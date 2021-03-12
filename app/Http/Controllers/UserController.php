@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Response;
-
 use App\Models\User;
+
+use App\Models\Branch;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 
 
 class UserController extends Controller
@@ -19,7 +20,8 @@ class UserController extends Controller
     public function user(Request $request)
     {
         $user = $request->user();
-        $user['permission_keys'] = $user->permissions->pluck('id')->toArray();
+        $user['branch_id'] = Branch::find($user->branch_id);
+        // $user['permission_keys'] = $user->permissions->pluck('id')->toArray();
         return $user;
     }
     /**
@@ -30,8 +32,6 @@ class UserController extends Controller
     public function index()
     {
         return User::all();
-
-        //  return User::select('lastName','firstName')->get();
     }
 
     /**
@@ -53,7 +53,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'first_name' => 'required|max:191',
+            'branch' =>  'required|max:191',
+            'first_name' =>  'required|max:191',
             'last_name' => 'required|max:191',
             'email' => 'required|string|email|max:191|unique:users',
             'phone' => 'required|max:12',
@@ -66,6 +67,7 @@ class UserController extends Controller
             $create = [
                 'first_name' => $request['first_name'],
                 'last_name' => $request['last_name'],
+                'branch_id' => $request['branch']['id'],
                 'user_type' => '',
                 'position' => '',
                 'email' => $request['email'],

@@ -1,6 +1,6 @@
 <template>
 <div class="h-screen flex w-full bg-img vx-row no-gutter items-center justify-center">
-  <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
+  <div v-bind:class="{ 'vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4': this.$route.name == 'page-signup' , 'vx-col sm:w-2/2 md:w-2/2 lg:w-4/4 xl:w-4/5 sm:m-0 m-4': this.$route.name == 'register'}">
     <vx-card>
       <div slot="no-body" class="full-page-bg-color">
         <div class="vx-row no-gutter">
@@ -14,6 +14,12 @@
                 <p>Fill the below form to create a new account.</p>
               </div>
               <div class="clearfix">
+                <div class="w-full">
+                  <label for=""><small>Choose Branch</small></label>
+                  <v-select name="proposal_id" :clearable="false" :get-option-label="option => option.name + ' - ' + option.code" v-model="form.branch" :options="branches" :dir="$vs.rtl ? 'rtl' : 'ltr'">
+                  </v-select>
+                  <has-error :form="form" field="branch"></has-error>
+                </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
@@ -72,27 +78,44 @@
 </template>
 
 <script>
+import vSelect from "vue-select";
+
 export default {
   data() {
     return {
+      branches: [],
       form: new Form({
         first_name: '',
         last_name: '',
         phone: '',
         address: '',
         email: '',
+        branch: '',
         password: '',
         confirm_password: '',
       }),
       isTermsConditionAccepted: true
     }
   },
+  components: {
+    "v-select": vSelect,
+  },
   computed: {
     validateForm() {
       return !this.errors.any() && this.form.first_name !== '' && this.form.email !== '' && this.form.password !== '' && this.form.confirm_password !== '' && this.isTermsConditionAccepted === true
     }
   },
+  created() {
+    console.log(this.$route.name);
+    this.getAllBranches();
+  },
   methods: {
+    getAllBranches() {
+      this.axios.get('/api/branches')
+        .then((response) => {
+          this.branches = response.data;
+        })
+    },
     checkLogin() {
       // If user is already logged in notify
       if (this.$store.state.auth.isUserLoggedIn()) {

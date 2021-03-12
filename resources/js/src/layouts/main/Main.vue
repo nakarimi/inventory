@@ -13,16 +13,6 @@
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
       <div id="content-overlay" />
-    <!-- <template v-else>
-      <the-navbar-vertical
-        :navbarColor="navbarColor"
-        :class="[
-          {'text-white' : isNavbarDark  && !isThemeDark},
-          {'text-base'  : !isNavbarDark && isThemeDark}
-        ]" />
-    </template> -->
-    <!-- /Navbar -->
-
       <div class="content-wrapper">
 
         <div class="router-view">

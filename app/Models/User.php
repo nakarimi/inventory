@@ -55,46 +55,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function accounts()
+    public function branch()
     {
-        return $this->hasMany(Account::class, 'user_id');
-    }
-    public function user_assignments()
-    {
-        return $this->hasMany(UserAssignment::class, 'user_id');
-    }
-    public function exchange_rates()
-    {
-        return $this->hasMany(ExchangeRate::class, 'user_id');
-    }
-    public function user_notifications()
-    {
-        return $this->hasMany(UserNotification::class, 'user_id');
-    }
-    public function proposals()
-    {
-        return $this->hasMany(Proposal::class, 'user_id');
-    }
-    public function projects()
-    {
-        return $this->hasMany(Project::class, 'user_id');
-    }
-    public function purchases()
-    {
-        return $this->hasMany(Purchase::class, 'user_id');
-    }
-    public function transfers()
-    {
-        return $this->hasMany(Transfer::class, 'user_id');
-    }
-
-    public function transaction()
-    {
-        return $this->hasMany(Transaction::class, 'user_id');
-    }
-
-    public function expenses()
-    {
-        return $this->hasMany(Expense::class, 'user_id');
+        return $this->hasOne(Branch::class, 'branch_id');
     }
 }

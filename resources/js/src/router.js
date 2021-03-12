@@ -33,7 +33,7 @@ const router = new Router({
               {
                 path: '/register',
                 name: 'register',
-                component: () => import('@/views/Register.vue')
+                component: () => import('@/views/pages/Register.vue')
               },
               {
                 path: '/page3',
@@ -59,7 +59,7 @@ const router = new Router({
               {
                 path: '/pages/signup',
                 name: 'page-signup',
-                component: () => import('@/views/pages/Signup.vue')
+                component: () => import('@/views/pages/Register.vue')
               },
               {
                 path: '/pages/error-404',
