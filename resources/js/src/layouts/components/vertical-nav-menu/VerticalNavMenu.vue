@@ -18,8 +18,9 @@
         <!-- Header -->
         <div class="header-sidebar flex items-end justify-between" slot="header">
 
+          <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
+            <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
           </router-link>
-
           <!-- Menu Buttons -->
           <div>
             <!-- Close Button -->
