@@ -18,12 +18,7 @@
         <!-- Header -->
         <div class="header-sidebar flex items-end justify-between" slot="header">
 
-          <!-- Logo -->
-          <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
-            <!-- <img src="@assets/images/logo/logo.png" alt="register" class="mx-auto"> -->
-            <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
           </router-link>
-          <!-- /Logo -->
 
           <!-- Menu Buttons -->
           <div>
@@ -107,7 +102,6 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import VNavMenuGroup from './VerticalNavMenuGroup.vue'
 import VNavMenuItem from './VerticalNavMenuItem.vue'
 
-import Logo from '../Logo.vue'
 
 export default {
   name: 'v-nav-menu',
@@ -115,10 +109,8 @@ export default {
     VNavMenuGroup,
     VNavMenuItem,
     VuePerfectScrollbar,
-    Logo
   },
   props: {
-    logo:             { type: String },
     openGroupHover:   { type: Boolean, default: false },
     parent:           { type: String },
     reduceNotRebound: { type: Boolean, default: true },

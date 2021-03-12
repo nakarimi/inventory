@@ -19,10 +19,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
-import VueCryptojs from 'vue-cryptojs'
-Vue.use(VueCryptojs)
-    
-// Vue.use(require('vue-moment'))
 import moment from 'moment'
 moment.locale('fa');
 Vue.prototype.moment = moment
@@ -50,15 +46,6 @@ import store from './store/store'
 // Vuexy Admin Filters
 import './filters/filters'
 
-// Clipboard
-import VueClipboard from 'vue-clipboard2'
-Vue.use(VueClipboard)
-
-// Tour
-import VueTour from 'vue-tour'
-Vue.use(VueTour)
-require('vue-tour/dist/vue-tour.css')
-
 // VeeValidate
 import VeeValidate from 'vee-validate'
 Vue.use(VeeValidate)
@@ -66,10 +53,6 @@ Vue.use(VeeValidate)
 // Vuejs - Vue wrapper for hammerjs
 import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
-
-// PrismJS
-import 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css'
 
 // Feather font icon
 require('@assets/css/iconfont.css')
