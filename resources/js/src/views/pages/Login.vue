@@ -62,12 +62,8 @@ export default {
       })
     }
   },
-  created() {
-    this.axios.get('/api/home').then((response) => {
-      console.log('This is response', response);
-    });
+  created() {    
     this.checkLogin();
-
   },
   methods: {
     checkLogin() {
@@ -76,7 +72,7 @@ export default {
           path: '/'
         });
         this.$vs.notify({
-          title: 'You have not access to the system!',
+          title: 'You have access to the system!',
           color: 'success',
           iconPack: 'feather',
           icon: 'icon-check',

@@ -31,9 +31,9 @@ const router = new Router({
                 component: () => import('./views/Home.vue')
               },
               {
-                path: '/page2',
-                name: 'page-2',
-                component: () => import('./views/Page2.vue')
+                path: '/register',
+                name: 'register',
+                component: () => import('@/views/Register.vue')
               },
               {
                 path: '/page3',
@@ -89,7 +89,6 @@ router.beforeEach((to, from, next) => {
   }
   if (to.name !== "page-login") {
       if (!localStorage.getItem("token")) {
-          // window.location.replace("/pages/login");
           router.push({ path: "/pages/login" });
       }
   }

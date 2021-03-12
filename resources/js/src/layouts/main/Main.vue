@@ -1,9 +1,6 @@
 <!-- =========================================================================================
     File Name: Main.vue
     Description: Main layout
-    ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
-    Author: Unknown
     ========================================================================================== -->
 
 <template>
@@ -67,9 +64,7 @@
                       </div>
                     </vs-dropdown-item>
                   </vs-dropdown-menu>
-
                 </vs-dropdown>
-
               </div>
             </transition>
 
