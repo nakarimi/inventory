@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-    File Name: VxBreadcrumb.vue
-    Description: Breadcrumb component
-    Component Name: VxBreadcrumb
-    ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
-      Author: Unknown
-    ========================================================================================== -->
-
 <template functional>
     <div class="vx-breadcrumb" :class="data.staticClass">
         <ul class="flex flex-wrap items-center">

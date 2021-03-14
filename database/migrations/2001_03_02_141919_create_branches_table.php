@@ -17,7 +17,7 @@ class CreateBranchesTable extends Migration
             $table->id();
             $table->string('code');
             $table->string('name');
-            $table->string('slug');
+            $table->string('address');
             $table->timestamps();
         });
     }

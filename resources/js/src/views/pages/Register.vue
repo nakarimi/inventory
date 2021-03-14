@@ -16,7 +16,7 @@
               <div class="clearfix">
                 <div class="w-full">
                   <label for=""><small>Choose Branch</small></label>
-                  <v-select name="proposal_id" :clearable="false" :get-option-label="option => option.name + ' - ' + option.code" v-model="form.branch" :options="branches" :dir="$vs.rtl ? 'rtl' : 'ltr'">
+                  <v-select name="branch" :clearable="false" :get-option-label="option => option.name + ' - ' + option.code" v-model="form.branch" :options="branches" :dir="$vs.rtl ? 'rtl' : 'ltr'">
                   </v-select>
                   <has-error :form="form" field="branch"></has-error>
                 </div>
@@ -63,11 +63,7 @@
                 <vs-button type="border" to="/pages/login" class="mt-6">Login</vs-button>
                 <vs-button class="float-right mt-6" @click="registerUser" :disabled="!validateForm">Register</vs-button>
               </div>
-              <ul>
-                <li v-for="e in Object.values(this.form.errors.errors)" :key="e">
-                  <small class="text-warning">{{ e[0] }}</small>
-                </li>
-              </ul>
+              <form-error></form-error>
             </div>
           </div>
         </div>
@@ -79,6 +75,7 @@
 
 <script>
 import vSelect from "vue-select";
+import FormError from '../share/FormError'
 
 export default {
   data() {
@@ -99,10 +96,11 @@ export default {
   },
   components: {
     "v-select": vSelect,
+    FormError,
   },
   computed: {
     validateForm() {
-      return !this.errors.any() && this.form.first_name !== '' && this.form.email !== '' && this.form.password !== '' && this.form.confirm_password !== '' && this.isTermsConditionAccepted === true
+      return !this.form.errors.any() && this.form.first_name !== '' && this.form.email !== '' && this.form.password !== '' && this.form.confirm_password !== '' && this.isTermsConditionAccepted === true
     }
   },
   created() {
@@ -131,10 +129,8 @@ export default {
       return true
     },
     registerUser() {
-      console.log(this.form);
       this.form.post('/api/users')
         .then(() => {
-          this.errors = []
           this.$vs.notify({
             title: 'Signup!',
             text: 'New user registered successfully!',
@@ -143,7 +139,7 @@ export default {
             icon: 'icon-check',
             position: 'top-right'
           })
-          // this.form.reset();
+          this.form.reset();
         })
         .catch((errors) => {
           this.$vs.notify({

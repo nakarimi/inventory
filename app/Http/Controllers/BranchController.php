@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class BranchController extends Controller
 {
@@ -35,7 +38,29 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        $this->validate($request,[
+            'code' => 'required|unique:branches',
+            'name' => 'required',
+            'address' => 'required',
+        ]);
+        // $customMessages = [
+        //     'customer.required' => 'Select a Customer first!.',
+        //     'customer_id.integer' => 'Invalid Customer!.'
+        // ];
+        // $validator = Validator::make($request, $rules);
+        // if ($validator->fails()) {
+        //     return $validator;
+        // }
+        DB::beginTransaction();
+        try {
+            Branch::create($request->all());
+            DB::commit();
+            return ['msg' => 'Branch successfully inserted'];
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**

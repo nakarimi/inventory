@@ -35,10 +35,33 @@ const router = new Router({
                 name: 'register',
                 component: () => import('@/views/pages/Register.vue')
               },
+              // List Routes
               {
-                path: '/page3',
-                name: 'page-3',
-                component: () => import('./views/Page2.vue')
+                path: '/apps/list/branch',
+                name: 'list-branch',
+                component: () => import('./views/apps/branch/BranchList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Branches List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/branch',
+                }
+              },
+              // Add Routes
+              {
+                path: '/apps/add/branch',
+                name: 'add-branch',
+                component: () => import('./views/apps/branch/BranchAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Branches List', url: {name: 'list-branch'} },
+                    { title: 'Add Branch', active: true }
+                  ],
+                  btn_list_path: '/apps/list/branch',
+                }
+
               },
               {
                 path: '/pages/logout',

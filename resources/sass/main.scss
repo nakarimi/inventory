@@ -26,7 +26,4 @@
 
 // rtl
 @import "vuexy/rtl";
-@import "vuexy/rtlCustom";
-@media print {
-  @import "vuexy/print";
-}
+@import "vuexy/_my_custom";
