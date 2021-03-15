@@ -24,4 +24,5 @@ Route::get('user', 'UserController@user')->middleware('auth:api');
 
 // Application Routes
 Route::resource('branches', 'BranchController');
+Route::resource('accounts', 'AccountController');
 Route::get('home', 'UserController@home');

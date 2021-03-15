@@ -31,10 +31,32 @@ const router = new Router({
                 component: () => import('./views/Home.vue')
               },
               {
-                path: '/register',
+                path: '/user/register',
                 name: 'register',
-                component: () => import('@/views/pages/Register.vue')
+                component: () => import('@/views/pages/Register.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Users List', url: {name: 'user-list'} },
+                    { title: 'Add Account', active: true }
+                  ],
+                  btn_list_path: '/list/users',
+                }
               },
+              {
+                path: '/list/users',
+                name: 'user-list',
+                component: () => import('@/views/pages/UserList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Users List', active: true }
+                  ],
+                  btn_plus_path: '/user/register',
+                }
+
+              },
+
               // List Routes
               {
                 path: '/apps/list/branch',
@@ -46,6 +68,18 @@ const router = new Router({
                     { title: 'Branches List', active: true }
                   ],
                   btn_plus_path: '/apps/add/branch',
+                }
+              },
+              {
+                path: '/apps/list/account',
+                name: 'list-account',
+                component: () => import('./views/apps/account/AccountList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Accounts List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/account',
                 }
               },
               // Add Routes
@@ -61,7 +95,19 @@ const router = new Router({
                   ],
                   btn_list_path: '/apps/list/branch',
                 }
-
+              },
+              {
+                path: '/apps/add/account',
+                name: 'add-account',
+                component: () => import('./views/apps/account/AccountAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Accounts List', url: {name: 'list-account'} },
+                    { title: 'Add Account', active: true }
+                  ],
+                  btn_list_path: '/apps/list/account',
+                }
               },
               {
                 path: '/pages/logout',

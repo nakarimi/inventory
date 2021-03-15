@@ -12,8 +12,13 @@ export default [
         submenu: [
             {
                 url: "/apps/list/branch",
-                name: "Branch",
+                name: "Branches",
                 slug: "branch-list",
+            },
+            {
+                url: "/apps/list/account",
+                name: "Accounts",
+                slug: "account-list",
             }
         ]
     },
@@ -27,6 +32,11 @@ export default [
                 url: "/apps/add/branch",
                 name: "Branch",
                 slug: "branch-add",
+            },
+            {
+                url: "/apps/add/account",
+                name: "Account",
+                slug: "account-add",
             }
         ]
     },
@@ -37,11 +47,17 @@ export default [
         // i18n: 'eCommerce',
         submenu: [
             {
-                url: "/register",
+                url: "/user/register",
                 name: "Register",
                 slug: "register",
                 icon: "UserPlusIcon"
-            }
+            },
+            {
+                url: "/list/users",
+                name: "Users List",
+                slug: "users-list",
+                icon: "UsersIcon"
+            },
         ]
     },
     {

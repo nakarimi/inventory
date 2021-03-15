@@ -24,8 +24,6 @@
 
               <!-- BREADCRUMB -->
               <vx-breadcrumb class="ml-4 md:block hidden" v-if="$route.meta.breadcrumb" :route="$route" :isRTL="$vs.rtl" />
-
-              <!-- DROPDOWN -->
               <div class="ml-auto md:block hidden cursor-pointer">
                 <vs-button v-if="$route.meta.btn_plus_path" radius icon="icon-plus" icon-pack="feather" :to="$route.meta.btn_plus_path" />
                 <vs-button v-if="$route.meta.btn_list_path" radius icon="icon-list" icon-pack="feather" :to="$route.meta.btn_list_path" />

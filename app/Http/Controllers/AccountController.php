@@ -14,7 +14,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        //
+        return Account::with('user_account.branch')->get();
     }
 
     /**
@@ -35,7 +35,9 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['account_user_id'] = $request['account_user_id']['id'];
+        $request['user_id'] = auth()->guard('api')->user()->id;
+        return Account::create($request->all());
     }
 
     /**

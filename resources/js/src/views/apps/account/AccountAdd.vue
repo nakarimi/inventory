@@ -4,18 +4,26 @@
     <vx-card>
       <div class="clearfix">
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
+          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Label" v-model="form.name" class="w-full" />
           <span class="text-danger text-sm">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('code') }}</span>
+          <div class="w-full">
+            <label for="">Choose User</label>
+            <v-select name="users" :clearable="false" :get-option-label="option => option.first_name + ' ' + option.last_name" v-model="form.account_user_id" :options="users" :dir="$vs.rtl ? 'rtl' : 'ltr'">
+            </v-select>
+            <has-error :form="form" field="users"></has-error>
+          </div>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('address') }}</span>
+          <label for=""  class="mt-2 mb-2">Account Status</label>
+          <vs-switch color="success" v-model="form.status">
+            <span slot="on">Active</span>
+            <span slot="off">Inactive</span>
+          </vs-switch>
+          <span class="text-danger text-sm">{{ errors.first('status') }}</span>
         </div>
-        <vs-button class="float-right mt-6" @click="storeBranch" :disabled="!validateForm">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeAccount" :disabled="!validateForm">Send</vs-button>
         <form-error :form="form"></form-error>
       </div>
     </vx-card>
@@ -25,19 +33,22 @@
 
 <script>
 import FormError from '../../share/FormError'
+import vSelect from "vue-select";
 
 export default {
   data() {
     return {
       form: new Form({
-        code: '',
+        account_user_id: '',
         name: '',
-        address: '',
+        status: '',
       }),
+      users: [],
     }
   },
   components: {
-    FormError
+    FormError,
+    "v-select": vSelect,
   },
   computed: {
     validateForm() {
@@ -46,11 +57,18 @@ export default {
     }
   },
   created() {
-    
+    this.getAllUsers();
   },
   methods: {
-    storeBranch() {
-      this.form.post('/api/branches')
+    getAllUsers() {
+      this.axios.get('/api/users')
+        .then((response) => {
+          this.users = response.data;
+        })
+    },
+
+    storeAccount() {
+      this.form.post('/api/accounts')
         .then((response) => {
           this.form.reset();
           this.$vs.notify({
