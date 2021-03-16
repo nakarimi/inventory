@@ -61,6 +61,18 @@ export default [
         ]
     },
     {
+        url: null,
+        name: "General",
+        icon: "SettingsIcon",
+        submenu: [
+            {
+                url: {name: 'manage-category'},
+                name: "Category Management",
+                slug: "category",
+            },
+        ]
+    },
+    {
         url: "/pages/logout",
         name: "Logout",
         slug: "logout",

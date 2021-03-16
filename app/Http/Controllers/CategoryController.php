@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Category::all();
     }
 
     /**
@@ -35,7 +39,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'slug' => 'required|unique:categories',
+            'name' => 'required',
+        ]);
+        return Category::create($request->all());
     }
 
     /**
@@ -67,9 +75,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'slug' => 'required|unique:categories',
+            'name' => 'required',
+        ]);
+        $category = Category::find($id);
+        return $category->update($request->all());
     }
 
     /**
@@ -78,8 +91,9 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        return $category->delete();
     }
 }

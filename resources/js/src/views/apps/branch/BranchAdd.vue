@@ -5,15 +5,15 @@
       <div class="clearfix">
         <h1>Add New Branch</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
+          <vs-input v-validate="'required'" data-vv-validate-on="change" name="name" label="Name" v-model="form.name" class="w-full" />
           <span class="text-danger text-sm">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
+          <vs-input v-validate="'required'" data-vv-validate-on="change" name="code" label="Code" v-model="form.code" class="w-full" />
           <span class="text-danger text-sm">{{ errors.first('code') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
+          <vs-input v-validate="'required'" data-vv-validate-on="change" name="address" label="Address" v-model="form.address" class="w-full" />
           <span class="text-danger text-sm">{{ errors.first('address') }}</span>
         </div>
         <vs-button class="float-right mt-6" @click="storeBranch" :disabled="!validateForm">Send</vs-button>
@@ -42,8 +42,7 @@ export default {
   },
   computed: {
     validateForm() {
-      return true;
-      // return !this.form.errors.any() && this.form.name !== '' && this.form.code !== '' && this.form.address !== ''
+      return !this.form.errors.any() && this.form.name !== '' && this.form.code !== '' && this.form.address !== ''
     }
   },
   created() {
@@ -62,7 +61,6 @@ export default {
             icon: 'icon-check',
             position: 'top-left'
           })
-
         }).catch((error) => {
           if (this.form.errors.errors.error) {
             this.$vs.notify({

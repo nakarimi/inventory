@@ -110,6 +110,18 @@ const router = new Router({
                 }
               },
               {
+                path: '/manage/category',
+                name: 'manage-category',
+                component: () => import('./views/apps/CategoryManagement.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Category Management', active: true },
+                  ],
+                  // btn_list_path: '/apps/list/category',
+                }
+              },
+              {
                 path: '/pages/logout',
                 name: 'page-logout',
               },

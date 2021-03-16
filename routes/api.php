@@ -22,7 +22,10 @@ Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 Route::resource('users', 'UserController');
 Route::get('user', 'UserController@user')->middleware('auth:api');
 
-// Application Routes
+// Application Resource Routes
 Route::resource('branches', 'BranchController');
 Route::resource('accounts', 'AccountController');
+Route::resource('categories', 'CategoryController');
+
+// Custom Routes
 Route::get('home', 'UserController@home');
