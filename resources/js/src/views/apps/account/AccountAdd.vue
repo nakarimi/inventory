@@ -3,6 +3,7 @@
   <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
     <vx-card>
       <div class="clearfix">
+        <h1>Add New Account</h1>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Label" v-model="form.name" class="w-full" />
           <span class="text-danger text-sm">{{ errors.first('name') }}</span>
