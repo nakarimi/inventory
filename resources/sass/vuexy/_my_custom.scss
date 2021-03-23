@@ -1,9 +1,24 @@
-.link-color{
-  color: rgba(var(--vs-primary), 1);
+[dir] .v-nav-menu .vs-sidebar .vs-sidebar--items {
+    background: rgb(255, 255, 255) !important;
+    background-image: none;
+    background-image: linear-gradient(
+        calc(360deg - 175deg),
+        rgba(193, 166, 255, 0.5) 6%,
+        rgba(255, 160, 160, 0.8) 130%
+    ) !important;
 }
-table thead.vs-table--thead tr{
-  background: #e8e6fd !important;
+.link-color {
+    color: rgba(var(--vs-primary), 1);
+}
+table thead.vs-table--thead tr {
+    background: #e8e6fd !important;
+}
+[dir] .v-nav-menu .shadow-bottom{
+  display: none !important;
+}
+.vs-sidebar--items .header-sidebar{
+  border-bottom: solid 1px gray;
 }
 body {
-  // background-image: url("/images/pages/vuexy-login-bg.jpg");
+    // background-image: url("/images/pages/vuexy-login-bg.jpg");
 }

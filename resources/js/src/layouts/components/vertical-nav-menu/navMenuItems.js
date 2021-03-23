@@ -19,6 +19,11 @@ export default [
                 url: "/apps/list/account",
                 name: "Accounts",
                 slug: "account-list",
+            },
+            {
+                url: "/apps/list/customer",
+                name: "Customers",
+                slug: "customer-list",
             }
         ]
     },
@@ -37,6 +42,11 @@ export default [
                 url: "/apps/add/account",
                 name: "Account",
                 slug: "account-add",
+            },
+            {
+                url: "/apps/add/customer",
+                name: "Customer",
+                slug: "customer-add",
             }
         ]
     },

@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +19,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return Customer::all();
     }
 
     /**
@@ -35,7 +40,12 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'email' => 'required|unique:customers',
+            'name' => 'required',
+            'phone' => 'required',
+        ]);
+        return Customer::create($request->all());
     }
 
     /**

@@ -82,6 +82,18 @@ const router = new Router({
                   btn_plus_path: '/apps/add/account',
                 }
               },
+              {
+                path: '/apps/list/customer',
+                name: 'list-customer',
+                component: () => import('./views/apps/customer/CustomerList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Customers List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/customer',
+                }
+              },
               // Add Routes
               {
                 path: '/apps/add/branch',
@@ -94,6 +106,19 @@ const router = new Router({
                     { title: 'Add Branch', active: true }
                   ],
                   btn_list_path: '/apps/list/branch',
+                }
+              },
+              {
+                path: '/apps/add/customer',
+                name: 'add-customer',
+                component: () => import('./views/apps/customer/CustomerAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Customers List', url: {name: 'list-customer'} },
+                    { title: 'Add Customer', active: true }
+                  ],
+                  btn_list_path: '/apps/list/customer',
                 }
               },
               {
