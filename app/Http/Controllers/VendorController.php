@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class VendorController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,7 @@ class VendorController extends Controller
      */
     public function index()
     {
-        //
+        return Vendor::all();
     }
 
     /**
@@ -35,7 +42,28 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $this->validate($request,[
+        //     'email' => 'required|unique:vendors',
+        //     'name' => 'required',
+        //     'phone' => 'required',
+        // ]);
+        DB::beginTransaction();
+        try {
+            $photoname = NULL;
+            if ($request->image != null) {
+
+                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+                \Image::make($request->image)->save(public_path('img/vendor/') . $photoname);
+                $request->merge(['logo' => $photoname]);
+            }
+        $result = Vendor::create($request->all());
+        DB::commit();
+        return $result;
+    } catch (Exception $e) {
+        DB::rollback();
+        return Response::json($e, 400);
+    }
+
     }
 
     /**

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class CustomerController extends Controller
 {
@@ -40,12 +42,28 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'email' => 'required|unique:customers',
-            'name' => 'required',
-            'phone' => 'required',
-        ]);
-        return Customer::create($request->all());
+        // $this->validate($request,[
+        //     'email' => 'required|unique:customers',
+        //     'name' => 'required',
+        //     'phone' => 'required',
+        // ]);
+        DB::beginTransaction();
+        try {
+            $photoname = NULL;
+            if ($request->image != null) {
+
+                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+                \Image::make($request->image)->save(public_path('img/customer/') . $photoname);
+                $request->merge(['logo' => $photoname]);
+            }
+        $result = Customer::create($request->all());
+        DB::commit();
+        return $result;
+    } catch (Exception $e) {
+        DB::rollback();
+        return Response::json($e, 400);
+    }
+
     }
 
     /**

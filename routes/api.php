@@ -26,6 +26,7 @@ Route::get('user', 'UserController@user')->middleware('auth:api');
 Route::resource('branches', 'BranchController');
 Route::resource('accounts', 'AccountController');
 Route::resource('customers', 'CustomerController');
+Route::resource('vendors', 'VendorController');
 Route::resource('categories', 'CategoryController');
 
 // Custom Routes

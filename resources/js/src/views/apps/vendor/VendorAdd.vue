@@ -5,7 +5,7 @@
     <div class="vx-row pl-5">
       <div class="w-2/3">
         <div class="clearfix">
-          <h1>Add New Customer</h1>
+          <h1>Add New Vendor</h1>
           <div class="mt-2 mb-2 grid">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
             <span class="text-danger text-sm">{{ errors.first('name') }}</span>
@@ -52,7 +52,7 @@
           </div>
         </div>
       <form-error :form="form"></form-error>
-    <vs-button class="float-right mt-6" @click="storeCustomer" :disabled="!validateForm">Send</vs-button>
+    <vs-button class="float-right mt-6" @click="storeVendor" :disabled="!validateForm">Send</vs-button>
     </div>
   </vx-card>
   <!-- </div> -->
@@ -83,8 +83,7 @@ export default {
   },
   computed: {
     validateForm() {
-      return !this.form.errors.any() &&
-        this.form.name !== '' &&
+      return this.form.name !== '' &&
         this.form.email !== '' &&
         this.form.phone !== ''
     }
@@ -100,9 +99,9 @@ export default {
         reader.readAsDataURL(input.target.files[0])
       }
     },
-    storeCustomer() {
+    storeVendor() {
       this.form.logo = this.form.image;
-      this.form.post('/api/customers')
+      this.form.post('/api/vendors')
         .then((response) => {
           this.form.reset();
           this.$vs.notify({

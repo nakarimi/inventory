@@ -1,7 +1,7 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="customers" stripe>
+    <vs-table ref="table" :data="vendors" stripe>
       <template slot="thead">
         <vs-th>#</vs-th>
         <vs-th>Name</vs-th>
@@ -33,9 +33,7 @@
               <p>{{ tr.website }}</p>
             </vs-td>
             <vs-td>
-              <p>
-                <vs-avatar size="40px" :src="`/img/customer/${(tr.logo) ? tr.logo : 'default.jpg'}`" />
-              </p>
+              <vs-avatar size="40px" :src="`/img/vendor/${(tr.logo) ? tr.logo : 'default.jpg'}`" />
             </vs-td>
           </vs-tr>
         </tbody>
@@ -49,7 +47,7 @@
 export default {
   data() {
     return {
-      customers: [],
+      vendors: [],
     }
   },
   created() {
@@ -57,8 +55,8 @@ export default {
   },
   methods: {
     loadAccounts() {
-      this.axios.get('/api/customers').then((response) => {
-        this.customers = response.data
+      this.axios.get('/api/vendors').then((response) => {
+        this.vendors = response.data
       }).catch(() => {})
     }
   }

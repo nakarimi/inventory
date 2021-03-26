@@ -14,6 +14,5 @@ class Customer extends Model
         'address',
         'logo',
         'user_id',
-
     ];
 }

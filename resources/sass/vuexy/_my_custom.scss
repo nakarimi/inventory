@@ -1,11 +1,7 @@
 [dir] .v-nav-menu .vs-sidebar .vs-sidebar--items {
     background: rgb(255, 255, 255) !important;
     background-image: none;
-    background-image: linear-gradient(
-        calc(360deg - 175deg),
-        rgba(193, 166, 255, 0.5) 6%,
-        rgba(255, 160, 160, 0.8) 130%
-    ) !important;
+    background-image: linear-gradient(calc(360deg - 175deg), rgba(193, 166, 255, 0.5) 6%, rgb(248, 248, 248) 130%) !important;
 }
 .link-color {
     color: rgba(var(--vs-primary), 1);

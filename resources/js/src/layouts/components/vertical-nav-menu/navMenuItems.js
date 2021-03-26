@@ -24,6 +24,11 @@ export default [
                 url: "/apps/list/customer",
                 name: "Customers",
                 slug: "customer-list",
+            },
+            {
+                url: "/apps/list/vendor",
+                name: "Vendors",
+                slug: "vendor-list",
             }
         ]
     },
@@ -47,6 +52,11 @@ export default [
                 url: "/apps/add/customer",
                 name: "Customer",
                 slug: "customer-add",
+            },
+            {
+                url: "/apps/add/vendor",
+                name: "Vendor",
+                slug: "vendor-add",
             }
         ]
     },
