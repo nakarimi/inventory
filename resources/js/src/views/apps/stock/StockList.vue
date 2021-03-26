@@ -1,15 +1,14 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="customers" stripe>
+    <vs-table ref="table" :data="stocks" stripe>
       <template slot="thead">
         <vs-th>#</vs-th>
         <vs-th>Name</vs-th>
-        <vs-th>Email</vs-th>
+        <vs-th>Code</vs-th>
         <vs-th>Phone</vs-th>
         <vs-th>Address</vs-th>
-        <vs-th>Website</vs-th>
-        <vs-th>Logo</vs-th>
+        <vs-th>Manager</vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
@@ -21,7 +20,7 @@
               <p>{{ tr.name }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.email }}</p>
+              <p>{{ tr.code }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.phone }}</p>
@@ -30,12 +29,7 @@
               <p>{{ tr.address }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.website }}</p>
-            </vs-td>
-            <vs-td>
-              <p>
-                <vs-avatar size="40px" :src="`/img/customer/${(tr.logo) ? tr.logo : 'default.jpg'}`" />
-              </p>
+              <p>{{ tr.manager }}</p>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -49,16 +43,16 @@
 export default {
   data() {
     return {
-      customers: [],
+      stocks: [],
     }
   },
   created() {
-    this.loadCustomers()
+    this.loadStocks()
   },
   methods: {
-    loadCustomers() {
-      this.axios.get('/api/customers').then((response) => {
-        this.customers = response.data
+    loadStocks() {
+      this.axios.get('/api/stocks').then((response) => {
+        this.stocks = response.data
       }).catch(() => {})
     }
   }

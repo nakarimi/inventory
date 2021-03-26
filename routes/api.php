@@ -28,6 +28,7 @@ Route::resource('accounts', 'AccountController');
 Route::resource('customers', 'CustomerController');
 Route::resource('vendors', 'VendorController');
 Route::resource('categories', 'CategoryController');
+Route::resource('stocks', 'StockController');
 
 // Custom Routes
 Route::get('home', 'UserController@home');

@@ -51,10 +51,10 @@ export default {
     }
   },
   created() {
-    this.loadAccounts()
+    this.loadVendors()
   },
   methods: {
-    loadAccounts() {
+    loadVendors() {
       this.axios.get('/api/vendors').then((response) => {
         this.vendors = response.data
       }).catch(() => {})

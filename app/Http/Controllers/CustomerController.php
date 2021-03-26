@@ -42,11 +42,11 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->validate($request,[
-        //     'email' => 'required|unique:customers',
-        //     'name' => 'required',
-        //     'phone' => 'required',
-        // ]);
+        $this->validate($request,[
+            'email' => 'required|email|unique:customers',
+            'name' => 'required',
+            'phone' => 'required|min:11|numeric',
+        ]);
         DB::beginTransaction();
         try {
             $photoname = NULL;

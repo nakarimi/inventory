@@ -29,6 +29,11 @@ export default [
                 url: "/apps/list/vendor",
                 name: "Vendors",
                 slug: "vendor-list",
+            },
+            {
+                url: "/apps/list/stock",
+                name: "Stocks",
+                slug: "stock-list",
             }
         ]
     },
@@ -57,6 +62,11 @@ export default [
                 url: "/apps/add/vendor",
                 name: "Vendor",
                 slug: "vendor-add",
+            },
+            {
+                url: "/apps/add/stock",
+                name: "Stock",
+                slug: "stock-add",
             }
         ]
     },

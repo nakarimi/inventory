@@ -106,6 +106,18 @@ const router = new Router({
                   btn_plus_path: '/apps/add/vendor',
                 }
               },
+              {
+                path: '/apps/list/stock',
+                name: 'list-stock',
+                component: () => import('./views/apps/stock/StockList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Stocks List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/stock',
+                }
+              },
               // Add Routes
               {
                 path: '/apps/add/branch',
@@ -144,6 +156,19 @@ const router = new Router({
                     { title: 'Add Vendor', active: true }
                   ],
                   btn_list_path: '/apps/list/vendor',
+                }
+              },
+              {
+                path: '/apps/add/stock',
+                name: 'add-stock',
+                component: () => import('./views/apps/stock/StockAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Stocks List', url: {name: 'list-stock'} },
+                    { title: 'Add Stock', active: true }
+                  ],
+                  btn_list_path: '/apps/list/stock',
                 }
               },
               {

@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Stock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class StockController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +20,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        //
+        return Stock::all();
     }
 
     /**
@@ -35,7 +41,22 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'code' => 'required|unique:stocks',
+            'name' => 'required',
+            'manager' => 'required',
+            'phone' => 'required|min:11|numeric',
+
+        ]);
+        DB::beginTransaction();
+        try {
+        $result = Stock::create($request->all());
+        DB::commit();
+        return $result;
+    } catch (Exception $e) {
+        DB::rollback();
+        return Response::json($e, 400);
+    }
     }
 
     /**
