@@ -1,10 +1,3 @@
-/*=========================================================================================
-  File Name: router.js
-  Description: Routes for vue-router. Lazy loading is enabled.
-
-==========================================================================================*/
-
-
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -118,6 +111,18 @@ const router = new Router({
                   btn_plus_path: '/apps/add/stock',
                 }
               },
+              {
+                path: '/apps/list/product',
+                name: 'list-product',
+                component: () => import('./views/apps/product/ProductList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/product',
+                }
+              },
               // Add Routes
               {
                 path: '/apps/add/branch',
@@ -184,6 +189,20 @@ const router = new Router({
                   btn_list_path: '/apps/list/account',
                 }
               },
+              {
+                path: '/apps/add/product',
+                name: 'add-product',
+                component: () => import('./views/apps/product/ProductAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', url: {name: 'list-product'} },
+                    { title: 'Add Product', active: true }
+                  ],
+                  btn_list_path: '/apps/list/product',
+                }
+              },
+              // End of add routes
               {
                 path: '/manage/category',
                 name: 'manage-category',

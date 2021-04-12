@@ -34,8 +34,13 @@ export default [
                 url: "/apps/list/stock",
                 name: "Stocks",
                 slug: "stock-list",
+            },
+            {
+                url: "/apps/list/product",
+                name: "Products",
+                slug: "product-list",
             }
-        ]
+        ].reverse()
     },
     {
         url: null,
@@ -67,8 +72,13 @@ export default [
                 url: "/apps/add/stock",
                 name: "Stock",
                 slug: "stock-add",
+            },
+            {
+                url: "/apps/add/product",
+                name: "Product",
+                slug: "product-add",
             }
-        ]
+        ].reverse()
     },
     {
         url: null,
