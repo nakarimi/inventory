@@ -118,6 +118,18 @@ const router = new Router({
                   btn_plus_path: '/apps/add/stock',
                 }
               },
+              {
+                path: '/apps/list/product',
+                name: 'list-product',
+                component: () => import('./views/apps/product/ProductList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/product',
+                }
+              },
               // Add Routes
               {
                 path: '/apps/add/branch',
@@ -169,6 +181,32 @@ const router = new Router({
                     { title: 'Add Stock', active: true }
                   ],
                   btn_list_path: '/apps/list/stock',
+                }
+              },
+              {
+                path: '/apps/add/product',
+                name: 'add-product',
+                component: () => import('./views/apps/product/ProductAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', url: {name: 'list-product'} },
+                    { title: 'Add Product', active: true }
+                  ],
+                  btn_list_path: '/apps/list/product',
+                }
+              },
+              {
+                path: '/apps/edit/product/:id',
+                name: 'edit-product',
+                component: () => import('./views/apps/product/ProductAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', url: {name: 'list-product'} },
+                    { title: 'Edit Product', active: true }
+                  ],
+                  btn_list_path: '/apps/list/product',
                 }
               },
               {

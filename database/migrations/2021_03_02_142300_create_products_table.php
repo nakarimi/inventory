@@ -22,11 +22,10 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 10, 3);
             $table->string('image')->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('stock_id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('quantity')->nullable();
             $table->string('stock')->nullable();
-            $table->unsignedBigInteger('stock_id');
-            $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('cascade');
             $table->string('barcode_symbology')->nullable();
             $table->string('product_details')->nullable();
             $table->decimal('tax', 10, 3)->nullable();
@@ -37,7 +36,8 @@ class CreateProductsTable extends Migration
             $table->string('purchase_unit')->nullable();
             $table->string('brand')->nullable();
             $table->string('featured')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
