@@ -40,7 +40,7 @@ export default [
                 name: "Products",
                 slug: "product-list",
             }
-        ]
+        ].reverse()
     },
     {
         url: null,
@@ -78,7 +78,7 @@ export default [
                 name: "Product",
                 slug: "product-add",
             }
-        ]
+        ].reverse()
     },
     {
         url: null,
