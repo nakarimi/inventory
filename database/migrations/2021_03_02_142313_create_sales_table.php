@@ -18,13 +18,10 @@ class CreateSalesTable extends Migration
             $table->string('date');
             $table->string('reference_no');
             $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->string('customer');
             $table->unsignedBigInteger('biller_id');
-            $table->foreign('biller_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('biller');
             $table->unsignedBigInteger('stock_id');
-            $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('cascade');
             $table->decimal('total', 10, 3);
             $table->string('sale_status');
             $table->string('payment_status');
@@ -37,6 +34,9 @@ class CreateSalesTable extends Migration
             $table->string('pos')->nullable(); // remaining cost
             $table->string('paid')->nullable(); //How much paid
             $table->unsignedBigInteger('user_id');
+            $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('cascade');
+            $table->foreign('biller_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

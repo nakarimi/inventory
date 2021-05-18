@@ -1,0 +1,73 @@
+<template lang="">
+<div>
+  <vx-card>
+    <vs-table ref="table" :data="sales" stripe>
+      <template slot="thead">
+        <vs-th>#</vs-th>
+        <vs-th>Date</vs-th>
+        <vs-th>Reference Code</vs-th>
+        <vs-th>Customer</vs-th>
+        <vs-th>Total</vs-th>
+        <vs-th>Stock</vs-th>
+        <vs-th>Due Date</vs-th>
+        <vs-th></vs-th>
+      </template>
+      <template slot-scope="{data}">
+        <tbody>
+          <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
+            <vs-td>
+              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.date | formatDate }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.reference_no }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.customer.name }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.total }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.stock.name }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.due_date | formatDate }}</p>
+            </vs-td>
+            <vs-td>
+              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/sale/${tr.id}`).catch(() => {})">Edit</span>
+            </vs-td>
+          </vs-tr>
+        </tbody>
+      </template>
+    </vs-table>
+  </vx-card>
+</div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      sales: [],
+    }
+  },
+  created() {
+    this.loadStocks()
+  },
+  methods: {
+    loadStocks() {
+      this.axios.get('/api/sales').then((response) => {
+        this.sales = response.data
+      }).catch(() => {})
+    }
+  }
+
+}
+</script>
+
+<style lang="">
+
+</style>
