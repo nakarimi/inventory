@@ -30,6 +30,7 @@ Route::resource('vendors', 'VendorController');
 Route::resource('categories', 'CategoryController');
 Route::resource('stocks', 'StockController');
 Route::resource('products', 'ProductController');
+Route::resource('sales', 'SaleController');
 
 // Custom Routes
 Route::get('home', 'UserController@home');

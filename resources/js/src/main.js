@@ -3,9 +3,14 @@ import App from './App.vue'
 
 // Vuesax Component Framework
 import Vuesax from 'vuesax'
-import print from 'print-js'
 
 Vue.use(Vuesax)
+
+import { Datetime } from 'vue-datetime'
+// You need a specific loader for CSS files
+import 'vue-datetime/dist/vue-datetime.css' 
+Vue.use(Datetime)
+
 
 // vForm start
 import { Form, HasError, AlertError } from 'vform'
@@ -20,13 +25,12 @@ import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
 import moment from 'moment'
-moment.locale('fa');
 Vue.prototype.moment = moment
-
-var momentj = require('moment-jalaali')
-momentj().format('jYYYY/jM/jD')
-Vue.prototype.momentj = momentj
-
+Vue.filter('formatDate', function(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD')
+    }
+  })
 // start sweetalert
 import Swal from 'sweetalert2'
 window.swal = Swal
@@ -74,10 +78,6 @@ Vue.use(VueProgressBar, {
     inverse: true,
     autoFinish: true
 })
-
-// Persian DatePcicker
-import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-Vue.component('date-picker', VuePersianDatetimePicker)
 
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 Vue.component('VuePerfectScrollbar', VuePerfectScrollbar)

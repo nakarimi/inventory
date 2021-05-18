@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
+use App\Helper\Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class SaleController extends Controller
 {
+
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        return Sale::with(['customer', 'stock'])->get();
     }
 
     /**
@@ -35,7 +44,27 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return Response::json($request, 400);
+
+        DB::beginTransaction();
+        try {
+            $request['customer'] = (isset($request['customer_id']) && $request['customer_id'] != null) ? $request['customer_id']['name'] : null;
+            $request['stock'] = (isset($request['stock_id']) && $request['stock_id'] != null) ? $request['stock_id']['name'] : null;
+            $request['biller'] = (isset($request['biller_id']) && $request['biller_id'] != null) ? $request['biller_id']['first_name'] : null;
+            $request['sale_status'] = 'active';
+            $request['payment_status'] = 'none';
+
+            Helper::get_id($request, 'stock_id');
+            Helper::get_id($request, 'biller_id');
+            Helper::get_id($request, 'customer_id');
+            $result = Sale::create($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
+
     }
 
     /**

@@ -123,6 +123,21 @@ const router = new Router({
                   btn_plus_path: '/apps/add/product',
                 }
               },
+              {
+                path: '/apps/list/sale',
+                name: 'list-sale',
+                component: () => import('./views/apps/sale/SaleList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Sales List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/sale',
+                }
+              },
+
+              // End Of List Routes
+              
               // Add Routes
               {
                 path: '/apps/add/branch',
@@ -190,16 +205,16 @@ const router = new Router({
                 }
               },
               {
-                path: '/apps/edit/product/:id',
-                name: 'edit-product',
-                component: () => import('./views/apps/product/ProductAdd.vue'),
+                path: '/apps/add/sale',
+                name: 'add-sale',
+                component: () => import('./views/apps/sale/SaleAdd.vue'),
                 meta: {
                   breadcrumb: [
                     { title: 'Home', url: '/' },
-                    { title: 'Products List', url: {name: 'list-product'} },
-                    { title: 'Edit Product', active: true }
+                    { title: 'Sales List', url: {name: 'list-sale'} },
+                    { title: 'Add Sale', active: true }
                   ],
-                  btn_list_path: '/apps/list/product',
+                  btn_list_path: '/apps/list/sale',
                 }
               },
               {
@@ -229,6 +244,34 @@ const router = new Router({
                 }
               },
               // End of add routes
+              // Edit Routes
+              {
+                path: '/apps/edit/product/:id',
+                name: 'edit-product',
+                component: () => import('./views/apps/product/ProductAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', url: {name: 'list-product'} },
+                    { title: 'Edit Product', active: true }
+                  ],
+                  btn_list_path: '/apps/list/product',
+                }
+              },
+              {
+                path: '/apps/edit/sale/:id',
+                name: 'edit-sale',
+                component: () => import('./views/apps/sale/SaleAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Sales List', url: {name: 'list-sale'} },
+                    { title: 'Edit Sale', active: true }
+                  ],
+                  btn_list_path: '/apps/list/sale',
+                }
+              },
+              // End Of Edit Routes
               {
                 path: '/manage/category',
                 name: 'manage-category',
