@@ -1,15 +1,16 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="vendors" stripe>
+    <vs-table ref="table" :data="products" stripe>
       <template slot="thead">
         <vs-th>#</vs-th>
         <vs-th>Name</vs-th>
-        <vs-th>Email</vs-th>
-        <vs-th>Phone</vs-th>
-        <vs-th>Address</vs-th>
-        <vs-th>Website</vs-th>
-        <vs-th>Logo</vs-th>
+        <vs-th>Code</vs-th>
+        <vs-th>Quantity</vs-th>
+        <vs-th>Price</vs-th>
+        <vs-th>Stock</vs-th>
+        <vs-th>Category</vs-th>
+        <vs-th></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
@@ -21,19 +22,22 @@
               <p>{{ tr.name }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.email }}</p>
+              <p>{{ tr.code }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.phone }}</p>
+              <p>{{ tr.quantity }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.address }}</p>
+              <p>{{ tr.price }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.website }}</p>
+              <p>{{ tr.stock.name }}</p>
             </vs-td>
             <vs-td>
-              <vs-avatar size="40px" :src="`/img/vendor/${(tr.logo) ? tr.logo : 'default.jpg'}`" />
+              <p>{{ tr.category.name }}</p>
+            </vs-td>
+            <vs-td>
+              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/product/${tr.id}`).catch(() => {})">Edit</span>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -47,16 +51,16 @@
 export default {
   data() {
     return {
-      vendors: [],
+      products: [],
     }
   },
   created() {
-    this.loadVendors()
+    this.loadStocks()
   },
   methods: {
-    loadVendors() {
-      this.axios.get('/api/vendors').then((response) => {
-        this.vendors = response.data
+    loadStocks() {
+      this.axios.get('/api/products').then((response) => {
+        this.products = response.data
       }).catch(() => {})
     }
   }

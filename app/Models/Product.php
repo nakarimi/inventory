@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Stock;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -17,7 +18,6 @@ class Product extends Model
         'stock_id',
         'user_id',
         'quantity',
-        'stock',
         'barcode_symbology',
         'product_details',
         'tax',
@@ -28,5 +28,14 @@ class Product extends Model
         'purchase_unit',
         'brand',
         'featured',
-    ]
+    ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function stock()
+    {
+        return $this->belongsTo(Stock::class, 'stock_id');
+    }
+
 }

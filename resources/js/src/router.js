@@ -177,6 +177,32 @@ const router = new Router({
                 }
               },
               {
+                path: '/apps/add/product',
+                name: 'add-product',
+                component: () => import('./views/apps/product/ProductAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', url: {name: 'list-product'} },
+                    { title: 'Add Product', active: true }
+                  ],
+                  btn_list_path: '/apps/list/product',
+                }
+              },
+              {
+                path: '/apps/edit/product/:id',
+                name: 'edit-product',
+                component: () => import('./views/apps/product/ProductAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Products List', url: {name: 'list-product'} },
+                    { title: 'Edit Product', active: true }
+                  ],
+                  btn_list_path: '/apps/list/product',
+                }
+              },
+              {
                 path: '/apps/add/account',
                 name: 'add-account',
                 component: () => import('./views/apps/account/AccountAdd.vue'),

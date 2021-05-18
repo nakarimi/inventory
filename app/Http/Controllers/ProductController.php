@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stock;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class ProductController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Product::with(['category', 'stock'])->get();
     }
 
     /**
@@ -35,7 +43,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
+        $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
+        // $this->validate($request,[
+        //     'code' => 'required|code|unique:products',
+        //     'name' => 'required',
+        //     'cost' => 'required',
+        // ]);
+        DB::beginTransaction();
+        try {
+            $photoname = NULL;
+            if ($request->image != null) {
+
+                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+                \Image::make($request->image)->save(public_path('img/product/') . $photoname);
+                $request->merge(['image' => $photoname]);
+            }
+            $result = Product::create($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -55,9 +85,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        //
+        $data = Product::with('category')->with('stock')->where('id', $id)->first();
+        $data->stock_id = Stock::find($data['stock_id']);
+        $data['category_id'] = $data['category'];
+        return $data;
     }
 
     /**
@@ -67,9 +100,33 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
+        $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
+        // $this->validate($request,[
+        //     'code' => 'required|code|unique:products',
+        //     'name' => 'required',
+        //     'cost' => 'required',
+        // ]);
+        DB::beginTransaction();
+        try {
+            $photoname = NULL;
+            $product = Product::findOrFail($id);
+            if (!($product->image == $request->image)) {
+                if ($request->image != null) {
+                    $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+                    \Image::make($request->image)->save(public_path('img/product/') . $photoname);
+                    $request->merge(['image' => $photoname]);
+                }
+            }
+            $result = $product->update($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**

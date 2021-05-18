@@ -42,7 +42,7 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'email' => 'required|email|unique:customers',
             'name' => 'required',
             'phone' => 'required|min:11|numeric',
@@ -56,14 +56,13 @@ class VendorController extends Controller
                 \Image::make($request->image)->save(public_path('img/vendor/') . $photoname);
                 $request->merge(['logo' => $photoname]);
             }
-        $result = Vendor::create($request->all());
-        DB::commit();
-        return $result;
-    } catch (Exception $e) {
-        DB::rollback();
-        return Response::json($e, 400);
-    }
-
+            $result = Vendor::create($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
