@@ -44,6 +44,11 @@ export default [
                 url: "/apps/list/sale",
                 name: "Sales",
                 slug: "sale-list",
+            },
+            {
+                url: "/apps/list/purchase",
+                name: "Purchases",
+                slug: "purchase-list",
             }
         ].reverse()
     },
@@ -87,6 +92,11 @@ export default [
                 url: "/apps/add/sale",
                 name: "Sale",
                 slug: "sale-add",
+            },
+            {
+                url: "/apps/add/purchase",
+                name: "Purchase",
+                slug: "purchase-add",
             }
         ].reverse()
     },

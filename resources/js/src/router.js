@@ -135,6 +135,18 @@ const router = new Router({
                   btn_plus_path: '/apps/add/sale',
                 }
               },
+              {
+                path: '/apps/list/purchase',
+                name: 'list-purchase',
+                component: () => import('./views/apps/purchase/PurchaseList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Purchases List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/purchase',
+                }
+              },
 
               // End Of List Routes
               
@@ -243,6 +255,19 @@ const router = new Router({
                   btn_list_path: '/apps/list/product',
                 }
               },
+              {
+                path: '/apps/add/purchase',
+                name: 'add-purchase',
+                component: () => import('./views/apps/purchase/PurchaseAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Purchases List', url: {name: 'list-purchase'} },
+                    { title: 'Add Purchase', active: true }
+                  ],
+                  btn_list_path: '/apps/list/purchase',
+                }
+              },
               // End of add routes
               // Edit Routes
               {
@@ -269,6 +294,19 @@ const router = new Router({
                     { title: 'Edit Sale', active: true }
                   ],
                   btn_list_path: '/apps/list/sale',
+                }
+              },
+              {
+                path: '/apps/edit/purchase/:id',
+                name: 'edit-purchase',
+                component: () => import('./views/apps/purchase/PurchaseAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Purchases List', url: {name: 'list-purchase'} },
+                    { title: 'Edit Purchase', active: true }
+                  ],
+                  btn_list_path: '/apps/list/purchase',
                 }
               },
               // End Of Edit Routes

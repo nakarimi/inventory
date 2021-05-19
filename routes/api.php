@@ -31,6 +31,7 @@ Route::resource('categories', 'CategoryController');
 Route::resource('stocks', 'StockController');
 Route::resource('products', 'ProductController');
 Route::resource('sales', 'SaleController');
+Route::resource('purchases', 'PurchaseController');
 
 // Custom Routes
 Route::get('home', 'UserController@home');
