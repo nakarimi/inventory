@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
+use App\Models\User;
+use App\Models\Stock;
 use App\Helper\Helper;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -44,16 +47,20 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        // return Response::json($request, 400);
-
+        // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
+
+            // Extract object label to be stored in database.
             $request['customer'] = (isset($request['customer_id']) && $request['customer_id'] != null) ? $request['customer_id']['name'] : null;
             $request['stock'] = (isset($request['stock_id']) && $request['stock_id'] != null) ? $request['stock_id']['name'] : null;
             $request['biller'] = (isset($request['biller_id']) && $request['biller_id'] != null) ? $request['biller_id']['first_name'] : null;
+
+            // Set two default status.
             $request['sale_status'] = 'active';
             $request['payment_status'] = 'none';
 
+            // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'biller_id');
             Helper::get_id($request, 'customer_id');
@@ -61,10 +68,11 @@ class SaleController extends Controller
             DB::commit();
             return $result;
         } catch (Exception $e) {
+
+            // Rollback the invalid changes on database. and throw the error to API.
             DB::rollback();
             return Response::json($e, 400);
         }
-
     }
 
     /**
@@ -84,9 +92,18 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sale $sale)
+    public function edit($id)
     {
-        //
+
+        // Load sale data to be inserted in the form.
+        $sale = Sale::with(['customer', 'stock', 'biller'])->find($id);
+
+        // These should be object to be fill by default in select list.
+        $sale['biller_id'] = User::find($sale['biller_id']);
+        $sale['customer_id'] = Customer::find($sale['customer_id']);
+        $sale['stock_id'] = Stock::find($sale['stock_id']);
+
+        return $sale;
     }
 
     /**
@@ -96,9 +113,37 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sale $sale)
+    public function update(Request $request, $id)
     {
-        //
+        // Using transaction that if process failed the invalid data will be cleared.
+        DB::beginTransaction();
+        try {
+
+            // Extract object label to be stored in database.
+            $request['customer'] = (isset($request['customer_id']) && $request['customer_id'] != null) ? $request['customer_id']['name'] : null;
+            $request['stock'] = (isset($request['stock_id']) && $request['stock_id'] != null) ? $request['stock_id']['name'] : null;
+            $request['biller'] = (isset($request['biller_id']) && $request['biller_id'] != null) ? $request['biller_id']['first_name'] : null;
+
+            // Set two default status.
+            $request['sale_status'] = 'active';
+            $request['payment_status'] = 'none';
+
+            // Get Id From object as the object can't be stored in DB.
+            Helper::get_id($request, 'stock_id');
+            Helper::get_id($request, 'biller_id');
+            Helper::get_id($request, 'customer_id');
+
+            // Load the main sale object and update it with new data.
+            $sale = Sale::find($id);
+            $sale->update($request->all());
+            DB::commit();
+            return $sale;
+        } catch (Exception $e) {
+
+            // Rollback the invalid changes on database. and throw the error to API.
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**

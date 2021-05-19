@@ -26,7 +26,7 @@ class CreateSalesTable extends Migration
             $table->string('sale_status');
             $table->string('payment_status');
             $table->string('due_date');
-            $table->string('note')->nullable();
+            $table->text('note')->nullable();
             $table->decimal('discount', 10, 3)->nullable();
             $table->decimal('product_tax', 10, 3)->nullable();
             $table->string('payment_term')->nullable();

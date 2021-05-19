@@ -46,7 +46,6 @@ class StockController extends Controller
             'name' => 'required',
             'manager' => 'required',
             'phone' => 'required|min:11|numeric',
-
         ]);
         DB::beginTransaction();
         try {

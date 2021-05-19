@@ -36,5 +36,9 @@ class Sale extends Model
     {
         return $this->belongsTo(Stock::class, 'stock_id');
     }
+    public function biller()
+    {
+        return $this->belongsTo(User::class, 'biller_id');
+    }
 
 }
