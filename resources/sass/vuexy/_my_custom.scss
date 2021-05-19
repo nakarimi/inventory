@@ -1,13 +1,13 @@
 [dir] .v-nav-menu .vs-sidebar .vs-sidebar--items {
     background: rgb(255, 255, 255) !important;
     background-image: none;
-    background-image: linear-gradient(calc(360deg - 175deg), rgba(193, 166, 255, 0.25) 6%, rgb(248, 248, 248) 130%) !important;
-}
+    background-image: linear-gradient(calc(360deg - 175deg), #fff 6%, #f8f8f8 130%) !important;
+  }
 .link-color {
     color: rgba(var(--vs-primary), 1);
 }
 table thead.vs-table--thead tr {
-    background: #e8e6fd !important;
+    background: #f0f0f0 !important;
 }
 [dir] .v-nav-menu .shadow-bottom{
   display: none !important;

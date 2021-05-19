@@ -22,7 +22,7 @@
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Biller</small></label>
-            <v-select label="name" name="biller_id" v-validate="'required'" v-model="form.biller_id" :get-option-label="option => option.first_name + ' ' +option.last_name" :options="billers" />
+            <v-select label="name" name="biller_id" v-validate="'required'" v-model="form.biller_id" :get-option-label="option => option.first_name + ' ' + option.last_name" :options="billers" />
             <span class="text-danger text-sm">{{ errors.first('biller_id') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
@@ -157,7 +157,7 @@ export default {
     loadSale(id) {
       this.axios.get(`/api/sales/${id}/edit`).then((response) => {
         this.form.fill(response.data);
-        this.form.image = '/img/product/' + this.form.image;
+        console.log(this.form);
       }).catch(() => {})
     },
     loadCategory() {
