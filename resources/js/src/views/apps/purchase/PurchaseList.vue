@@ -1,5 +1,6 @@
 <template lang="">
 <div>
+  <items />
   <vx-card>
     <vs-table ref="table" :data="purchases" stripe>
       <template slot="thead">
@@ -50,6 +51,8 @@
 </template>
 
 <script>
+
+
 export default {
   data() {
     return {

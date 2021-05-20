@@ -6,75 +6,81 @@
         <h1>Add New Sale</h1>
         <vs-row>
 
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <label for=""><small>Date</small></label>
-            <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime>
-            <span class="text-danger text-sm">{{ errors.first('date') }}</span>
-          </vs-col>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('reference_no') }}</span>
+          <vs-col class="sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4">
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
+              <label for=""><small>Date</small></label>
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime>
+              <span class="text-danger text-sm">{{ errors.first('date') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
+              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('reference_no') }}</span>
+            </vs-col>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Customer</small></label>
-            <v-select label="name" name="customer_id" v-validate="'required'" v-model="form.customer_id" :options="customers" />
+            <v-select label="name" :clearable="false" name="customer_id" v-validate="'required'" v-model="form.customer_id" :options="customers" />
             <span class="text-danger text-sm">{{ errors.first('customer_id') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Biller</small></label>
-            <v-select label="name" name="biller_id" v-validate="'required'" v-model="form.biller_id" :get-option-label="option => option.first_name + ' ' + option.last_name" :options="billers" />
+            <v-select label="name" :clearable="false" name="biller_id" v-validate="'required'" v-model="form.biller_id" :get-option-label="option => option.first_name + ' ' + option.last_name" :options="billers" />
             <span class="text-danger text-sm">{{ errors.first('biller_id') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Stock</small></label>
-            <v-select label="name" name="stock_id" v-validate="'required'" v-model="form.stock_id" :options="stocks" />
+            <v-select label="name" :clearable="false" name="stock_id" v-validate="'required'" v-model="form.stock_id" :options="stocks" />
             <span class="text-danger text-sm">{{ errors.first('stock_id') }}</span>
           </vs-col>
-
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total" label="Total" v-model="form.total" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('total') }}</span>
-          </vs-col>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <label for=""><small>Due Date</small></label>
-            <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date"></datetime>
-            <span class="text-danger text-sm">{{ errors.first('due_date') }}</span>
-          </vs-col>
         </vs-row>
+
+        <!-- Import the items component from another component -->
+        <items :form="form" />
+
         <vs-row>
+          <vs-col class="sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2">
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="discount" label="Discount" v-model="form.discount" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('discount') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="product_tax" label="Product Tax" v-model="form.product_tax" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('product_tax') }}</span>
+            </vs-col>
+
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="payment_term" label="Payment Term" v-model="form.payment_term" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('payment_term') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total_items" label="Total Items" v-model="form.total_items" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('total_items') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="pos" label="Pos" v-model="form.pos" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('pos') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="paid" label="Paid" v-model="form.paid" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('paid') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-2/3 xl:w-2/3 p-2">
+              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total" label="Total" v-model="form.total" class="w-full" />
+              <span class="text-danger text-sm">{{ errors.first('total') }}</span>
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <label for=""><small>Due Date</small></label>
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date"></datetime>
+              <span class="text-danger text-sm">{{ errors.first('due_date') }}</span>
+            </vs-col>
+          </vs-col>
+
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-            <vs-textarea rows="10" v-validate="'required'" data-vv-validate-on="blur" label="Note" name="note" v-model="form.note" class="w-full" />
+            <label for=""><small>Details</small></label>
+            <vs-textarea rows="10" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
             <span class="text-danger text-sm">{{ errors.first('note') }}</span>
           </vs-col>
-        </vs-row>
-        <vs-row>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="discount" label="Discount" v-model="form.discount" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('discount') }}</span>
-          </vs-col>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="product_tax" label="Product Tax" v-model="form.product_tax" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('product_tax') }}</span>
-          </vs-col>
 
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="payment_term" label="Payment Term" v-model="form.payment_term" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('payment_term') }}</span>
-          </vs-col>
-        </vs-row>
-        <vs-row>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total_items" label="Total Items" v-model="form.total_items" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('total_items') }}</span>
-          </vs-col>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="pos" label="Pos" v-model="form.pos" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('pos') }}</span>
-          </vs-col>
-          <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="paid" label="Paid" v-model="form.paid" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('paid') }}</span>
-          </vs-col>
         </vs-row>
         <form-error :form="form"></form-error>
         <vs-button class="float-right mt-6" @click="storeSale" :disabled="!validateForm">Send</vs-button>
@@ -87,11 +93,23 @@
 <script>
 import FormError from '../../share/FormError'
 import vSelect from "vue-select";
-import { Datetime } from 'vue-datetime';
+import {
+  Datetime
+} from 'vue-datetime';
+import Items from '../../share/Items'
+
 export default {
   data() {
     return {
       form: new Form({
+        items: [{
+          item_id: "",
+          unit_id: "",
+          ammount: "0",
+          unit_price: "0",
+          total_price: "0",
+        }, ],
+
         date: '',
         reference_no: '',
         customer_id: '',
@@ -115,8 +133,10 @@ export default {
     }
   },
   components: {
-    FormError, datetime: Datetime,
+    FormError,
+    datetime: Datetime,
     "v-select": vSelect,
+    Items,
   },
   computed: {
     validateForm() {
