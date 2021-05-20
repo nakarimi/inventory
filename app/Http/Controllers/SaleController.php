@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Stock;
 use App\Helper\Helper;
 use App\Models\Customer;
+use App\Models\StockRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -50,7 +51,6 @@ class SaleController extends Controller
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
-
             // Extract object label to be stored in database.
             $request['customer'] = (isset($request['customer_id']) && $request['customer_id'] != null) ? $request['customer_id']['name'] : null;
             $request['stock'] = (isset($request['stock_id']) && $request['stock_id'] != null) ? $request['stock_id']['name'] : null;
@@ -65,6 +65,7 @@ class SaleController extends Controller
             Helper::get_id($request, 'biller_id');
             Helper::get_id($request, 'customer_id');
             $result = Sale::create($request->all());
+            Helper::store_items('sale', $result->id, $request);
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -103,6 +104,11 @@ class SaleController extends Controller
         $sale['customer_id'] = Customer::find($sale['customer_id']);
         $sale['stock_id'] = Stock::find($sale['stock_id']);
 
+        // Find Items based on type and it.
+        $sale['items'] = StockRecord::where('type', 'sale')->where('type_id', $id)
+            ->with(['category_id', 'item_id'])
+            ->select('decrement AS ammount', 'stock_records.*')
+            ->get();
         return $sale;
     }
 
@@ -136,6 +142,7 @@ class SaleController extends Controller
             // Load the main sale object and update it with new data.
             $sale = Sale::find($id);
             $sale->update($request->all());
+            Helper::store_items('sale', $id, $request);
             DB::commit();
             return $sale;
         } catch (Exception $e) {

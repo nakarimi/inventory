@@ -77,6 +77,7 @@ export default {
     return {
       form: new Form({
         items: [{
+          category_id: "",
           item_id: "",
           unit_id: "",
           ammount: "0",

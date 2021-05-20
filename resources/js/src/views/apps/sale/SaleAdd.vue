@@ -103,6 +103,7 @@ export default {
     return {
       form: new Form({
         items: [{
+          category_id: "",
           item_id: "",
           unit_id: "",
           ammount: "0",
@@ -177,7 +178,7 @@ export default {
     loadSale(id) {
       this.axios.get(`/api/sales/${id}/edit`).then((response) => {
         this.form.fill(response.data);
-        console.log(this.form);
+
       }).catch(() => {})
     },
     loadCustomers() {

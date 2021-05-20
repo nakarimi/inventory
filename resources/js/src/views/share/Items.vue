@@ -6,7 +6,7 @@
       <vs-row vs-w="12" class="pb-2 mb-2">
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <label for=""><small>Category</small></label>
-          <v-select label="name" :clearable="false" @input="categorySelected($event, index)" :options="categories" />
+          <v-select label="name" v-model="i.category_id" :clearable="false" @input="categorySelected($event, index)" :options="categories" />
           <span class="text-danger text-sm">{{ errors.first('item_id') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
@@ -83,13 +83,12 @@ export default {
     items_total() {
       let main_price = 0;
       for (const key of Object.keys(this.form.items)) {
+        this.form.items[key].unit_id = this.units.find(e => e.id == this.form.items[key].unit_id || e.id == this.form.items[key].unit_id.id);
         this.form.items[key].total_price = (this.form.items[key].unit_price * this.form.items[key].ammount);
         main_price += this.form.items[key].total_price;
       }
-
       this.form.total = main_price;
     }
-
   },
   methods: {
     categorySelected($event, index) {
@@ -97,6 +96,7 @@ export default {
     },
     addRow() {
       this.form.items.push({
+        category_id: "",
         item_id: "",
         unit_id: "",
         ammount: "0",
