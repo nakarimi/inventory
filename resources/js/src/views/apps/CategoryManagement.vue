@@ -74,10 +74,10 @@ export default {
     }
   },
   created() {
-    this.loadBranches()
+    this.loadCategories()
   },
   methods: {
-    loadBranches() {
+    loadCategories() {
       this.axios.get('/api/categories').then((response) => {
         this.categories = response.data
       }).catch(() => {})
@@ -86,7 +86,7 @@ export default {
       this.form.post('/api/categories')
         .then((response) => {
           this.form.reset()
-          this.loadBranches()
+          this.loadCategories()
           this.$vs.notify({
             title: 'Success!',
             text: 'Process completed successfully!',
@@ -116,7 +116,7 @@ export default {
     submitEditCategory() {
       this.form.patch('/api/categories/' + this.form.id)
         .then((response) => {
-          this.loadBranches()
+          this.loadCategories()
           this.form.reset()
           this.$validator.reset()
           this.$vs.notify({
@@ -158,7 +158,7 @@ export default {
                 text: 'Process completed successfully!',
                 icon: 'success',
               })
-              this.loadBranches()
+              this.loadCategories()
             })
             .catch(() => {
               swal.fire({

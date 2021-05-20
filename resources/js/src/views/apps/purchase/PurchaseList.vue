@@ -1,5 +1,6 @@
 <template lang="">
 <div>
+  <items />
   <vx-card>
     <vs-table ref="table" :data="purchases" stripe>
       <template slot="thead">
@@ -37,7 +38,9 @@
               <p>{{ tr.due_date | formatDate }}</p>
             </vs-td>
             <vs-td>
-              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/purchase/${tr.id}`).catch(() => {})">Edit</span>
+              <span class="cursor-pointer" @click="$router.push(`/apps/edit/purchase/${tr.id}`).catch(() => {})">
+                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </span>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -48,6 +51,8 @@
 </template>
 
 <script>
+
+
 export default {
   data() {
     return {
