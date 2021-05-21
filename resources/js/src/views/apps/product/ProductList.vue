@@ -37,7 +37,9 @@
               <p>{{ tr.category.name }}</p>
             </vs-td>
             <vs-td>
-              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/product/${tr.id}`).catch(() => {})">Edit</span>
+              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/product/${tr.id}`).catch(() => {})">
+                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </span>
             </vs-td>
           </vs-tr>
         </tbody>

@@ -83,7 +83,9 @@ export default {
     items_total() {
       let main_price = 0;
       for (const key of Object.keys(this.form.items)) {
-        this.form.items[key].unit_id = this.units.find(e => e.id == this.form.items[key].unit_id || e.id == this.form.items[key].unit_id.id);
+        if (this.form.items[key].id) {
+          this.form.items[key].unit_id = this.units.find(e => e.id == this.form.items[key].unit_id || e.id == this.form.items[key].unit_id.id);
+        }
         this.form.items[key].total_price = (this.form.items[key].unit_price * this.form.items[key].ammount);
         main_price += this.form.items[key].total_price;
       }
