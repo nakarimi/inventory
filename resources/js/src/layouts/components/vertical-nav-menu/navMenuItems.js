@@ -49,6 +49,11 @@ export default [
                 url: "/apps/list/purchase",
                 name: "Purchases",
                 slug: "purchase-list",
+            },
+            {
+                url: "/apps/list/payment",
+                name: "Payments",
+                slug: "payment-list",
             }
         ].reverse()
     },
@@ -97,6 +102,11 @@ export default [
                 url: "/apps/add/purchase",
                 name: "Purchase",
                 slug: "purchase-add",
+            },
+            {
+                url: "/apps/add/payment",
+                name: "Payment",
+                slug: "payment-add",
             }
         ].reverse()
     },

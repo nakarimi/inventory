@@ -147,6 +147,18 @@ const router = new Router({
                   btn_plus_path: '/apps/add/purchase',
                 }
               },
+              {
+                path: '/apps/list/payment',
+                name: 'list-payment',
+                component: () => import('./views/apps/payment/PaymentList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Payments List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/payment',
+                }
+              },
 
               // End Of List Routes
               
@@ -268,6 +280,19 @@ const router = new Router({
                   btn_list_path: '/apps/list/purchase',
                 }
               },
+              {
+                path: '/apps/add/payment',
+                name: 'add-payment',
+                component: () => import('./views/apps/payment/PaymentAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Payments List', url: {name: 'list-payment'} },
+                    { title: 'Add Payment', active: true }
+                  ],
+                  btn_list_path: '/apps/list/payment',
+                }
+              },
               // End of add routes
               // Edit Routes
               {
@@ -307,6 +332,19 @@ const router = new Router({
                     { title: 'Edit Purchase', active: true }
                   ],
                   btn_list_path: '/apps/list/purchase',
+                }
+              },
+              {
+                path: '/apps/edit/payment/:id',
+                name: 'edit-payment',
+                component: () => import('./views/apps/payment/PaymentAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Payments List', url: {name: 'list-payment'} },
+                    { title: 'Edit Payment', active: true }
+                  ],
+                  btn_list_path: '/apps/list/payment',
                 }
               },
               // End Of Edit Routes

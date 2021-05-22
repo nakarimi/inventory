@@ -21,6 +21,8 @@ class Purchase extends Model
         'user_id',
     ];
 
+
+    // Database relation diffinition.
     public function vendor()
     {
         return $this->belongsTo(Vendor::class, 'vendor_id');

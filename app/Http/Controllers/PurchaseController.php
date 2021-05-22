@@ -27,6 +27,7 @@ class PurchaseController extends Controller
      */
     public function index()
     {
+        // Load All Purchases with associate vendor and stock.
         return Purchase::with(['vendor', 'stock'])->get();
     }
 
@@ -99,6 +100,7 @@ class PurchaseController extends Controller
         // These should be object to be fill by default in select list.
         $purchase['vendor_id'] = Vendor::find($purchase['vendor_id']);
         $purchase['stock_id'] = Stock::find($purchase['stock_id']);
+        
         // Find Items based on type and it.
         $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
