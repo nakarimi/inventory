@@ -8,23 +8,23 @@
           <h1>Add New Vendor</h1>
           <div class="mt-2 mb-2 grid">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="email" label="Email Address" v-model="form.email" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('email') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('email') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('phone') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="website" label="Website" v-model="form.website" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('website') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('website') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('address') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
           </div>
         </div>
       </div>

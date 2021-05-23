@@ -6,15 +6,15 @@
         <h1>Add New Branch</h1>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('code') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('address') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
         </div>
         <vs-button class="float-right mt-6" @click="storeBranch" :disabled="!validateForm">Send</vs-button>
         <form-error :form="form"></form-error>

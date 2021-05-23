@@ -15,15 +15,14 @@ class CreateTransfersTable extends Migration
     {
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('source_account');
-            $table->unsignedBigInteger('target_account');
-            $table->foreign('source_account')->references('id')->on('accounts')->onDelete('cascade');
-            $table->foreign('target_account')->references('id')->on('accounts')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            $table->unsignedBigInteger('source_stock');
+            $table->unsignedBigInteger('target_stock');
             $table->decimal('ammount', 10, 3);
             $table->string('approval_status');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('source_stock')->references('id')->on('stocks')->onDelete('cascade');
+            $table->foreign('target_stock')->references('id')->on('stocks')->onDelete('cascade');
             $table->timestamps();
         });
     }

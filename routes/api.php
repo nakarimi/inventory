@@ -33,6 +33,9 @@ Route::resource('products', 'ProductController');
 Route::resource('sales', 'SaleController');
 Route::resource('purchases', 'PurchaseController');
 Route::resource('payments', 'PaymentController');
+Route::resource('fixpayments', 'FixPaymentController');
+Route::resource('transfers', 'TransferController');
+Route::get('transactions', 'TransferController@transactions');
 
 // Custom Routes
 Route::get('home', 'UserController@home');

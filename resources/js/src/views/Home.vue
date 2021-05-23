@@ -3,17 +3,22 @@
   <h1 class="mb-5">Overview Panel</h1>
   <vs-row>
     <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-      <h5>Products Sales</h5>
-      <vue-apex-charts type="bar" height="350" :options="barChart.chartOptions" :series="barChart.series"></vue-apex-charts>
+      <vs-card>
+        <vs-divider>Products Sales</vs-divider>
+        <vue-apex-charts type="bar" height="350" :options="barChart.chartOptions" :series="barChart.series"></vue-apex-charts>
+      </vs-card>
     </vs-col>
     <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-      <h5>Category</h5>
-      <vue-apex-charts type="radialBar" height="350" :options="radialBarChart.chartOptions" :series="radialBarChart.series"></vue-apex-charts>
+      <vs-card>
+        <vs-divider>Category</vs-divider>
+        <vue-apex-charts type="radialBar" height="350" :options="radialBarChart.chartOptions" :series="radialBarChart.series"></vue-apex-charts>
+      </vs-card>
     </vs-col>
   </vs-row>
-  <h5>Financial Status</h5>
-  <vue-apex-charts type="bar" height="350" :options="columnChart.chartOptions" :series="columnChart.series"></vue-apex-charts>
-
+  <vs-card>
+    <vs-divider>Financial Status</vs-divider>
+    <vue-apex-charts type="bar" height="350" :options="columnChart.chartOptions" :series="columnChart.series"></vue-apex-charts>
+  </vs-card>
 </div>
 </template>
 
@@ -108,7 +113,6 @@ export default {
         }
       },
 
-      
       // Category chart information.
       radialBarChart: {
         series: [44, 55, 67, 83],

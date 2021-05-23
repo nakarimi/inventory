@@ -20,12 +20,12 @@ class CreateTransactionsTable extends Migration
             $table->decimal('credit', 10, 3)->nullable();
             $table->decimal('debit', 10, 3)->nullable();
             $table->unsignedBigInteger('account_id');
-            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->string('status');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

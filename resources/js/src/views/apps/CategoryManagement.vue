@@ -6,11 +6,11 @@
       <div class="sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 p-4">
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required|min:3'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required|min:3'" data-vv-validate-on="blur" name="slug" label="Slug" v-model="form.slug" @input="form.errors.errors.slug = []" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('slug') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('slug') }}</span>
         </div>
         <vs-button class="float-right m-3" v-if="!this.form.id" @click="addNewCategory" :disabled="!validateForm">Add New</vs-button>
         <vs-button class="float-right m-3" v-if="this.form.id" @click="submitEditCategory" :disabled="!validateForm">Update</vs-button>

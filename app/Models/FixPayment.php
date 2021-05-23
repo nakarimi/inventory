@@ -4,21 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Transaction extends Model
+class FixPayment extends Model
 {
     protected $fillable = [
+        'ammount',
+        'receiver',
+        'title',
         'type',
-        'type_id',
-        'credit',
-        'debit',
+        'date',
+        'payment_status',
+        'note',
+        'approval_code',
         'account_id',
-        'status',
-        'description',
         'user_id',
     ];
+
+
+    // Payment Database relation diffinition.
     public function account_id()
     {
         return $this->belongsTo(Account::class, 'account_id');
     }
-
 }

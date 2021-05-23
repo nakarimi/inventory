@@ -31,6 +31,11 @@ Vue.filter('formatDate', function(value) {
       return moment(String(value)).format('YYYY-MM-DD')
     }
   })
+Vue.filter('formatDateTime', function(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD H:m:s')
+    }
+  })
 // start sweetalert
 import Swal from 'sweetalert2'
 window.swal = Swal

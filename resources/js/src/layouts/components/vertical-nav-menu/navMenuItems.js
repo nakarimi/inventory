@@ -54,6 +54,21 @@ export default [
                 url: "/apps/list/payment",
                 name: "Payments",
                 slug: "payment-list",
+            },
+            {
+                url: "/apps/list/fixpayment",
+                name: "Fix Payments",
+                slug: "fixpayment-list",
+            },
+            {
+                url: "/apps/list/transfer",
+                name: "Transfers",
+                slug: "transfer-list",
+            },
+            {
+                url: "/apps/list/transaction",
+                name: "Transactions",
+                slug: "transaction-list",
             }
         ].reverse()
     },
@@ -107,6 +122,16 @@ export default [
                 url: "/apps/add/payment",
                 name: "Payment",
                 slug: "payment-add",
+            },
+            {
+                url: "/apps/add/fixpayment",
+                name: "Fix Payment",
+                slug: "fixpayment-add",
+            },
+            {
+                url: "/apps/add/transfer",
+                name: "Transfer",
+                slug: "transfer-add",
             }
         ].reverse()
     },

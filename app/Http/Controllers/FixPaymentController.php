@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Helper\Helper;
-use App\Models\Payment;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\FixPayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
-class PaymentController extends Controller
+class FixPaymentController extends Controller
 {
     // Adding the current user to each request.
     // By user id the branch also will be available.
@@ -25,8 +24,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        // Load All Payments with associate vendor and stock.
-        return Payment::with(['account_id', 'purchase_id', 'sale_id'])->get();
+        // Load All FixPayments with associate vendor and stock.
+        return FixPayment::with(['account_id'])->get();
     }
 
     /**
@@ -56,17 +55,15 @@ class PaymentController extends Controller
 
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'account_id');
-            Helper::get_id($request, 'user_account');
-            Helper::get_id($request, 'sale_id');
-            Helper::get_id($request, 'purchase_id');
 
-            $result = Payment::create($request->all());
+            $result = FixPayment::create($request->all());
+
             // Add transaction records.
             $data = [
-                'type' => 'payment',
+                'type' => 'fixpayment',
                 'type_id' => $result->id,
-                'credit' => ($result->type == 'In') ? $result->amount : 0,
-                'debit' => ($result->type == 'Out') ? $result->amount : 0,
+                'credit' => ($result->type == 'In') ? $result->ammount : 0,
+                'debit' => ($result->type == 'Out') ? $result->ammount : 0,
                 'account_id' => $request->account_id,
                 'status' => $result->type,
                 'description' => '---',
@@ -87,10 +84,10 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Payment  $payment
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
-    public function show(Payment $payment)
+    public function show(FixPayment $fixpayment)
     {
         //
     }
@@ -98,23 +95,23 @@ class PaymentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Payment  $payment
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        // Load All Payments with associate vendor and stock.
-        return Payment::with(['account_id', 'purchase_id', 'sale_id'])->find($id);
+        // Load All FixPayments with associate vendor and stock.
+        return FixPayment::with(['account_id'])->find($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Payment  $payment
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Payment $payment)
+    public function update(Request $request, FixPayment $fixpayment)
     {
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
@@ -125,27 +122,25 @@ class PaymentController extends Controller
 
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'account_id');
-            Helper::get_id($request, 'user_account');
-            Helper::get_id($request, 'sale_id');
-            Helper::get_id($request, 'purchase_id');
 
-            $result = $payment->update($request->all());
+            $result = $fixpayment->update($request->all());
 
 
+            // Add Transaction recored.
             $data = [
-                'type' => 'payment',
-                'type_id' => $payment->id,
-                'credit' => ($payment->type == 'In') ? $payment->amount : 0,
-                'debit' => ($payment->type == 'Out') ? $payment->amount : 0,
+                'type' => 'fixpayment',
+                'type_id' => $fixpayment->id,
+                'credit' => ($fixpayment->type == 'In') ? $fixpayment->ammount : 0,
+                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->ammount : 0,
                 'account_id' => $request->account_id,
-                'status' => $payment->type,
+                'status' => $fixpayment->type,
                 'description' => '---',
                 'user_id' => $request->user_id,
             ];
             Helper::do_transaction($data, true);
 
             DB::commit();
-            return $payment;
+            return $fixpayment;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -157,10 +152,10 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Payment  $payment
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Payment $payment)
+    public function destroy(FixPayment $fixpayment)
     {
         //
     }

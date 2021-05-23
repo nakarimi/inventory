@@ -8,21 +8,21 @@
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Date</small></label>
             <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime>
-            <span class="text-danger text-sm">{{ errors.first('date') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('date') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('reference_no') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('reference_no') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Vendor</small></label>
             <v-select label="name" name="vendor_id" v-validate="'required'" v-model="form.vendor_id" :options="vendors" />
-            <span class="text-danger text-sm">{{ errors.first('vendor_id') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('vendor_id') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Stock</small></label>
             <v-select label="name" name="stock_id" v-validate="'required'" v-model="form.stock_id" :options="stocks" />
-            <span class="text-danger text-sm">{{ errors.first('stock_id') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('stock_id') }}</span>
           </vs-col>
         </vs-row>
 
@@ -32,27 +32,26 @@
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <label for=""><small>Note</small></label>
-
             <vs-textarea rows="6" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('note') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
               <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="discount" label="Discount" v-model="form.discount" class="w-full" />
-              <span class="text-danger text-sm">{{ errors.first('discount') }}</span>
+              <span class="text-danger text-sm absolute">{{ errors.first('discount') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
               <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total_tax" label="Total Tax" v-model="form.total_tax" class="w-full" />
-              <span class="text-danger text-sm">{{ errors.first('total_tax') }}</span>
+              <span class="text-danger text-sm absolute">{{ errors.first('total_tax') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
               <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total" label="Total" v-model="form.total" class="w-full" />
-              <span class="text-danger text-sm">{{ errors.first('total') }}</span>
+              <span class="text-danger text-sm absolute">{{ errors.first('total') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
               <label for=""><small>Due Date</small></label>
               <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date"></datetime>
-              <span class="text-danger text-sm">{{ errors.first('due_date') }}</span>
+              <span class="text-danger text-sm absolute">{{ errors.first('due_date') }}</span>
             </vs-col>
           </vs-col>
         </vs-row>
