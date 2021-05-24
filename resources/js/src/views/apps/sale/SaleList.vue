@@ -43,6 +43,9 @@
               <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
                 <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
               </span>
+              <a class="cursor-pointer my-text-black hover:text-danger" target="_blank" :href="`/print?type=sale&id=${tr.id}`">
+                <feather-icon icon="PrinterIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </a>
             </vs-td>
           </vs-tr>
         </tbody>

@@ -1,30 +1,54 @@
 [dir] .v-nav-menu .vs-sidebar .vs-sidebar--items {
     background: rgb(255, 255, 255) !important;
     background-image: none;
-    background-image: linear-gradient(calc(360deg - 175deg), #fff 6%, #f8f8f8 130%) !important;
-  }
+    background-image: linear-gradient(
+        calc(360deg - 175deg),
+        #fff 6%,
+        #f8f8f8 130%
+    ) !important;
+}
 .link-color {
     color: rgba(var(--vs-primary), 1);
 }
 table thead.vs-table--thead tr {
     background: #f0f0f0 !important;
 }
-[dir] .v-nav-menu .shadow-bottom{
-  display: none !important;
+[dir] .v-nav-menu .shadow-bottom {
+    display: none !important;
 }
-.vs-sidebar--items .header-sidebar{
-  border-bottom: solid 1px gray;
+.vs-sidebar--items .header-sidebar {
+    border-bottom: solid 1px gray;
 }
 .vs__selected-options {
-  display: contents;
+    display: contents;
 }
 d.vs-icon {
-  font-size: 1.5rem !important;
+    font-size: 1.5rem !important;
 }
-.apexcharts-menu-icon{
-  display: none !important;
+.apexcharts-menu-icon {
+    display: none !important;
 }
-.vuesax-app-is-ltr .vs-chip--text{
-  min-width: 50px;
-  font-weight: bold;
+.vuesax-app-is-ltr .vs-chip--text {
+    min-width: 50px;
+    font-weight: bold;
+}
+
+@media print {
+    img {
+        margin: 5px !important;
+    }
+    .vx-logo-text {
+        margin-right: 20px !important;
+        margin-left: 20px !important;
+        color: #ea5455 !important;
+        font-size: 18px !important;
+        // text-align: left !important;
+        font-weight: 600 !important;
+    }
+    body {
+        -webkit-print-color-adjust: exact !important;
+    }
+}
+a.my-text-black{
+  color: #626262;
 }
