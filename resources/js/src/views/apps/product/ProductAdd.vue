@@ -8,29 +8,29 @@
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('code') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="unit" label="Unit" v-model="form.unit" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('unit') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('unit') }}</span>
           </vs-col>
         </vs-row>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="cost" label="Cost" v-model="form.cost" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('cost') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('cost') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="price" label="Price" v-model="form.price" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('price') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('price') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <vs-textarea rows="10" v-validate="'required'" data-vv-validate-on="blur" name="Product Details" label="product_details" v-model="form.product_details" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('product_details') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('product_details') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <div class="vx-col w-full">
@@ -56,7 +56,7 @@
                 <vs-button @click="$refs.uploadImgInput.click()">Upload</vs-button>
               </div>
             </div>
-            <span class="text-danger text-sm">{{ errors.first('image') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('image') }}</span>
           </vs-col>
 
         </vs-row>
@@ -65,58 +65,58 @@
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Category</small></label>
             <v-select label="name" name="category_id" v-validate="'required'" v-model="form.category_id" :options="categories" />
-            <span class="text-danger text-sm">{{ errors.first('category_id') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('category_id') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Stock</small></label>
             <v-select label="name" name="stock_id" v-validate="'required'" v-model="form.stock_id" :options="stocks" />
-            <span class="text-danger text-sm">{{ errors.first('stock_id') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('stock_id') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="quantity" label="quantity" v-model="form.quantity" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('quantity') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('quantity') }}</span>
           </vs-col>
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="barcode_symbology" label="Barcode Symbology" v-model="form.barcode_symbology" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('barcode_symbology') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('barcode_symbology') }}</span>
           </vs-col>
         </vs-row>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="tax" label="tax" v-model="form.tax" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('tax') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('tax') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="type" label="type" v-model="form.type" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('type') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('type') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="supplier" label="supplier" v-model="form.supplier" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('supplier') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('supplier') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="supplier_price" label="Supplier Price" v-model="form.supplier_price" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('supplier_price') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('supplier_price') }}</span>
           </vs-col>
         </vs-row>
         <vs-row>
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="sale_unit" label="sale_unit" v-model="form.sale_unit" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('sale_unit') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('sale_unit') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="purchase_unit" label="purchase_unit" v-model="form.purchase_unit" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('purchase_unit') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('purchase_unit') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="brand" label="brand" v-model="form.brand" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('brand') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('brand') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <vs-input v-validate="'required'" data-vv-validate-on="blur" name="featured" label="featured" v-model="form.featured" class="w-full" />
-            <span class="text-danger text-sm">{{ errors.first('featured') }}</span>
+            <span class="text-danger text-sm absolute">{{ errors.first('featured') }}</span>
           </vs-col>
         </vs-row>
         <form-error :form="form"></form-error>

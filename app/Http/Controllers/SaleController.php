@@ -161,6 +161,14 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $sale->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

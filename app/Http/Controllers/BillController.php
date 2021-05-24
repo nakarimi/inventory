@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class BillController extends Controller
 {
@@ -80,6 +82,14 @@ class BillController extends Controller
      */
     public function destroy(Bill $bill)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $bill->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

@@ -100,6 +100,14 @@ class StockController extends Controller
      */
     public function destroy(Stock $stock)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $stock->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

@@ -6,23 +6,23 @@
         <h1>Add New Stock</h1>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('code') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="manager" label="Manager" v-model="form.manager" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('manager') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('manager') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('phone') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('address') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
         </div>
         <form-error :form="form"></form-error>
         <vs-button class="float-right mt-6" @click="storeStock" :disabled="!validateForm">Send</vs-button>

@@ -1,15 +1,14 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="products" stripe>
+    <vs-table ref="table" :data="fixpayments" stripe>
       <template slot="thead">
         <vs-th>#</vs-th>
-        <vs-th>Name</vs-th>
-        <vs-th>Code</vs-th>
-        <vs-th>Quantity</vs-th>
-        <vs-th>Price</vs-th>
-        <vs-th>Stock</vs-th>
-        <vs-th>Category</vs-th>
+        <vs-th>Title</vs-th>
+        <vs-th>Account</vs-th>
+        <vs-th>Ammount</vs-th>
+        <vs-th>Paid To</vs-th>
+        <vs-th>Date</vs-th>
         <vs-th></vs-th>
       </template>
       <template slot-scope="{data}">
@@ -19,26 +18,23 @@
               <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.name }}</p>
+              <p>{{ tr.title }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.code }}</p>
+              <p>{{ tr.account_id.name }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.quantity }}</p>
+              <p>{{ tr.ammount }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.price }}</p>
+              <p>{{ tr.receiver }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.stock.name }}</p>
+              <p>{{ tr.created_at | formatDate }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.category.name }}</p>
-            </vs-td>
-            <vs-td>
-              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/product/${tr.id}`).catch(() => {})">
-                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-success stroke-current" class="cursor-pointer" />
+              <span class="cursor-pointer" @click="$router.push(`/apps/edit/fixpayment/${tr.id}`).catch(() => {})">
+                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
               </span>
               <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
                 <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
@@ -56,14 +52,13 @@
 export default {
   data() {
     return {
-      products: [],
+      fixpayments: [],
     }
   },
   created() {
-    this.loadProducts()
+    this.loadPayments()
   },
   methods: {
-
     // Delete the item from system, asking confirmation and show message in response.
     deleteEntity(id) {
       swal.fire({
@@ -73,16 +68,16 @@ export default {
         showCancelButton: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          this.axios.delete(`/api/products/${id}`)
+          this.axios.delete(`/api/fixpayments/${id}`)
             .then((id) => {
               swal.fire({
                 title: 'Completed!',
-                text: "Product removed from system successfully!",
+                text: "Payment removed from system successfully!",
                 icon: 'success',
               })
 
               // Reload the data to show valid information to the table.
-              this.loadProducts();
+              this.loadPayments();
             })
             .catch(() => {
               swal.fire(
@@ -94,11 +89,9 @@ export default {
         }
       })
     },
-
-    // Load all products to be listed on the table.
-    loadProducts() {
-      this.axios.get('/api/products').then((response) => {
-        this.products = response.data
+    loadPayments() {
+      this.axios.get('/api/fixpayments').then((response) => {
+        this.fixpayments = response.data
       }).catch(() => {})
     }
   }

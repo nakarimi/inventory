@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class AccountController extends Controller
 {
@@ -82,6 +84,15 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $account->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
+
     }
 }

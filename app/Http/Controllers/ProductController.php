@@ -137,6 +137,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $product->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
+
     }
 }

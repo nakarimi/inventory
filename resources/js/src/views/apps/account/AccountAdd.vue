@@ -6,7 +6,7 @@
         <h1>Add New Account</h1>
         <div class="mt-2 mb-2 grid">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Label" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
           <div class="w-full">
@@ -22,7 +22,7 @@
             <span slot="on">Active</span>
             <span slot="off">Inactive</span>
           </vs-switch>
-          <span class="text-danger text-sm">{{ errors.first('status') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('status') }}</span>
         </div>
         <vs-button class="float-right mt-6" @click="storeAccount" :disabled="!validateForm">Send</vs-button>
         <form-error :form="form"></form-error>

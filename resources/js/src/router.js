@@ -147,9 +147,55 @@ const router = new Router({
                   btn_plus_path: '/apps/add/purchase',
                 }
               },
+              {
+                path: '/apps/list/payment',
+                name: 'list-payment',
+                component: () => import('./views/apps/payment/PaymentList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Payments List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/payment',
+                }
+              },
+              {
+                path: '/apps/list/fixpayment',
+                name: 'list-fixpayment',
+                component: () => import('./views/apps/fixpayment/FixPaymentList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Fix Payments List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/fixpayment',
+                }
+              },
+              {
+                path: '/apps/list/transfer',
+                name: 'list-transfer',
+                component: () => import('./views/apps/transfer/TransferList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Transfers List', active: true }
+                  ],
+                  btn_plus_path: '/apps/add/transfer',
+                }
+              },
+              {
+                path: '/apps/list/transaction',
+                name: 'list-transaction',
+                component: () => import('./views/apps/transaction/TransactionList.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Transactions List', active: true }
+                  ],
+                }
+              },
 
               // End Of List Routes
-              
               // Add Routes
               {
                 path: '/apps/add/branch',
@@ -268,6 +314,45 @@ const router = new Router({
                   btn_list_path: '/apps/list/purchase',
                 }
               },
+              {
+                path: '/apps/add/payment',
+                name: 'add-payment',
+                component: () => import('./views/apps/payment/PaymentAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Payments List', url: {name: 'list-payment'} },
+                    { title: 'Add Payment', active: true }
+                  ],
+                  btn_list_path: '/apps/list/payment',
+                }
+              },       
+              {
+                path: '/apps/add/fixpayment',
+                name: 'add-fixpayment',
+                component: () => import('./views/apps/fixpayment/FixPaymentAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Fix Payments List', url: {name: 'list-fixpayment'} },
+                    { title: 'Add Fix Payment', active: true }
+                  ],
+                  btn_list_path: '/apps/list/fixpayment',
+                }
+              },
+              {
+                path: '/apps/add/transfer',
+                name: 'add-transfer',
+                component: () => import('./views/apps/transfer/TransferAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Transfers List', url: {name: 'list-transfer'} },
+                    { title: 'Add Transfer', active: true }
+                  ],
+                  btn_list_path: '/apps/list/transfer',
+                }
+              },
               // End of add routes
               // Edit Routes
               {
@@ -307,6 +392,45 @@ const router = new Router({
                     { title: 'Edit Purchase', active: true }
                   ],
                   btn_list_path: '/apps/list/purchase',
+                }
+              },
+              {
+                path: '/apps/edit/payment/:id',
+                name: 'edit-payment',
+                component: () => import('./views/apps/payment/PaymentAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Payments List', url: {name: 'list-payment'} },
+                    { title: 'Edit Payment', active: true }
+                  ],
+                  btn_list_path: '/apps/list/payment',
+                }
+              },
+              {
+                path: '/apps/edit/fixpayment/:id',
+                name: 'edit-fixpayment',
+                component: () => import('./views/apps/fixpayment/FixPaymentAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Fix Payments List', url: {name: 'list-fixpayment'} },
+                    { title: 'Edit Fix Payment', active: true }
+                  ],
+                  btn_list_path: '/apps/list/fixpayment',
+                }
+              },
+              {
+                path: '/apps/edit/transfer/:id',
+                name: 'edit-transfer',
+                component: () => import('./views/apps/transfer/TransferAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Transfers List', url: {name: 'list-transfer'} },
+                    { title: 'Edit Transfer', active: true }
+                  ],
+                  btn_list_path: '/apps/list/transfer',
                 }
               },
               // End Of Edit Routes

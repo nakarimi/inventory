@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stock;
 use App\Helper\Helper;
-use App\Models\Vendor;
-use App\Models\Purchase;
-use App\Models\StockRecord;
 use Illuminate\Http\Request;
+use App\Models\FixPayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
-class PurchaseController extends Controller
+class FixPaymentController extends Controller
 {
     // Adding the current user to each request.
     // By user id the branch also will be available.
@@ -27,8 +24,8 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        // Load All Purchases with associate vendor and stock.
-        return Purchase::with(['vendor', 'stock'])->get();
+        // Load All FixPayments with associate vendor and stock.
+        return FixPayment::with(['account_id'])->get();
     }
 
     /**
@@ -53,18 +50,27 @@ class PurchaseController extends Controller
         DB::beginTransaction();
         try {
 
-            // Extract object label to be stored in database.
-            $request['vendor'] = (isset($request['vendor_id']) && $request['vendor_id'] != null) ? $request['vendor_id']['name'] : null;
-            $request['stock'] = (isset($request['stock_id']) && $request['stock_id'] != null) ? $request['stock_id']['name'] : null;
-
             // Set default status.
             $request['payment_status'] = 'none';
 
             // Get Id From object as the object can't be stored in DB.
-            Helper::get_id($request, 'stock_id');
-            Helper::get_id($request, 'vendor_id');
-            $result = Purchase::create($request->all());
-            Helper::store_items('purchase', $result->id, $request, true);
+            Helper::get_id($request, 'account_id');
+
+            $result = FixPayment::create($request->all());
+
+            // Add transaction records.
+            $data = [
+                'type' => 'fixpayment',
+                'type_id' => $result->id,
+                'credit' => ($result->type == 'In') ? $result->ammount : 0,
+                'debit' => ($result->type == 'Out') ? $result->ammount : 0,
+                'account_id' => $request->account_id,
+                'status' => $result->type,
+                'description' => '---',
+                'user_id' => $request->user_id,
+            ];
+            Helper::do_transaction($data);
+
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -78,10 +84,10 @@ class PurchaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Purchase  $purchase
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
-    public function show(Purchase $purchase)
+    public function show(FixPayment $fixpayment)
     {
         //
     }
@@ -89,54 +95,52 @@ class PurchaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Purchase  $purchase
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        // Load purchase data to be inserted in the form.
-        $purchase = Purchase::with(['vendor', 'stock'])->find($id);
-
-        // These should be object to be fill by default in select list.
-        $purchase['vendor_id'] = Vendor::find($purchase['vendor_id']);
-        $purchase['stock_id'] = Stock::find($purchase['stock_id']);
-        
-        // Find Items based on type and it.
-        $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
-            ->with(['category_id', 'item_id'])
-            ->select('increment AS ammount', 'stock_records.*')
-            ->get();
-
-        return $purchase;
+        // Load All FixPayments with associate vendor and stock.
+        return FixPayment::with(['account_id'])->find($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Purchase  $purchase
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Purchase $purchase)
+    public function update(Request $request, FixPayment $fixpayment)
     {
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
 
-            // Extract object label to be stored in database.
-            $request['vendor'] = (isset($request['vendor_id']) && $request['vendor_id'] != null) ? $request['vendor_id']['name'] : null;
-            $request['stock'] = (isset($request['stock_id']) && $request['stock_id'] != null) ? $request['stock_id']['name'] : null;
-
             // Set default status.
             $request['payment_status'] = 'none';
 
             // Get Id From object as the object can't be stored in DB.
-            Helper::get_id($request, 'stock_id');
-            Helper::get_id($request, 'vendor_id');
-            $purchase->create($request->all());
-            Helper::store_items('purchase', $purchase->id, $request, true);
+            Helper::get_id($request, 'account_id');
+
+            $result = $fixpayment->update($request->all());
+
+
+            // Add Transaction recored.
+            $data = [
+                'type' => 'fixpayment',
+                'type_id' => $fixpayment->id,
+                'credit' => ($fixpayment->type == 'In') ? $fixpayment->ammount : 0,
+                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->ammount : 0,
+                'account_id' => $request->account_id,
+                'status' => $fixpayment->type,
+                'description' => '---',
+                'user_id' => $request->user_id,
+            ];
+            Helper::do_transaction($data, true);
+
             DB::commit();
-            return $purchase;
+            return $fixpayment;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -148,14 +152,14 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Purchase  $purchase
+     * @param  \App\Models\FixPayment  $fixpayment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Purchase $purchase)
+    public function destroy(FixPayment $fixpayment)
     {
         DB::beginTransaction();
         try {
-            $result = $purchase->delete();
+            $result = $fixpayment->delete();
             DB::commit();
             return $result;
         } catch (Exception $e) {

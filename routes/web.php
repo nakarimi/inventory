@@ -13,5 +13,6 @@ use Illuminate\Support\Facades\Cache;
 |
 */
 
+Route::get('/print', 'PrintController@print');
 Route::get('/{any}', 'ApplicationController')->where('any', '.*');
 

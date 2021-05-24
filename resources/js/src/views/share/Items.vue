@@ -7,29 +7,29 @@
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <label for=""><small>Category</small></label>
           <v-select label="name" v-model="i.category_id" :clearable="false" @input="categorySelected($event, index)" :options="categories" />
-          <span class="text-danger text-sm">{{ errors.first('item_id') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('item_id') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <label for=""><small>Product</small></label>
           <v-select label="name" :clearable="false" name="item_id" v-validate="'required'" v-model="i.item_id" :options="products" />
-          <span class="text-danger text-sm">{{ errors.first('item_id') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('item_id') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <label for=""><small>Unit</small></label>
           <v-select label="name" :clearable="false" name="unit_id" v-validate="'required'" v-model="i.unit_id" :options="units" />
-          <span class="text-danger text-sm">{{ errors.first('unit_id') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('unit_id') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="ammount" label="Ammount" v-model="i.ammount" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('ammount') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('ammount') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="unit_price" label="Unit Price" v-model="i.unit_price" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('unit_price') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('unit_price') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <vs-input v-validate="'required'" data-vv-validate-on="blur" name="total_price" label="Total Price" :value="i.total_price" :data="items_total" class="w-full" />
-          <span class="text-danger text-sm">{{ errors.first('total_price') }}</span>
+          <span class="text-danger text-sm absolute">{{ errors.first('total_price') }}</span>
         </vs-col>
       </vs-row>
     </div>
@@ -83,7 +83,9 @@ export default {
     items_total() {
       let main_price = 0;
       for (const key of Object.keys(this.form.items)) {
-        this.form.items[key].unit_id = this.units.find(e => e.id == this.form.items[key].unit_id || e.id == this.form.items[key].unit_id.id);
+        if (this.form.items[key].id) {
+          this.form.items[key].unit_id = this.units.find(e => e.id == this.form.items[key].unit_id || e.id == this.form.items[key].unit_id.id);
+        }
         this.form.items[key].total_price = (this.form.items[key].unit_price * this.form.items[key].ammount);
         main_price += this.form.items[key].total_price;
       }
