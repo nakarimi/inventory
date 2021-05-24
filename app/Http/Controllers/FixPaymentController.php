@@ -157,6 +157,14 @@ class FixPaymentController extends Controller
      */
     public function destroy(FixPayment $fixpayment)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $fixpayment->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

@@ -105,6 +105,14 @@ class BranchController extends Controller
      */
     public function destroy(Branch $branch)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $branch->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

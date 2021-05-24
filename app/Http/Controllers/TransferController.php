@@ -146,7 +146,15 @@ class TransferController extends Controller
      */
     public function destroy(Transfer $transfer)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $transfer->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
     public function transactions(){
         return Transaction::with('account_id')->get();

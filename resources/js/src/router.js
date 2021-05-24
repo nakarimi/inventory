@@ -196,7 +196,6 @@ const router = new Router({
               },
 
               // End Of List Routes
-              
               // Add Routes
               {
                 path: '/apps/add/branch',

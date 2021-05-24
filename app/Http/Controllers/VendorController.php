@@ -107,6 +107,14 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $vendor->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

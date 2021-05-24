@@ -38,7 +38,10 @@
             </vs-td>
             <vs-td>
               <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/product/${tr.id}`).catch(() => {})">
-                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-success stroke-current" class="cursor-pointer" />
+              </span>
+              <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
+                <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
               </span>
             </vs-td>
           </vs-tr>
@@ -57,10 +60,43 @@ export default {
     }
   },
   created() {
-    this.loadStocks()
+    this.loadProducts()
   },
   methods: {
-    loadStocks() {
+
+    // Delete the item from system, asking confirmation and show message in response.
+    deleteEntity(id) {
+      swal.fire({
+        title: 'Are you sure ???',
+        text: "If you continue this item will not exist anymore !!!",
+        icon: 'question',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.axios.delete(`/api/products/${id}`)
+            .then((id) => {
+              swal.fire({
+                title: 'Completed!',
+                text: "Product removed from system successfully!",
+                icon: 'success',
+              })
+
+              // Reload the data to show valid information to the table.
+              this.loadProducts();
+            })
+            .catch(() => {
+              swal.fire(
+                'Failed!',
+                'Operation rejected, please check the system!',
+                'error'
+              )
+            });
+        }
+      })
+    },
+
+    // Load all products to be listed on the table.
+    loadProducts() {
       this.axios.get('/api/products').then((response) => {
         this.products = response.data
       }).catch(() => {})

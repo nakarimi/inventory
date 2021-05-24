@@ -162,6 +162,14 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $result = $payment->delete();
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 }

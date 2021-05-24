@@ -36,6 +36,9 @@
               <span class="cursor-pointer" @click="$router.push(`/apps/edit/fixpayment/${tr.id}`).catch(() => {})">
                 <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
               </span>
+              <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
+                <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </span>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -46,8 +49,6 @@
 </template>
 
 <script>
-
-
 export default {
   data() {
     return {
@@ -58,6 +59,36 @@ export default {
     this.loadPayments()
   },
   methods: {
+    // Delete the item from system, asking confirmation and show message in response.
+    deleteEntity(id) {
+      swal.fire({
+        title: 'Are you sure ???',
+        text: "If you continue this item will not exist anymore !!!",
+        icon: 'question',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.axios.delete(`/api/fixpayments/${id}`)
+            .then((id) => {
+              swal.fire({
+                title: 'Completed!',
+                text: "Payment removed from system successfully!",
+                icon: 'success',
+              })
+
+              // Reload the data to show valid information to the table.
+              this.loadPayments();
+            })
+            .catch(() => {
+              swal.fire(
+                'Failed!',
+                'Operation rejected, please check the system!',
+                'error'
+              )
+            });
+        }
+      })
+    },
     loadPayments() {
       this.axios.get('/api/fixpayments').then((response) => {
         this.fixpayments = response.data
