@@ -96,6 +96,9 @@
 			.content-box.rtl table tr td:nth-child(2) {
 				text-align: left;
 			}
+      .rounded{
+        border-radius: 50%;
+      }
 		</style>
 	</head>
 

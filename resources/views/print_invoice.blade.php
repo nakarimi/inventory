@@ -98,7 +98,7 @@
       </tr>
 
       <tr class="item">
-         <td>Hosting (3 months)</td>
+         <td><img class="rounded" width="50px" src="{{ $logo }}"></td>
 
          <td>$75.00</td>
       </tr>
@@ -109,7 +109,7 @@
       </tr>
 
       <tr class="item">
-         <td>Hosting (3 months)</td>
+         <td><img class="rounded" width="50px" src="{{ $logo }}"></td>
 
          <td>$75.00</td>
       </tr>
