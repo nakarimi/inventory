@@ -57,7 +57,7 @@ class TransferController extends Controller
             $request['ammount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
             $result = Transfer::create($request->all());
 
-            // Add all items to the stock from the source stock.
+            // Add all items to the stock from the target stock.
             $request['stock_id'] = (isset($request['target_stock']) && $request['target_stock'] != null) ? $request['target_stock'] : null;
             Helper::store_items('in-transfer', $result->id, $request, true);
 

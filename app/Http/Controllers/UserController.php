@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 
 use App\Models\Branch;
@@ -14,7 +15,8 @@ use Illuminate\Support\Facades\Response;
 class UserController extends Controller
 {
 
-    public function home(Request $request){
+    public function home(Request $request)
+    {
         return 'API CONNECED';
     }
     public function user(Request $request)
@@ -52,7 +54,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'branch' =>  'required|max:191',
             'first_name' =>  'required|max:191',
             'last_name' => 'required|max:191',
@@ -92,7 +94,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id);
+        return User::with('branch')->find($id);
     }
 
     /**
@@ -103,7 +105,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('branch')->findOrFail($id);
         // $user['userleaders'] = UserAssignment::where('lead_user_id', $id)->get();
         return $user;
     }
@@ -117,36 +119,46 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        DB::beginTransaction();
-        try {
-            $photoname = NULL;
-            if ($request->image != null) {
-                if (strpos($request->image, 'base64')) {
-                    $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                    \Image::make($request->image)->save(public_path('img/user/') . $photoname);
-                    $request->merge(['photo' => $photoname]);
-                } else {
-                    $photoname = $request->image;
-                }
-            }
+        $user = DB::table('users')->find($id);
+        if ($request->change_password) {
+            $validated = $request->validate([
+                'current_password' => [
+                    'required',
 
-
+                    function ($attribute, $value, $fail) use ($user) {
+                        if (!Hash::check($value, $user->password)) {
+                            $fail('Your password was not updated, since the provided current password does not match.');
+                        }
+                    }
+                ],
+                'new_password' => [
+                    'required', 'min:6', 'confirmed', 'different:current_password'
+                ]
+            ]);
             $user = User::findOrFail($id);
-            $request['password'] =  Hash::make($request['password']);
-            $request['image'] =  ($photoname) ? $photoname : '';
-            $user->update($request->all());
-            // if($request->userleaders != null){
-            //     foreach ($request->userleaders as $key => $val) {
-            //         if(!UserAssignment::where(['lead_user_id' => $val['id'], 'user_id'=> $id])->get()){
-            //             UserAssignment::create(['lead_user_id' => $val['id'], 'user_id'=> $id]);
-            //         }
-            //     }
-            // }
-            DB::commit();
-            return ["message" => "موفقانه معلومات اصلاح شد"];
-        } catch (\Exception $e) {
-            DB::rollback();
-            return Response::json($e, 400);
+            $password = Hash::make($request['new_password']);
+            $user->update(['password' => $password]);
+            return User::findOrFail($id);
+        } else {
+            DB::beginTransaction();
+            try {
+                $this->validate($request, [
+                    'branch' =>  'required',
+                    'first_name' =>  'required|max:191',
+                    'last_name' => 'required|max:191',
+                    'phone' => 'required|max:12',
+                    'address' => 'required',
+                ]);
+                unset($request['email']);
+                $request['branch_id'] = $request['branch']['id'];
+                $user = User::find($id);
+                $user->update($request->all());
+                DB::commit();
+                return ["message" => "موفقانه معلومات اصلاح شد"];
+            } catch (Exception $e) {
+                DB::rollback();
+                return Response::json($e, 400);
+            }
         }
     }
 

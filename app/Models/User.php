@@ -43,7 +43,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        // 'password', 'remember_token',
     ];
 
     /**
@@ -55,7 +55,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // User relation with branch.
     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+    public function branch_id()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

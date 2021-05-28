@@ -52,6 +52,8 @@ class ProductController extends Controller
         // ]);
         DB::beginTransaction();
         try {
+
+            // Image Upload/Store.
             $photoname = NULL;
             if ($request->image != null) {
 
@@ -59,6 +61,8 @@ class ProductController extends Controller
                 \Image::make($request->image)->save(public_path('img/product/') . $photoname);
                 $request->merge(['image' => $photoname]);
             }
+
+            // Product being create.
             $result = Product::create($request->all());
             DB::commit();
             return $result;
@@ -88,6 +92,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $data = Product::with('category')->with('stock')->where('id', $id)->first();
+
+        // Add exist object for select option.
         $data->stock_id = Stock::find($data['stock_id']);
         $data['category_id'] = $data['category'];
         return $data;
@@ -146,6 +152,5 @@ class ProductController extends Controller
             DB::rollback();
             return Response::json($e, 400);
         }
-
     }
 }

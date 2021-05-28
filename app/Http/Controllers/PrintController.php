@@ -24,7 +24,7 @@ class PrintController extends Controller
 
     // Direct download.
     // return $pdf->stream();
-    return $pdf->download('invoice'.Carbon::now().'.pdf');
+    return $pdf->download('invoice-'.Carbon::now().'.pdf');
   }
 
     

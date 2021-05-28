@@ -62,7 +62,7 @@ export default {
       })
     }
   },
-  created() {    
+  created() {
     this.checkLogin();
   },
   methods: {
@@ -93,7 +93,11 @@ export default {
             icon: 'icon-check',
             position: 'top-right'
           })
-          window.location.replace("/");
+          setTimeout(() => {
+            this.$router.go(0);
+            window.location.href = '/';
+          }, 500);
+
         })
         .catch(() => {
           this.$vs.notify({
@@ -113,7 +117,7 @@ export default {
   },
   computed: {
     validateForm() {
-      return !this.errors.any() && this.form.email !== '' && this.form.password !== '' 
+      return !this.errors.any() && this.form.email !== '' && this.form.password !== ''
     }
   },
 }

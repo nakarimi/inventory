@@ -26,6 +26,9 @@ Vue.use(VueAxios, axios)
 
 import moment from 'moment'
 Vue.prototype.moment = moment
+
+
+// Custom filters.
 Vue.filter('formatDate', function(value) {
     if (value) {
       return moment(String(value)).format('YYYY-MM-DD')
@@ -36,7 +39,14 @@ Vue.filter('formatDateTime', function(value) {
       return moment(String(value)).format('YYYY-MM-DD H:m:s')
     }
   })
-// start sweetalert
+Vue.filter('remove_', function(value) {
+    if (value) {
+      return value.replaceAll("_", " ")
+    }
+  })
+
+
+  // start sweetalert
 import Swal from 'sweetalert2'
 window.swal = Swal
 

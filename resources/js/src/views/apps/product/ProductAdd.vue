@@ -32,6 +32,8 @@
             <vs-textarea rows="10" v-validate="'required'" data-vv-validate-on="blur" name="Product Details" label="product_details" v-model="form.product_details" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('product_details') }}</span>
           </vs-col>
+
+          <!-- Upload Image for Product. -->
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <div class="vx-col w-full">
               <template v-if="form.image">
@@ -58,6 +60,7 @@
             </div>
             <span class="text-danger text-sm absolute">{{ errors.first('image') }}</span>
           </vs-col>
+          <!-- End Of Product Upload Image. -->
 
         </vs-row>
         <vs-row>
@@ -181,6 +184,9 @@ export default {
     this.loadCategory()
   },
   methods: {
+
+
+    // Read image data and append to the form.
     updateCurrImg(input) {
       if (input.target.files && input.target.files[0]) {
         const reader = new FileReader()
@@ -197,6 +203,8 @@ export default {
     },
     loadProduct(id) {
       this.axios.get(`/api/products/${id}/edit`).then((response) => {
+        
+        // Fill the form with database data.
         this.form.fill(response.data);
         this.form.image = '/img/product/' + this.form.image;
       }).catch(() => {})
@@ -209,6 +217,8 @@ export default {
 
     storeProduct() {
       this.form.logo = this.form.image;
+
+      // check to call update or store function in backend.
       if (this.$route.params.id) {
         var x = this.form.patch(`/api/products/${this.$route.params.id}`)
         if (this.form.image.includes('/img/product/')) {

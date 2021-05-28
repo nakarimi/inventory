@@ -1,6 +1,6 @@
 <template>
-<div class="h-screen flex w-full bg-img vx-row no-gutter items-center justify-center">
-  <div v-bind:class="{ 'vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4': this.$route.name == 'page-signup' , 'vx-col sm:w-2/2 md:w-2/2 lg:w-4/4 xl:w-4/5 sm:m-0 m-4': this.$route.name == 'register'}">
+<div class="h-screen flex w-full bg-img vx-row no-gutter -items-center justify-center">
+  <div v-bind:class="{ 'vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4': this.$route.name == 'page-signup' , 'vx-col sm:w-2/2 md:w-2/2 lg:w-4/4 xl:w-4/5 sm:m-0 m-4': this.$route.name != 'page-signup'}">
     <vx-card>
       <div slot="no-body" class="full-page-bg-color">
         <div class="vx-row no-gutter">
@@ -10,8 +10,8 @@
           <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center pb-5 d-theme-dark-bg">
             <div class="px-8 pt-8 register-tabs-container">
               <div class="vx-card__title mb-4">
-                <h4 class="mb-4">Create Account</h4>
-                <p>Fill the below form to create a new account.</p>
+                <h4 class="mb-4">Account Info</h4>
+                <p>Fill the below form the account information.</p>
               </div>
               <div class="clearfix">
                 <div class="w-full">
@@ -47,39 +47,44 @@
 
                 </div>
 
-                <div class="mt-2 mb-2 grid">
-                  <vs-input ref="password" type="password" data-vv-validate-on="blur" v-validate="'required|min:6'" name="password" label-placeholder="Password" placeholder="Password" v-model="form.password" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('password') }}</span>
-
+                <!-- If it is an edit page, don't show the password fields -->
+                <div v-if="!$route.params.id">
+                  <div class="mt-2 mb-2 grid">
+                    <vs-input ref="password" type="password" data-vv-validate-on="blur" v-validate="'required|min:6'" name="password" label-placeholder="Password" placeholder="Password" v-model="form.password" class="w-full" />
+                    <span class="text-danger text-sm absolute">{{ errors.first('password') }}</span>
+                  </div>
+                  <div class="mt-2 mb-2 grid">
+                    <vs-input type="password" v-validate="'min:6|confirmed:password'" data-vv-validate-on="blur" data-vv-as="password" name="confirm_password" label-placeholder="Confirm Password" placeholder="Confirm Password" v-model="form.confirm_password" class="w-full" />
+                    <span class="text-danger text-sm absolute">{{ errors.first('confirm_password') }}</span>
+                  </div>
                 </div>
 
-                <div class="mt-2 mb-2 grid">
-                  <vs-input type="password" v-validate="'min:6|confirmed:password'" data-vv-validate-on="blur" data-vv-as="password" name="confirm_password" label-placeholder="Confirm Password" placeholder="Confirm Password" v-model="form.confirm_password" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('confirm_password') }}</span>
-
-                </div>
-
-                <vs-checkbox v-model="isTermsConditionAccepted" class="mt-6">I accept the terms & conditions.</vs-checkbox>
-                <vs-button type="border" to="/pages/login" class="mt-6">Login</vs-button>
-                <vs-button class="float-right mt-6" @click="registerUser" :disabled="!validateForm">Register</vs-button>
+                <vs-checkbox v-if="!$route.params.id" v-model="isTermsConditionAccepted" class="mt-6">I accept the terms & conditions.</vs-checkbox>
+                <vs-button type="border" @click="openPassword" class="mt-6">Change Password</vs-button>
+                <vs-button class="float-right mt-6" @click="registerUser" :disabled="!validateForm">{{ $route.params.id ? 'Update' : 'Register' }}</vs-button>
               </div>
-              <form-error></form-error>
+              <form-error :form="form"></form-error>
             </div>
           </div>
         </div>
       </div>
     </vx-card>
   </div>
+    <vs-popup class="holamundo" title="Change account password" v-if="user" :active.sync="popupOpen">
+    <password-change @closesteps="closeModel" ref="change_pass" :id="user.id"></password-change>
+  </vs-popup>
 </div>
 </template>
 
 <script>
 import vSelect from "vue-select";
 import FormError from '../share/FormError'
+import PasswordChange from '../share/PasswordChange'
 
 export default {
   data() {
     return {
+      popupOpen: false,
       branches: [],
       form: new Form({
         first_name: '',
@@ -91,23 +96,42 @@ export default {
         password: '',
         confirm_password: '',
       }),
-      isTermsConditionAccepted: true
+      isTermsConditionAccepted: true,
+      user: []
     }
   },
   components: {
     "v-select": vSelect,
     FormError,
+    PasswordChange,
   },
   computed: {
     validateForm() {
-      return !this.form.errors.any() && this.form.first_name !== '' && this.form.email !== '' && this.form.password !== '' && this.form.confirm_password !== '' && this.isTermsConditionAccepted === true
+      return true;
+      // return !this.form.errors.any() && this.form.first_name !== '' && this.form.email !== '' && this.form.password !== '' && this.form.confirm_password !== '' && this.isTermsConditionAccepted === true
     }
   },
   created() {
-    console.log(this.$route.name);
+    if (this.$route.params.id) {
+      this.loadUser(this.$route.params.id)
+    }
     this.getAllBranches();
   },
   methods: {
+    closeModel() {
+      // this.getAllNotification();
+      this.popupOpen = false;
+    },
+    openPassword(){
+      this.popupOpen = true;
+    },
+    loadUser(id) {
+      this.axios.get(`/api/users/${id}/edit`).then((response) => {
+        this.form.fill(response.data);
+        this.user = response.data;
+
+      }).catch(() => {})
+    },
     getAllBranches() {
       this.axios.get('/api/branches')
         .then((response) => {
@@ -128,28 +152,38 @@ export default {
       }
       return true
     },
+
     registerUser() {
-      this.form.post('/api/users')
-        .then(() => {
-          this.$vs.notify({
-            title: 'Signup!',
-            text: 'New user registered successfully!',
-            color: 'success',
-            iconPack: 'feather',
-            icon: 'icon-check',
-            position: 'top-right'
-          })
+      if (this.$route.params.id) {
+        var x = this.form.patch(`/api/users/${this.$route.params.id}`)
+      } else {
+        var x = this.form.post('/api/users')
+      }
+      x.then((response) => {
+        if (!this.$route.params.id) {
           this.form.reset();
+        }
+        this.$vs.notify({
+          title: 'Success!',
+          text: 'Process completed successfully!',
+          color: 'success',
+          iconPack: 'feather',
+          icon: 'icon-check',
+          position: 'top-left'
         })
-        .catch((errors) => {
+
+      }).catch((error) => {
+        if (this.form.errors.errors.error) {
           this.$vs.notify({
-            title: 'Signup failed!',
+            title: 'Failed!',
+            text: 'There is some failure, please try again!',
             color: 'danger',
             iconPack: 'feather',
-            icon: 'icon-check',
-            position: 'top-right'
+            icon: 'icon-cross',
+            position: 'top-left'
           })
-        })
+        }
+      })
 
     }
   }

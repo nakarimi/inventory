@@ -19,7 +19,12 @@
         <div class="header-sidebar flex items-end justify-between" slot="header">
 
           <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
+          <div class="inline-grid">
             <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}{{ (branch) ? ' / ' + branch :'' }}</span>
+            <span class="text-success" v-show="isMouseEnter || !reduce" v-if="user">{{ user.first_name }} {{ user.last_name }} 
+              <small>(Logged In)</small>
+            </span>
+          </div>
           </router-link>
           <!-- Menu Buttons -->
           <div>
@@ -130,6 +135,7 @@ export default {
     },
     showShadowBottom    : false,
     branch: null,
+    user: null,
   }),
   computed: {
     isGroupActive () {
@@ -281,7 +287,10 @@ export default {
     this.setVerticalNavMenuWidth()
   },
   created () {
-    this.branch = localStorage.getItem('branch');
+    this.user = JSON.parse(localStorage.getItem('user'));
+    if(this.user){
+      this.branch = (this.user.branch_id) ? this.user.branch_id.name : '';
+    }
   },
 }
 

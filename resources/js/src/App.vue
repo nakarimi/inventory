@@ -32,14 +32,10 @@ export default {
       this.axios.get('/api/user')
         .then((response) => {
           this.user = response.data
-          localStorage.setItem('branch_id', this.user.branch_id.id)
-          localStorage.setItem('branch', this.user.branch_id.name)
-          localStorage.setItem('branch_code', this.user.branch_id.code)
+          localStorage.setItem('user', JSON.stringify(this.user))
         }).catch(() => {
           localStorage.removeItem('token');
-          localStorage.removeItem('branch');
-          localStorage.removeItem('branch-id');
-          localStorage.removeItem('branch_code');
+          localStorage.removeItem('user');
           if (this.$route.path != "/pages/login") {
             this.$route.path = '/pages/login'
             window.location.replace("/pages/login");

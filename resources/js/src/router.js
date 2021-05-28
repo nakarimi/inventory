@@ -37,6 +37,19 @@ const router = new Router({
                 }
               },
               {
+                path: '/user/edit/:id',
+                name: 'edit-user',
+                component: () => import('@/views/pages/Register.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Users List', url: {name: 'user-list'} },
+                    { title: 'Add Account', active: true }
+                  ],
+                  btn_list_path: '/list/users',
+                }
+              },
+              {
                 path: '/list/users',
                 name: 'user-list',
                 component: () => import('@/views/pages/UserList.vue'),
@@ -510,7 +523,7 @@ router.beforeEach((to, from, next) => {
     }).then((result) => {
       if (result.value) {
         localStorage.removeItem('token');
-        router.push({ path: "/pages/login" });
+        window.location.href = '/pages/login';
       }else{
         router.push({ path: from.path });
       }

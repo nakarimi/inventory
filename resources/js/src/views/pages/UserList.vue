@@ -8,6 +8,7 @@
         <vs-th>Name</vs-th>
         <vs-th>Branch</vs-th>
         <vs-th>Phone</vs-th>
+        <vs-th></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
@@ -27,6 +28,10 @@
             <vs-td>
               <p>{{ tr.phone }}</p>
             </vs-td>
+            <span class="cursor-pointer hover:text-success" @click="$router.push(`/user/edit/${tr.id}`).catch(() => {})">
+              <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+            </span>
+
           </vs-tr>
         </tbody>
       </template>

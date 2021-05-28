@@ -65,6 +65,8 @@ class SaleController extends Controller
             Helper::get_id($request, 'biller_id');
             Helper::get_id($request, 'customer_id');
             $result = Sale::create($request->all());
+
+            // store related items.
             Helper::store_items('sale', $result->id, $request);
             DB::commit();
             return $result;

@@ -1,7 +1,7 @@
 <template>
 <div>
   <vs-divider class="pt-3 px-3 pb-0"> Products </vs-divider>
-  <form data-vv-scope="step-3">
+  <div data-vv-scope="step-3">
     <div v-for="(i, index) in form.items" :key="i.id">
       <vs-row vs-w="12" class="pb-2 mb-2">
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
@@ -33,7 +33,7 @@
         </vs-col>
       </vs-row>
     </div>
-  </form>
+  </div>
   <vs-row vs-w="12">
     <vs-col vs-type="flex" vs-justify="right" vs-align="right" vs-lg="4" vs-sm="4" vs-xs="12" class="pt-2 mb-2 ml-3 mr-3">
       <vs-button type="border" @click.stop="addRow" color="success" icon="add"></vs-button>

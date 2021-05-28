@@ -29,6 +29,9 @@ class Product extends Model
         'brand',
         'featured',
     ];
+
+
+    // Relations
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');

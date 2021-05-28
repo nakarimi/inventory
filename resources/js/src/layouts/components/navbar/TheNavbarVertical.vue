@@ -1,19 +1,9 @@
-<!-- =========================================================================================
-  File Name: TheNavbar.vue
-  Description: Navbar component
-  Component Name: TheNavbar
-========================================================================================== -->
-
 <template>
   <div class="relative">
 
     <div class="vx-navbar-wrapper" :class="classObj">
 
       <vs-navbar class="vx-navbar navbar-custom navbar-skelton" :color="navbarColorLocal" :class="textColor">
-
-        <!-- SM - OPEN SIDEBAR BUTTON -->
-        <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" />
-
         <vs-spacer />
         <profile-drop-down />
 

@@ -80,7 +80,6 @@ export default {
                 text: "Product removed from system successfully!",
                 icon: 'success',
               })
-
               // Reload the data to show valid information to the table.
               this.loadProducts();
             })
