@@ -33,7 +33,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with('branch')->get();
+        // load all users except admin and current user
+        return User::with('branch')->whereNotIn('id', [1, auth()->guard('api')->user()->id])->get();
     }
 
     /**
@@ -173,5 +174,11 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return ['message' => 'User Deleted'];
+    }
+
+    // Approve user status
+    public function approve($id){
+        $user = User::findOrFail($id);
+        $user->update(['status' => 'Approved']);
     }
 }

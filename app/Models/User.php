@@ -34,6 +34,7 @@ class User extends Authenticatable
         'phone',
         'address',
         'password',
+        'status',
         'branch_id'
     ];
 

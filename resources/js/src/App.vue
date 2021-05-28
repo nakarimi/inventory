@@ -5,7 +5,12 @@
 
 <template>
 <div id="app" :class="vueAppClasses">
-  <router-view @setAppClasses="setAppClasses" />
+  <router-view v-if="user && user.status == 'Approved'" @setAppClasses="setAppClasses" />
+  <h1 class="flex items-center justify-center self-center text-danger text-center w-full" v-if="user && user.status == 'Pending'">
+    Hi {{ user.first_name }} {{ user.last_name }},<br>
+
+    Your account is pending, adminstrator will approve it soon!  
+  </h1>
 </div>
 </template>
 
@@ -16,7 +21,8 @@ import jwt from '@/http/requests/auth/jwt/index.js'
 export default {
   data() {
     return {
-      vueAppClasses: []
+      vueAppClasses: [],
+      user: []
     }
   },
   watch: {

@@ -1,5 +1,6 @@
 <template lang="">
 <div>
+  <h6 class="text-warning">Remmeber your new password, after update you will be logout to login with new password!</h6>
   <div class="mt-2 mb-2 grid">
     <vs-input autocomplete="off" ref="current_password" type="password" data-vv-validate-on="blur" v-validate="'required|min:6'" name="current_password" label-placeholder="Password" placeholder="Current Password" v-model="form.current_password" class="w-full" />
     <span class="text-danger text-sm absolute">{{ errors.first('current_password') | remove_ }}</span>

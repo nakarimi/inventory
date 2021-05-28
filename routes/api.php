@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 Route::resource('users', 'UserController');
 Route::get('user', 'UserController@user')->middleware('auth:api');
+Route::post('approve/user/{id}', 'UserController@approve')->middleware('auth:api');
 
 // Application Resource Routes
 Route::resource('branches', 'BranchController');

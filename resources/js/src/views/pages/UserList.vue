@@ -8,6 +8,7 @@
         <vs-th>Name</vs-th>
         <vs-th>Branch</vs-th>
         <vs-th>Phone</vs-th>
+        <vs-th>Status</vs-th>
         <vs-th></vs-th>
       </template>
       <template slot-scope="{data}">
@@ -28,8 +29,16 @@
             <vs-td>
               <p>{{ tr.phone }}</p>
             </vs-td>
+            <vs-td>
+              <p :class="(tr.status == 'Approved')? 'text-success' : 'text-danger' ">{{ tr.status }}
+                <feather-icon v-if="tr.status == 'Pending'" @click="approveAccount(tr.id)" title="Approve Account" icon="RotateCwIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </p>
+            </vs-td>
             <span class="cursor-pointer hover:text-success" @click="$router.push(`/user/edit/${tr.id}`).catch(() => {})">
               <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+            </span>
+            <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
+              <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
             </span>
 
           </vs-tr>
@@ -51,6 +60,45 @@ export default {
     this.loadUsers()
   },
   methods: {
+
+    // Approve accounts that created and need admin permission
+    approveAccount(id) {
+      this.axios.post('/api/approve/user/' + id).then((response) => {
+        this.loadUsers()
+      })
+    },
+    // Delete the item from system, asking confirmation and show message in response.
+    deleteEntity(id) {
+      swal.fire({
+        title: 'Are you sure ???',
+        text: "If you continue, this item and all related contents will not exist anymore !!!",
+        icon: 'question',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.axios.delete(`/api/users/${id}`)
+            .then((id) => {
+              swal.fire({
+                title: 'Completed!',
+                text: "Sale removed from system successfully!",
+                icon: 'success',
+              })
+
+              // Reload the data to show valid information to the table.
+              this.loadSales();
+            })
+            .catch(() => {
+              swal.fire(
+                'Failed!',
+                'Operation rejected, please check the system!',
+                'error'
+              )
+            });
+        }
+      })
+    },
+
+    // Load exist users to be listed on the table.
     loadUsers() {
       this.axios.get('/api/users').then((response) => {
         this.users = response.data
