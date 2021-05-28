@@ -485,6 +485,11 @@ const router = new Router({
                 name: 'page-error-404',
                 component: () => import('@/views/pages/Error404.vue')
               },
+              {
+                path: '/pages/pending',
+                name: 'page-pending',
+                component: () => import('@/views/pages/pending.vue')
+              },
             ]
         },
         {
