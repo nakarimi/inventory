@@ -39,19 +39,11 @@ class BranchController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        $this->validate($request,[
+        $this->validate($request, [
             'code' => 'required|unique:branches',
             'name' => 'required',
             'address' => 'required',
         ]);
-        // $customMessages = [
-        //     'customer.required' => 'Select a Customer first!.',
-        //     'customer_id.integer' => 'Invalid Customer!.'
-        // ];
-        // $validator = Validator::make($request, $rules);
-        // if ($validator->fails()) {
-        //     return $validator;
-        // }
         DB::beginTransaction();
         try {
             Branch::create($request->all());
@@ -82,7 +74,7 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
-        //
+        return $branch;
     }
 
     /**
@@ -94,7 +86,21 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
-        //
+        // return $request;
+        $this->validate($request, [
+            'code' => 'required|unique:branches,code,'. $branch->id,
+            'name' => 'required',
+            'address' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $branch->update($request->all());
+            DB::commit();
+            return ['msg' => 'Branch successfully updated'];
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**

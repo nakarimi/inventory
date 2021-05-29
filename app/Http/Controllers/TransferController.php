@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Stock;
 use App\Helper\Helper;
 use App\Models\Transfer;

@@ -34,12 +34,14 @@
                 <feather-icon v-if="tr.status == 'Pending'" @click="approveAccount(tr.id)" title="Approve Account" icon="RotateCwIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
               </p>
             </vs-td>
-            <span class="cursor-pointer hover:text-success" @click="$router.push(`/user/edit/${tr.id}`).catch(() => {})">
-              <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
-            </span>
-            <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
-              <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
-            </span>
+            <vs-td>
+              <span class="cursor-pointer hover:text-success" @click="$router.push(`/user/edit/${tr.id}`).catch(() => {})">
+                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </span>
+              <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
+                <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+              </span>
+            </vs-td>
 
           </vs-tr>
         </tbody>
@@ -63,8 +65,29 @@ export default {
 
     // Approve accounts that created and need admin permission
     approveAccount(id) {
-      this.axios.post('/api/approve/user/' + id).then((response) => {
-        this.loadUsers()
+      swal.fire({
+        title: 'Are you sure ???',
+        text: "If you continue, this account will access to the system !!!",
+        icon: 'question',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.axios.post('/api/approve/user/' + id).then((response) => {
+              swal.fire({
+                title: 'Completed!',
+                text: "User status approved successfully!",
+                icon: 'success',
+              })
+              this.loadUsers()
+            })
+            .catch(() => {
+              swal.fire(
+                'Failed!',
+                'Operation rejected, please check the system!',
+                'error'
+              )
+            });
+        }
       })
     },
     // Delete the item from system, asking confirmation and show message in response.
@@ -80,17 +103,17 @@ export default {
             .then((id) => {
               swal.fire({
                 title: 'Completed!',
-                text: "Sale removed from system successfully!",
+                text: "Item removed from system successfully!",
                 icon: 'success',
               })
 
               // Reload the data to show valid information to the table.
-              this.loadSales();
+              this.loadUsers();
             })
             .catch(() => {
               swal.fire(
                 'Failed!',
-                'Operation rejected, please check the system!',
+                'Operation rejected, please check the system for REFERENCES!',
                 'error'
               )
             });

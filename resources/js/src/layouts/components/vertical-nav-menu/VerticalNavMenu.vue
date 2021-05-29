@@ -20,8 +20,10 @@
 
           <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
           <div class="inline-grid">
-            <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}{{ (branch) ? ' / ' + branch :'' }}</span>
-            <span class="text-success" v-show="isMouseEnter || !reduce" v-if="user">{{ user.first_name }} {{ user.last_name }} 
+            <span class="vx-logo-text text-primary" v-if="title">{{ title }}{{ (branch) ? ' / ' + branch : '' }}</span>
+            
+            <!-- Add the loged in user name in system. -->
+            <span class="text-success" v-if="user">{{ user.first_name }} {{ user.last_name }} 
               <small>(Logged In)</small>
             </span>
           </div>

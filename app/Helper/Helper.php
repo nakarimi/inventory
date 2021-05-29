@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use App\Models;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\StockRecord;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
@@ -36,20 +37,26 @@ class Helper
             $item['stock_id'] = $request['stock_id'];
             $item['product_id'] = $item['item_id'];
             $item['user_id'] = $request['user_id'];
-            
+
             $result = StockRecord::create($item);
         }
     }
-    public static function do_transaction($data, $update = false){
-        if($update){
+    public static function do_transaction($data, $update = false)
+    {
+        if ($update) {
             $trans = Transaction::where('type', $data['type'])
-            ->where('type_id', $data['type_id'])->update([
-                'status' => 'rejected'
-            ]);
+                ->where('type_id', $data['type_id'])->update([
+                    'status' => 'rejected'
+                ]);
             Transaction::create($data);
-        }else{
+        } else {
             Transaction::create($data);
         }
     }
-    
+
+    // Get users ids where branch id is same as logged in user branch.
+    public static function sameBranchUsers()
+    {
+        return User::where('branch_id', auth()->guard('api')->user()->branch_id)->pluck('id')->toArray();
+    }
 }

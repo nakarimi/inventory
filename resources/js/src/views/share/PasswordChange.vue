@@ -14,7 +14,6 @@
     <span class="text-danger text-sm absolute">{{ errors.first('new_password_confirmation') | remove_ }}</span>
   </div>
   <form-error :form="form"></form-error>
-
   <vs-button class="float-right mt-6" @click="updatePassword">Send</vs-button>
 
 </div>
@@ -32,10 +31,14 @@ export default {
         new_password: '',
         new_password_confirmation: '',
       }),
+      user: []
     }
   },
   components: {
     FormError
+  },
+  created() {
+    this.user = JSON.parse(localStorage.getItem('user'));
   },
   methods: {
     updatePassword() {
@@ -49,10 +52,13 @@ export default {
             icon: 'icon-check',
             position: 'top-left'
           })
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
 
-          window.location.href = '/pages/login';
+          // if current user changed his password.
+          if(user.id == this.id){
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/pages/login';
+          }
         }).catch((error) => {
           if (this.form.errors.errors.error) {
             this.$vs.notify({

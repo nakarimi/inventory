@@ -22,28 +22,28 @@
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('first_name') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('first_name') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="Last Name" name="last_name" placeholder="Last Name" v-model="form.last_name" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('last_name') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('last_name') | remove_ }}</span>
 
                 </div>
 
                 <div class="mt-2 mb-2 grid">
-                  <vs-input v-validate="'required|email'" data-vv-validate-on="blur" name="email" type="email" label-placeholder="Email" placeholder="Email" v-model="form.email" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('email') }}</span>
+                  <vs-input v-validate="'required|email'" :disabled="$route.params.id" @input="form.email = form.email.toLowerCase()" data-vv-validate-on="blur" name="email" type="email" label-placeholder="Email" placeholder="Email" v-model="form.email" class="w-full" />
+                  <span class="text-danger text-sm">{{ errors.first('email') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="Phone" name="phone" placeholder="Phone" v-model="form.phone" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('phone') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="Address" name="address" placeholder="Address" v-model="form.address" class="w-full" />
-                  <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('address') | remove_ }}</span>
 
                 </div>
 
@@ -51,16 +51,17 @@
                 <div v-if="!$route.params.id">
                   <div class="mt-2 mb-2 grid">
                     <vs-input ref="password" type="password" data-vv-validate-on="blur" v-validate="'required|min:6'" name="password" label-placeholder="Password" placeholder="Password" v-model="form.password" class="w-full" />
-                    <span class="text-danger text-sm absolute">{{ errors.first('password') }}</span>
+                    <span class="text-danger text-sm">{{ errors.first('password') | remove_ }}</span>
                   </div>
                   <div class="mt-2 mb-2 grid">
                     <vs-input type="password" v-validate="'min:6|confirmed:password'" data-vv-validate-on="blur" data-vv-as="password" name="confirm_password" label-placeholder="Confirm Password" placeholder="Confirm Password" v-model="form.confirm_password" class="w-full" />
-                    <span class="text-danger text-sm absolute">{{ errors.first('confirm_password') }}</span>
+                    <span class="text-danger text-sm">{{ errors.first('confirm_password') | remove_ }}</span>
                   </div>
                 </div>
 
                 <vs-checkbox v-if="!$route.params.id" v-model="isTermsConditionAccepted" class="mt-6">I accept the terms & conditions.</vs-checkbox>
-                <vs-button type="border" @click="openPassword" class="mt-6">Change Password</vs-button>
+                <vs-button type="border" v-if="$route.params.id" @click="openPassword" class="mt-6">Change Password</vs-button>
+                <vs-button type="border" v-if="!$route.params.id" to="/pages/login" class="mt-6">Login</vs-button>
                 <vs-button class="float-right mt-6" @click="registerUser" :disabled="!validateForm">{{ $route.params.id ? 'Update' : 'Register' }}</vs-button>
               </div>
               <form-error :form="form"></form-error>
@@ -70,8 +71,8 @@
       </div>
     </vx-card>
   </div>
-    <vs-popup class="holamundo" title="Change account password" v-if="user" :active.sync="popupOpen">
-    <password-change @closesteps="closeModel" ref="change_pass" :id="user.id"></password-change>
+  <vs-popup class="holamundo" title="Change account password" v-if="user" :active.sync="popupOpen">
+    <password-change ref="change_pass" :id="user.id"></password-change>
   </vs-popup>
 </div>
 </template>
@@ -122,7 +123,7 @@ export default {
       // this.getAllNotification();
       this.popupOpen = false;
     },
-    openPassword(){
+    openPassword() {
       this.popupOpen = true;
     },
     loadUser(id) {

@@ -446,6 +446,19 @@ const router = new Router({
                   btn_list_path: '/apps/list/transfer',
                 }
               },
+              {
+                path: '/apps/edit/branch/:id',
+                name: 'edit-branch',
+                component: () => import('./views/apps/branch/BranchAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Branches List', url: {name: 'list-branch'} },
+                    { title: 'Edit Branch', active: true }
+                  ],
+                  btn_list_path: '/apps/list/branch',
+                }
+              },
               // End Of Edit Routes
               {
                 path: '/manage/category',

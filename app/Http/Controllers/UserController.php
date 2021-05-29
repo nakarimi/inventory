@@ -23,7 +23,6 @@ class UserController extends Controller
     {
         $user = $request->user();
         $user['branch_id'] = Branch::find($user->branch_id);
-        // $user['permission_keys'] = $user->permissions->pluck('id')->toArray();
         return $user;
     }
     /**
@@ -133,7 +132,10 @@ class UserController extends Controller
                     }
                 ],
                 'new_password' => [
-                    'required', 'min:6', 'confirmed', 'different:current_password'
+                    'required',
+                    'min:6',
+                    'confirmed',
+                    'different:current_password'
                 ]
             ]);
             $user = User::findOrFail($id);
@@ -155,7 +157,7 @@ class UserController extends Controller
                 $user = User::find($id);
                 $user->update($request->all());
                 DB::commit();
-                return ["message" => "موفقانه معلومات اصلاح شد"];
+                return ["Success"];
             } catch (Exception $e) {
                 DB::rollback();
                 return Response::json($e, 400);

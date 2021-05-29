@@ -5,7 +5,6 @@
             <h1 class="sm:mx-0 mx-4 mb-12 text-5xl text-warning">Pending!</h1>
             <p class="sm:mx-0 mx-4 mb-4 sm:mb-16">
                 Your account is under review.</p>
-
         </div>
     </div>
 </template>

@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Account;
-use App\Models\ExchangeRate;
-use App\Models\Proposal;
-use App\Models\UserAssignment;
-use App\Models\UserNotification;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
 
@@ -44,7 +41,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        // 'password', 'remember_token',
+        'password', 'remember_token',
     ];
 
     /**
@@ -56,6 +53,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    protected static function boot()
+    {
+        parent::boot();
+        // Just load users with same branch, except for adminstrator.
+        if(auth()->guard('api')->user() && auth()->guard('api')->user()->id != 1){
+            $bId = auth()->guard('api')->user()->branch_id;
+            static::addGlobalScope('branch_id', function (Builder $builder) use ($bId) {
+                $builder->where('branch_id',  $bId);
+            });
+        }
+    }
+    
     // User relation with branch.
     public function branch()
     {
