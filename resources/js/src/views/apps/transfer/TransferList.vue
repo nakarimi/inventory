@@ -34,10 +34,8 @@
             <vs-td>
               <p>{{ tr.created_at | formatDate }}</p>
             </vs-td>
-            <vs-td>
-              <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/transfer/${tr.id}`).catch(() => {})">
-                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
-              </span>
+            <vs-td v-if="tr">
+              <action-buttons :parent_data.sync="transfers" entity="transfer" entity_plural="transfers" :id="tr.id" ></action-buttons>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -48,7 +46,9 @@
 </template>
 
 <script>
+import ActionButtons from '../../share/ActionButtons.vue'
 export default {
+  components: { ActionButtons },
   data() {
     return {
       transfers: [],

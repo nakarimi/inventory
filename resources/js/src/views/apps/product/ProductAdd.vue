@@ -29,7 +29,7 @@
             <span class="text-danger text-sm absolute">{{ errors.first('price') | remove_ }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-          <label for=""><small>Product Details</small></label>
+            <label for=""><small>Product Details</small></label>
             <vs-textarea rows="10" v-validate="'required'" data-vv-validate-on="blur" name="product_details" v-model="form.product_details" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('product_details') | remove_ }}</span>
           </vs-col>
@@ -186,7 +186,6 @@ export default {
   },
   methods: {
 
-
     // Read image data and append to the form.
     updateCurrImg(input) {
       if (input.target.files && input.target.files[0]) {
@@ -204,7 +203,7 @@ export default {
     },
     loadProduct(id) {
       this.axios.get(`/api/products/${id}/edit`).then((response) => {
-        
+
         // Fill the form with database data.
         this.form.fill(response.data);
         this.form.image = '/img/product/' + this.form.image;

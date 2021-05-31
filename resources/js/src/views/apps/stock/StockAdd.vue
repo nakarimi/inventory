@@ -9,7 +9,7 @@
           <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
+          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" :disabled="($route.params.id)" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
@@ -54,39 +54,56 @@ export default {
   },
   computed: {
     validateForm() {
+      return true;
       return this.form.name !== '' &&
         this.form.code !== '' &&
         this.form.phone !== ''
     }
   },
-  created() {},
+  created() {
+    if (this.$route.params.id) {
+      this.loadStock(this.$route.params.id)
+    }
+  },
   methods: {
+    loadStock(id) {
+      this.axios.get(`/api/stocks/${id}/edit`).then((response) => {
+        this.form.fill(response.data);
+      }).catch(() => {})
+    },
     storeStock() {
-      this.form.logo = this.form.image;
-      this.form.post('/api/stocks')
-        .then((response) => {
+      if (this.$route.params.id) {
+        var x = this.form.patch(`/api/stocks/${this.$route.params.id}`)
+      } else {
+        var x = this.form.post('/api/stocks')
+      }
+      x.then((response) => {
+        if (!this.$route.params.id) {
           this.form.reset();
+        } else {
+          this.$router.push("/apps/list/stock");
+        }
+        this.$vs.notify({
+          title: 'Success!',
+          text: 'Process completed successfully!',
+          color: 'success',
+          iconPack: 'feather',
+          icon: 'icon-check',
+          position: 'top-left'
+        })
+
+      }).catch((error) => {
+        if (this.form.errors.errors.error) {
           this.$vs.notify({
-            title: 'Success!',
-            text: 'Process completed successfully!',
-            color: 'success',
+            title: 'Failed!',
+            text: 'There is some failure, please try again!',
+            color: 'danger',
             iconPack: 'feather',
-            icon: 'icon-check',
+            icon: 'icon-cross',
             position: 'top-left'
           })
-
-        }).catch((error) => {
-          if (this.form.errors.errors.error) {
-            this.$vs.notify({
-              title: 'Failed!',
-              text: 'There is some failure, please try again!',
-              color: 'danger',
-              iconPack: 'feather',
-              icon: 'icon-cross',
-              position: 'top-left'
-            })
-          }
-        })
+        }
+      })
     },
   }
 }

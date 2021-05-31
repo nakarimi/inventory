@@ -459,6 +459,45 @@ const router = new Router({
                   btn_list_path: '/apps/list/branch',
                 }
               },
+              {
+                path: '/apps/edit/customer/:id',
+                name: 'edit-customer',
+                component: () => import('./views/apps/customer/CustomerAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Customers List', url: {name: 'list-customer'} },
+                    { title: 'Edit Customer', active: true }
+                  ],
+                  btn_list_path: '/apps/list/customer',
+                }
+              },
+              {
+                path: '/apps/edit/vendor/:id',
+                name: 'edit-vendor',
+                component: () => import('./views/apps/vendor/VendorAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Vendors List', url: {name: 'list-vendor'} },
+                    { title: 'Edit Vendor', active: true }
+                  ],
+                  btn_list_path: '/apps/list/vendor',
+                }
+              },
+              {
+                path: '/apps/edit/stock/:id',
+                name: 'edit-stock',
+                component: () => import('./views/apps/stock/StockAdd.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Stocks List', url: {name: 'list-stock'} },
+                    { title: 'Edit Stock', active: true }
+                  ],
+                  btn_list_path: '/apps/list/stock',
+                }
+              },
               // End Of Edit Routes
               {
                 path: '/manage/category',

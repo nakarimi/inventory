@@ -11,7 +11,7 @@
             <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="email" label="Email Address" v-model="form.email" class="w-full" />
+            <vs-input v-validate="'required'" data-vv-validate-on="blur" :disabled="($route.params.id)" name="email" label="Email Address" v-model="form.email" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('email') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
@@ -28,31 +28,31 @@
           </div>
         </div>
       </div>
-        <div class="vx-col w-1/3">
-          <template v-if="form.image">
-            <div class="img-container w-64 mx-auto flex items-center justify-center mt-5">
-              <img :src="form.image" width="50px" height="50px" alt="img" class="user_image responsive" />
-            </div>
-            <div class="modify-img flex justify-center mt-5">
-              <input type="file" class="hidden" ref="updateImgInput" @change="updateCurrImg" accept="image/*" />
-              <vs-button class="mr-4" @click="$refs.updateImgInput.click()">Change</vs-button>
-              <vs-button color="warning" @click="form.image = null">Remove</vs-button>
-            </div>
-          </template>
-          <template v-if="!form.image">
-            <div class="mt-4">
-              <div class="img-container w-64 mx-auto flex items-center justify-center">
-                <img src="/img/customer/default.jpg" width="50px" height="50px" alt="img" @click="$refs.uploadImgInput.click()" class="user_image responsive cursor-pointer" />
-              </div>
-            </div>
-          </template>
-          <div class="upload-img mt-5 text-center" v-if="!form.image">
-            <input type="file" class="hidden" ref="uploadImgInput" @change="updateCurrImg" accept="image/*" />
-            <vs-button @click="$refs.uploadImgInput.click()">Upload</vs-button>
+      <div class="vx-col w-1/3">
+        <template v-if="form.image">
+          <div class="img-container w-64 mx-auto flex items-center justify-center mt-5">
+            <img :src="form.image" width="50px" height="50px" alt="img" class="user_image responsive" />
           </div>
+          <div class="modify-img flex justify-center mt-5">
+            <input type="file" class="hidden" ref="updateImgInput" @change="updateCurrImg" accept="image/*" />
+            <vs-button class="mr-4" @click="$refs.updateImgInput.click()">Change</vs-button>
+            <vs-button color="warning" @click="form.image = null">Remove</vs-button>
+          </div>
+        </template>
+        <template v-if="!form.image">
+          <div class="mt-4">
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
+              <img src="/img/customer/default.jpg" width="50px" height="50px" alt="img" @click="$refs.uploadImgInput.click()" class="user_image responsive cursor-pointer" />
+            </div>
+          </div>
+        </template>
+        <div class="upload-img mt-5 text-center" v-if="!form.image">
+          <input type="file" class="hidden" ref="uploadImgInput" @change="updateCurrImg" accept="image/*" />
+          <vs-button @click="$refs.uploadImgInput.click()">Upload</vs-button>
         </div>
+      </div>
       <form-error :form="form"></form-error>
-    <vs-button class="float-right mt-6" @click="storeCustomer" :disabled="!validateForm">Send</vs-button>
+      <vs-button class="float-right mt-6" @click="storeCustomer" :disabled="!validateForm">Send</vs-button>
     </div>
   </vx-card>
   <!-- </div> -->
@@ -83,14 +83,26 @@ export default {
   },
   computed: {
     validateForm() {
+      return true;
       return !this.form.errors.any() &&
         this.form.name !== '' &&
         this.form.email !== '' &&
         this.form.phone !== ''
     }
   },
-  created() {},
+  created() {
+    if (this.$route.params.id) {
+      this.loadCustomer(this.$route.params.id)
+    }
+
+  },
   methods: {
+    loadCustomer(id) {
+      this.axios.get(`/api/customers/${id}/edit`).then((response) => {
+        this.form.fill(response.data);
+        this.form.image = '/img/customer/' + this.form.logo;
+      }).catch(() => {})
+    },
     updateCurrImg(input) {
       if (input.target.files && input.target.files[0]) {
         const reader = new FileReader()
@@ -102,30 +114,42 @@ export default {
     },
     storeCustomer() {
       this.form.logo = this.form.image;
-      this.form.post('/api/customers')
-        .then((response) => {
+      if (this.$route.params.id) {
+        var x = this.form.patch(`/api/customers/${this.$route.params.id}`)
+        if (this.form.image.includes('/img/customer/')) {
+          this.form.image = this.form.image.replace('/img/customer/', '');
+        }
+
+      } else {
+        var x = this.form.post('/api/customers')
+      }
+      x.then((response) => {
+        if (!this.$route.params.id) {
           this.form.reset();
+        }else{
+          this.$router.push("/apps/list/customer");
+        }        
+        this.$vs.notify({
+          title: 'Success!',
+          text: 'Process completed successfully!',
+          color: 'success',
+          iconPack: 'feather',
+          icon: 'icon-check',
+          position: 'top-left'
+        })
+
+      }).catch((error) => {
+        if (this.form.errors.errors.error) {
           this.$vs.notify({
-            title: 'Success!',
-            text: 'Process completed successfully!',
-            color: 'success',
+            title: 'Failed!',
+            text: 'There is some failure, please try again!',
+            color: 'danger',
             iconPack: 'feather',
-            icon: 'icon-check',
+            icon: 'icon-cross',
             position: 'top-left'
           })
-
-        }).catch((error) => {
-          if (this.form.errors.errors.error) {
-            this.$vs.notify({
-              title: 'Failed!',
-              text: 'There is some failure, please try again!',
-              color: 'danger',
-              iconPack: 'feather',
-              icon: 'icon-cross',
-              position: 'top-left'
-            })
-          }
-        })
+        }
+      })
     },
   }
 }

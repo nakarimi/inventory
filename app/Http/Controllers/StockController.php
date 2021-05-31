@@ -77,7 +77,7 @@ class StockController extends Controller
      */
     public function edit(Stock $stock)
     {
-        //
+        return $stock;
     }
 
     /**
@@ -89,7 +89,21 @@ class StockController extends Controller
      */
     public function update(Request $request, Stock $stock)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required',
+            'manager' => 'required',
+            'phone' => 'required|min:11|numeric',
+        ]);
+        DB::beginTransaction();
+        try {
+            unset($request->code);
+        $result = $stock->update($request->all());
+        DB::commit();
+        return $result;
+    } catch (Exception $e) {
+        DB::rollback();
+        return Response::json($e, 400);
+    }
     }
 
     /**

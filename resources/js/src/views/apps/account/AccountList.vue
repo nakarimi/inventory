@@ -8,6 +8,7 @@
         <vs-th>User</vs-th>
         <vs-th>Branch</vs-th>
         <vs-th>Status</vs-th>
+        <vs-th></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
@@ -29,6 +30,9 @@
               :color="(tr.status == '1') ? 'success' : 'danger'" 
               class="product-order-status">{{ (tr.status == '1') ? 'Active' : 'Inactive' }}</vs-chip>
             </vs-td>
+            <vs-td v-if="tr">
+              <action-buttons ref="ab" :parent_data.sync="accounts" entity="account" entity_plural="accounts" :id="tr.id" ></action-buttons>
+            </vs-td>
           </vs-tr>
         </tbody>
       </template>
@@ -38,12 +42,15 @@
 </template>
 
 <script>
+import ActionButtons from '../../share/ActionButtons'
+
 export default {
   data() {
     return {
       accounts: [],
     }
   },
+  components: {ActionButtons},
   created() {
     this.loadAccounts()
   },

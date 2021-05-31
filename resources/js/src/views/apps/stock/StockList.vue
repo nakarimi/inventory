@@ -9,6 +9,7 @@
         <vs-th>Phone</vs-th>
         <vs-th>Address</vs-th>
         <vs-th>Manager</vs-th>
+        <vs-th></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
@@ -31,6 +32,9 @@
             <vs-td>
               <p>{{ tr.manager }}</p>
             </vs-td>
+            <vs-td v-if="tr">
+              <action-buttons :parent_data.sync="stocks" entity="stock" entity_plural="stocks" :id="tr.id" ></action-buttons>
+            </vs-td>
           </vs-tr>
         </tbody>
       </template>
@@ -40,12 +44,15 @@
 </template>
 
 <script>
+import ActionButtons from '../../share/ActionButtons'
+
 export default {
   data() {
     return {
       stocks: [],
     }
   },
+  components: {ActionButtons},
   created() {
     this.loadStocks()
   },

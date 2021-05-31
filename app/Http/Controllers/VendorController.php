@@ -84,7 +84,7 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor)
     {
-        //
+        return $vendor;
     }
 
     /**
@@ -96,7 +96,28 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'phone' => 'required|min:11|numeric',
+        ]);
+        DB::beginTransaction();
+        try {
+            $photoname = NULL;
+            if (!($vendor->image == $request->image)) {
+                if ($request->image != null && !str_contains($request->image, 'vendor/')) {
+                    $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+                    \Image::make($request->image)->save(public_path('img/vendor/') . $photoname);
+                    $request->merge(['logo' => $photoname]);
+                }
+            }
+            unset($request->email);
+            $result = $vendor->update($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**

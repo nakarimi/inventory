@@ -37,10 +37,8 @@
             <vs-td>
               <p>{{ tr.due_date | formatDate }}</p>
             </vs-td>
-            <vs-td>
-              <span class="cursor-pointer" @click="$router.push(`/apps/edit/purchase/${tr.id}`).catch(() => {})">
-                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
-              </span>
+            <vs-td v-if="tr">
+              <action-buttons :parent_data.sync="purchases" entity="purchase" entity_plural="purchases" :id="tr.id" ></action-buttons>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -51,9 +49,10 @@
 </template>
 
 <script>
-
+import ActionButtons from '../../share/ActionButtons.vue'
 
 export default {
+  components: { ActionButtons },
   data() {
     return {
       purchases: [],

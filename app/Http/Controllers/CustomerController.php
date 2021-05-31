@@ -42,7 +42,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'email' => 'required|email|unique:customers',
             'name' => 'required',
             'phone' => 'required|min:11|numeric',
@@ -56,14 +56,13 @@ class CustomerController extends Controller
                 \Image::make($request->image)->save(public_path('img/customer/') . $photoname);
                 $request->merge(['logo' => $photoname]);
             }
-        $result = Customer::create($request->all());
-        DB::commit();
-        return $result;
-    } catch (Exception $e) {
-        DB::rollback();
-        return Response::json($e, 400);
-    }
-
+            $result = Customer::create($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -85,7 +84,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return $customer;
     }
 
     /**
@@ -97,7 +96,28 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'phone' => 'required|min:11|numeric',
+        ]);
+        DB::beginTransaction();
+        try {
+            unset($request->email);
+            $photoname = NULL;
+            if ($request->image != null) {
+
+                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+                \Image::make($request->image)->save(public_path('img/customer/') . $photoname);
+                $request->merge(['logo' => $photoname]);
+            }
+            $result = $customer->update($request->all());
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
+
     }
 
     /**
