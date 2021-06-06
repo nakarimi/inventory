@@ -7,31 +7,31 @@
         <vs-row>
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <vs-input data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('name') | remove_ }}</span>
+            <vs-input name="name" label="Name" v-model="form.name" @input="form.errors.errors.name = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="name"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <vs-input data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('code') | remove_ }}</span>
+            <vs-input name="code" label="Code" v-model="form.code" @input="form.errors.errors.code = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="code"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-            <vs-input data-vv-validate-on="blur" name="unit" label="Unit" v-model="form.unit" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('unit') | remove_ }}</span>
+            <vs-input name="unit" label="Unit" v-model="form.unit" @input="form.errors.errors.unit = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="unit"></has-error>
           </vs-col>
         </vs-row>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-            <vs-input type="number" data-vv-validate-on="blur" name="cost" label="Cost" v-model="form.cost" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('cost') | remove_ }}</span>
+            <vs-input type="number" name="cost" label="Cost" v-model="form.cost" @input="form.errors.errors.cost = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="cost"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-            <vs-input type="number" data-vv-validate-on="blur" name="price" label="Price" v-model="form.price" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('price') | remove_ }}</span>
+            <vs-input type="number" name="price" label="Price" v-model="form.price" @input="form.errors.errors.price = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="price"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <label for=""><small>Product Details</small></label>
-            <vs-textarea rows="10" data-vv-validate-on="blur" name="product_details" v-model="form.product_details" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('product_details') | remove_ }}</span>
+            <vs-textarea rows="10" name="product_details" v-model="form.product_details" @input="form.errors.errors.product_details = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="product_details"></has-error>
           </vs-col>
 
           <!-- Upload Image for Product. -->
@@ -59,7 +59,7 @@
                 <vs-button @click="$refs.uploadImgInput.click()">Upload</vs-button>
               </div>
             </div>
-            <span class="text-danger text-sm absolute">{{ errors.first('image') | remove_ }}</span>
+            <has-error class="text-danger text-sm" :form="form" field="image"></has-error>
           </vs-col>
           <!-- End Of Product Upload Image. -->
 
@@ -68,63 +68,62 @@
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Category</small></label>
-            <v-select label="name" name="category_id" v-model="form.category_id" :options="categories" />
-            <span class="text-danger text-sm absolute">{{ errors.first('category_id') | remove_ }}</span>
+            <v-select label="name" name="category_id" v-model="form.category_id" @input="form.errors.errors.category_id = []" :options="categories" />
+            <has-error class="text-danger text-sm" :form="form" field="category_id"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Stock</small></label>
-            <v-select label="name" name="stock_id" v-model="form.stock_id" :options="stocks" />
-            <span class="text-danger text-sm absolute">{{ errors.first('stock_id') | remove_ }}</span>
+            <v-select label="name" name="stock_id" v-model="form.stock_id" @input="form.errors.errors.stock_id = []" :options="stocks" />
+            <has-error class="text-danger text-sm" :form="form" field="stock_id"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" data-vv-validate-on="blur" name="quantity" label="quantity" v-model="form.quantity" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('quantity') | remove_ }}</span>
+            <vs-input type="number" name="quantity" label="quantity" v-model="form.quantity" @input="form.errors.errors.quantity = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="quantity"></has-error>
           </vs-col>
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="barcode_symbology" label="Barcode Symbology" v-model="form.barcode_symbology" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('barcode_symbology') | remove_ }}</span>
+            <vs-input name="barcode_symbology" label="Barcode Symbology" v-model="form.barcode_symbology" @input="form.errors.errors.barcode_symbology = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="barcode_symbology"></has-error>
           </vs-col>
         </vs-row>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" data-vv-validate-on="blur" name="tax" label="tax" v-model="form.tax" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('tax') | remove_ }}</span>
+            <vs-input type="number" name="tax" label="tax" v-model="form.tax" @input="form.errors.errors.tax = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="tax"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="type" label="type" v-model="form.type" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('type') | remove_ }}</span>
+            <vs-input name="type" label="type" v-model="form.type" @input="form.errors.errors.type = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="type"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="supplier" label="supplier" v-model="form.supplier" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('supplier') | remove_ }}</span>
+            <vs-input name="supplier" label="supplier" v-model="form.supplier" @input="form.errors.errors.supplier = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="supplier"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" data-vv-validate-on="blur" name="supplier_price" label="Supplier Price" v-model="form.supplier_price" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('supplier_price') | remove_ }}</span>
+            <vs-input type="number" name="supplier_price" label="Supplier Price" v-model="form.supplier_price" @input="form.errors.errors.supplier_price = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="supplier_price"></has-error>
           </vs-col>
         </vs-row>
         <vs-row>
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="sale_unit" label="sale_unit" v-model="form.sale_unit" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('sale_unit') | remove_ }}</span>
+            <vs-input name="sale_unit" label="sale_unit" v-model="form.sale_unit" @input="form.errors.errors.sale_unit = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="sale_unit"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="purchase_unit" label="purchase_unit" v-model="form.purchase_unit" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('purchase_unit') | remove_ }}</span>
+            <vs-input name="purchase_unit" label="purchase_unit" v-model="form.purchase_unit" @input="form.errors.errors.purchase_unit = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="purchase_unit"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="brand" label="brand" v-model="form.brand" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('brand') | remove_ }}</span>
+            <vs-input name="brand" label="brand" v-model="form.brand" @input="form.errors.errors.brand = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="brand"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input data-vv-validate-on="blur" name="featured" label="featured" v-model="form.featured" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('featured') | remove_ }}</span>
+            <vs-input name="featured" label="featured" v-model="form.featured" @input="form.errors.errors.featured = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="featured"></has-error>
           </vs-col>
         </vs-row>
-        <form-error :form="form"></form-error>
-        <vs-button class="float-right mt-6" @click="storeProduct" :disabled="!validateForm">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeProduct" :disabled="form.busy">Send</vs-button>
       </div>
     </vx-card>
   </div>
@@ -132,7 +131,6 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 
 export default {
@@ -166,16 +164,7 @@ export default {
     }
   },
   components: {
-    FormError,
     "v-select": vSelect,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      // return this.form.name !== '' &&
-      //   this.form.code !== '' &&
-      //   this.form.phone !== ''
-    }
   },
   created() {
     if (this.$route.params.id) {

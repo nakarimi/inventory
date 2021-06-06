@@ -38,7 +38,6 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         $this->validate($request, [
             'code' => 'required|unique:branches|min:3',
             'name' => 'required|min:3',

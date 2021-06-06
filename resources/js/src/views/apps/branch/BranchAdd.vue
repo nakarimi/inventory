@@ -6,17 +6,16 @@
         <h1 v-if="$route.params.id">Update Branch</h1>
         <h1 v-if="!$route.params.id">Add New Branch</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input name="name" label="Name" v-model="form.name" class="w-full" />
-          <form-error :form="form" :field="'name'"></form-error>
+          <vs-input name="name" label="Name" v-model="form.name" @input="form.errors.errors.name = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="name"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input name="code" label="Code" v-model="form.code" @input="form.code = form.code.replaceAll(' ', '_').toLowerCase()" class="w-full" />
-          <form-error :form="form" :field="'code'"></form-error>
-
+          <vs-input name="code" label="Code" v-model="form.code" @input="form.errors.errors.code = [], form.code = form.code.replaceAll(' ', '_').toLowerCase()" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="code"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input name="address" label="Address" v-model="form.address" class="w-full" />
-          <form-error :form="form" :field="'address'"></form-error>
+          <vs-input name="address" label="Address" v-model="form.address" @input="form.errors.errors.address = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="address"></has-error>
         </div>
         <vs-button class="float-right mt-6" @click="storeBranch" :disabled="form.busy">Send</vs-button>
       </div>
@@ -26,8 +25,6 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
-
 export default {
   data() {
     return {
@@ -37,9 +34,6 @@ export default {
         address: '',
       }),
     }
-  },
-  components: {
-    FormError
   },
   created() {
     if (this.$route.params.id) {

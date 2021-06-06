@@ -1,30 +1,34 @@
 <template>
 <div class="flex w-full bg-img vx-row no-gutter justify-center">
-  <!-- <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4"> -->
   <vx-card>
     <div class="vx-row pl-5">
       <div class="w-2/3">
         <div class="clearfix">
           <h1>Add New Customer</h1>
           <div class="mt-2 mb-2 grid">
-            <vs-input data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
+            <vs-input name="name" label="Name" v-model="form.name" @input="form.errors.errors.name = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="name"></has-error>
+
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input data-vv-validate-on="blur" :disabled="($route.params.id)" name="email" label="Email Address" v-model="form.email" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('email') }}</span>
+            <vs-input :disabled="($route.params.id)" name="email" label="Email Address" v-model="form.email" @input="form.errors.errors.email = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="email"></has-error>
+
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
+            <vs-input name="phone" label="Phone" v-model="form.phone" @input="form.errors.errors.phone = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="phone"></has-error>
+
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input data-vv-validate-on="blur" name="website" label="Website" v-model="form.website" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('website') }}</span>
+            <vs-input name="website" label="Website" v-model="form.website" @input="form.errors.errors.website = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="website"></has-error>
+
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
+            <vs-input name="address" label="Address" v-model="form.address" @input="form.errors.errors.address = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="address"></has-error>
+
           </div>
         </div>
       </div>
@@ -51,16 +55,13 @@
           <vs-button @click="$refs.uploadImgInput.click()">Upload</vs-button>
         </div>
       </div>
-      <form-error :form="form"></form-error>
-      <vs-button class="float-right mt-6" @click="storeCustomer" :disabled="!validateForm">Send</vs-button>
+      <vs-button class="float-right mt-6" @click="storeCustomer" :disabled="form.busy">Send</vs-button>
     </div>
   </vx-card>
-  <!-- </div> -->
 </div>
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 
 export default {
@@ -78,23 +79,12 @@ export default {
     }
   },
   components: {
-    FormError,
     "v-select": vSelect,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      return !this.form.errors.any() &&
-        this.form.name !== '' &&
-        this.form.email !== '' &&
-        this.form.phone !== ''
-    }
   },
   created() {
     if (this.$route.params.id) {
       this.loadCustomer(this.$route.params.id)
     }
-
   },
   methods: {
     loadCustomer(id) {
@@ -119,16 +109,15 @@ export default {
         if (this.form.image.includes('/img/customer/')) {
           this.form.image = this.form.image.replace('/img/customer/', '');
         }
-
       } else {
         var x = this.form.post('/api/customers')
       }
       x.then((response) => {
         if (!this.$route.params.id) {
           this.form.reset();
-        }else{
+        } else {
           this.$router.push("/apps/list/customer");
-        }        
+        }
         this.$vs.notify({
           title: 'Success!',
           text: 'Process completed successfully!',

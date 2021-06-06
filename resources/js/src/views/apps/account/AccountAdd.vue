@@ -5,27 +5,26 @@
       <div class="clearfix">
         <h1>Add New Account</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input data-vv-validate-on="blur" name="name" label="Label" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
+          <vs-input name="name" label="Label" v-model="form.name" @input="form.errors.errors.name = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="name"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
           <div class="w-full">
             <label for="">Choose User</label>
-            <v-select name="users" :clearable="false" :get-option-label="option => option.first_name + ' ' + option.last_name" v-model="form.account_user_id" :options="users" :dir="$vs.rtl ? 'rtl' : 'ltr'">
+            <v-select name="account_user_id" :clearable="false" :get-option-label="option => option.first_name + ' ' + option.last_name" v-model="form.account_user_id" @input="form.errors.errors.account_user_id = []" :options="users" :dir="$vs.rtl ? 'rtl' : 'ltr'">
             </v-select>
-            <has-error :form="form" field="users"></has-error>
+            <has-error class="text-danger text-sm" :form="form" field="account_user_id"></has-error>
           </div>
         </div>
         <div class="mt-2 mb-2 grid">
-          <label for=""  class="mt-2 mb-2">Account Status</label>
-          <vs-switch color="success" v-model="form.status">
+          <label for="" class="mt-2 mb-2">Account Status</label>
+          <vs-switch color="success" v-model="form.status" @input="form.errors.errors.status = []">
             <span slot="on">Active</span>
             <span slot="off">Inactive</span>
           </vs-switch>
-          <span class="text-danger text-sm absolute">{{ errors.first('status') }}</span>
+          <has-error class="text-danger text-sm" :form="form" field="status"></has-error>
         </div>
-        <vs-button class="float-right mt-6" @click="storeAccount" :disabled="!validateForm">Send</vs-button>
-        <form-error :form="form"></form-error>
+        <vs-button class="float-right mt-6" @click="storeAccount" :disabled="form.busy">Send</vs-button>
       </div>
     </vx-card>
   </div>
@@ -33,7 +32,6 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 
 export default {
@@ -48,14 +46,7 @@ export default {
     }
   },
   components: {
-    FormError,
     "v-select": vSelect,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      // return !this.form.errors.any() && this.form.name !== '' && this.form.code !== '' && this.form.address !== ''
-    }
   },
   created() {
     this.getAllUsers();
@@ -82,16 +73,14 @@ export default {
           })
 
         }).catch((error) => {
-          if (this.form.errors.errors.error) {
-            this.$vs.notify({
-              title: 'Failed!',
-              text: 'There is some failure, please try again!',
-              color: 'danger',
-              iconPack: 'feather',
-              icon: 'icon-cross',
-              position: 'top-left'
-            })
-          }
+          this.$vs.notify({
+            title: 'Failed!',
+            text: 'There is some failure, please try again!',
+            color: 'danger',
+            iconPack: 'feather',
+            icon: 'icon-cross',
+            position: 'top-left'
+          })
         })
     },
   }

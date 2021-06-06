@@ -5,17 +5,16 @@
     <div class="vx-row">
       <div class="sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 p-4">
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required|min:3'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
+          <vs-input v-validate="'required|min:3'" name="name" label="Name" v-model="form.name" @input="form.errors.errors.name = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="name"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required|min:3'" data-vv-validate-on="blur" name="slug" label="Slug" v-model="form.slug" @input="form.errors.errors.slug = []" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('slug') }}</span>
+          <vs-input v-validate="'required|min:3'" name="slug" label="Slug" v-model="form.slug" @input="form.errors.errors.slug = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="slug"></has-error>
         </div>
-        <vs-button class="float-right m-3" v-if="!this.form.id" @click="addNewCategory" :disabled="!validateForm">Add New</vs-button>
-        <vs-button class="float-right m-3" v-if="this.form.id" @click="submitEditCategory" :disabled="!validateForm">Update</vs-button>
+        <vs-button class="float-right m-3" v-if="!this.form.id" @click="addNewCategory" :disabled="form.busy">Add New</vs-button>
+        <vs-button class="float-right m-3" v-if="this.form.id" @click="submitEditCategory" :disabled="form.busy">Update</vs-button>
         <vs-button color="warning" class="float-right m-3" @click="form.reset()">Cancel</vs-button>
-        <form-error :form="form"></form-error>
       </div>
       <div class="sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 p-4">
         <vs-table ref="table" :data="categories" stripe>
@@ -52,7 +51,6 @@
 </template>
 
 <script>
-import FormError from '../share/FormError'
 export default {
   data() {
     return {
@@ -64,9 +62,6 @@ export default {
         slug: '',
       })
     }
-  },
-  components: {
-    FormError
   },
   computed: {
     validateForm() {
@@ -96,16 +91,14 @@ export default {
             position: 'top-left'
           })
         }).catch((error) => {
-          if (this.form.errors.errors.error) {
-            this.$vs.notify({
-              title: 'Failed!',
-              text: 'There is some failure, please try again!',
-              color: 'danger',
-              iconPack: 'feather',
-              icon: 'icon-cross',
-              position: 'top-left'
-            })
-          }
+          this.$vs.notify({
+            title: 'Failed!',
+            text: 'There is some failure, please try again!',
+            color: 'danger',
+            iconPack: 'feather',
+            icon: 'icon-cross',
+            position: 'top-left'
+          })
         })
 
     },
@@ -128,16 +121,14 @@ export default {
             position: 'top-left'
           })
         }).catch((error) => {
-          if (this.form.errors.errors.error) {
-            this.$vs.notify({
-              title: 'Failed!',
-              text: 'There is some failure, please try again!',
-              color: 'danger',
-              iconPack: 'feather',
-              icon: 'icon-cross',
-              position: 'top-left'
-            })
-          }
+          this.$vs.notify({
+            title: 'Failed!',
+            text: 'There is some failure, please try again!',
+            color: 'danger',
+            iconPack: 'feather',
+            icon: 'icon-cross',
+            position: 'top-left'
+          })
         })
 
     },

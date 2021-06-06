@@ -21,28 +21,28 @@
                   <has-error :form="form" field="branch"></has-error>
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input data-vv-validate-on="blur" label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
+                  <vs-input label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('first_name') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input data-vv-validate-on="blur" label-placeholder="Last Name" name="last_name" placeholder="Last Name" v-model="form.last_name" class="w-full" />
+                  <vs-input label-placeholder="Last Name" name="last_name" placeholder="Last Name" v-model="form.last_name" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('last_name') | remove_ }}</span>
 
                 </div>
 
                 <div class="mt-2 mb-2 grid">
-                  <vs-input v-validate="'required|email'" :disabled="$route.params.id" @input="form.email = form.email.toLowerCase()" data-vv-validate-on="blur" name="email" type="email" label-placeholder="Email" placeholder="Email" v-model="form.email" class="w-full" />
+                  <vs-input v-validate="'required|email'" :disabled="$route.params.id" @input="form.email = form.email.toLowerCase()" name="email" type="email" label-placeholder="Email" placeholder="Email" v-model="form.email" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('email') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input data-vv-validate-on="blur" label-placeholder="Phone" name="phone" placeholder="Phone" v-model="form.phone" class="w-full" />
+                  <vs-input label-placeholder="Phone" name="phone" placeholder="Phone" v-model="form.phone" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('phone') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input data-vv-validate-on="blur" label-placeholder="Address" name="address" placeholder="Address" v-model="form.address" class="w-full" />
+                  <vs-input label-placeholder="Address" name="address" placeholder="Address" v-model="form.address" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('address') | remove_ }}</span>
 
                 </div>
@@ -50,11 +50,11 @@
                 <!-- If it is an edit page, don't show the password fields -->
                 <div v-if="!$route.params.id">
                   <div class="mt-2 mb-2 grid">
-                    <vs-input ref="password" type="password" data-vv-validate-on="blur" v-validate="'required|min:6'" name="password" label-placeholder="Password" placeholder="Password" v-model="form.password" class="w-full" />
+                    <vs-input ref="password" type="password" v-validate="'required|min:6'" name="password" label-placeholder="Password" placeholder="Password" v-model="form.password" class="w-full" />
                     <span class="text-danger text-sm">{{ errors.first('password') | remove_ }}</span>
                   </div>
                   <div class="mt-2 mb-2 grid">
-                    <vs-input type="password" v-validate="'min:6|confirmed:password'" data-vv-validate-on="blur" data-vv-as="password" name="confirm_password" label-placeholder="Confirm Password" placeholder="Confirm Password" v-model="form.confirm_password" class="w-full" />
+                    <vs-input type="password" v-validate="'min:6|confirmed:password'" data-vv-as="password" name="confirm_password" label-placeholder="Confirm Password" placeholder="Confirm Password" v-model="form.confirm_password" class="w-full" />
                     <span class="text-danger text-sm">{{ errors.first('confirm_password') | remove_ }}</span>
                   </div>
                 </div>

@@ -43,13 +43,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'code' => 'required|code|unique:products',
+            'name' => 'required',
+            'cost' => 'required',
+            'supplier_price' => 'required',
+        ]);
         $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
         $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
-        // $this->validate($request,[
-        //     'code' => 'required|code|unique:products',
-        //     'name' => 'required',
-        //     'cost' => 'required',
-        // ]);
         DB::beginTransaction();
         try {
 

@@ -37,6 +37,11 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'account_user_id' => 'required',
+            'name' => 'required|min:3',
+            'status' => 'required',
+        ]);
         $request['account_user_id'] = $request['account_user_id']['id'];
         $request['user_id'] = auth()->guard('api')->user()->id;
         return Account::create($request->all());

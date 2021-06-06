@@ -5,27 +5,26 @@
       <div class="clearfix">
         <h1>Add New Stock</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
+          <vs-input name="name" label="Name" v-model="form.name" @input="form.errors.errors.name = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="name"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" :disabled="($route.params.id)" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
+          <vs-input name="code" label="Code" v-model="form.code" @input="form.errors.errors.code = []" :disabled="($route.params.id)" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="code"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input data-vv-validate-on="blur" name="manager" label="Manager" v-model="form.manager" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('manager') }}</span>
+          <vs-input name="manager" label="Manager" v-model="form.manager" @input="form.errors.errors.manager = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="manager"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
+          <vs-input name="phone" label="Phone" v-model="form.phone" @input="form.errors.errors.phone = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="phone"></has-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
+          <vs-input name="address" label="Address" v-model="form.address" @input="form.errors.errors.address = []" class="w-full" />
+          <has-error class="text-danger text-sm" :form="form" field="address"></has-error>
         </div>
-        <form-error :form="form"></form-error>
-        <vs-button class="float-right mt-6" @click="storeStock" :disabled="!validateForm">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeStock" :disabled="form.busy">Send</vs-button>
       </div>
     </vx-card>
   </div>
@@ -33,7 +32,6 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 
 export default {
@@ -49,16 +47,7 @@ export default {
     }
   },
   components: {
-    FormError,
     "v-select": vSelect,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      return this.form.name !== '' &&
-        this.form.code !== '' &&
-        this.form.phone !== ''
-    }
   },
   created() {
     if (this.$route.params.id) {
