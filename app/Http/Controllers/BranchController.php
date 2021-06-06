@@ -40,9 +40,9 @@ class BranchController extends Controller
     {
         // return $request;
         $this->validate($request, [
-            'code' => 'required|unique:branches',
-            'name' => 'required',
-            'address' => 'required',
+            'code' => 'required|unique:branches|min:3',
+            'name' => 'required|min:3',
+            'address' => 'required|min:10',
         ]);
         DB::beginTransaction();
         try {

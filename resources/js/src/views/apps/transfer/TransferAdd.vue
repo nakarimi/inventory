@@ -26,7 +26,7 @@
       <items :form="form" />
 
       <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-        <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total" label="Ammount" v-model="form.total" class="w-full" />
+        <vs-input type="number" data-vv-validate-on="blur" name="total" label="Ammount" v-model="form.total" class="w-full" />
         <span class="text-danger text-sm absolute">{{ errors.first('total') }}</span>
       </vs-col>
       <vs-button class="float-right mt-6" @click="storeTransfer" :disabled="!validateForm">Send</vs-button>
@@ -120,16 +120,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

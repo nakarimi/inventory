@@ -6,19 +6,19 @@
         <h1 v-if="$route.params.id">Update Branch</h1>
         <h1 v-if="!$route.params.id">Add New Branch</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
+          <vs-input name="name" label="Name" v-model="form.name" class="w-full" />
+          <form-error :form="form" :field="'name'"></form-error>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" @input="form.code = form.code.replaceAll(' ', '_').toLowerCase()" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
+          <vs-input name="code" label="Code" v-model="form.code" @input="form.code = form.code.replaceAll(' ', '_').toLowerCase()" class="w-full" />
+          <form-error :form="form" :field="'code'"></form-error>
+
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
+          <vs-input name="address" label="Address" v-model="form.address" class="w-full" />
+          <form-error :form="form" :field="'address'"></form-error>
         </div>
-        <vs-button class="float-right mt-6" @click="storeBranch" :disabled="!validateForm">Send</vs-button>
-        <form-error :form="form"></form-error>
+        <vs-button class="float-right mt-6" @click="storeBranch" :disabled="form.busy">Send</vs-button>
       </div>
     </vx-card>
   </div>
@@ -40,12 +40,6 @@ export default {
   },
   components: {
     FormError
-  },
-  computed: {
-    validateForm() {
-      return true;
-      // return !this.form.errors.any() && this.form.name !== '' && this.form.code !== '' && this.form.address !== ''
-    }
   },
   created() {
     if (this.$route.params.id) {
@@ -79,16 +73,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

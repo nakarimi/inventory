@@ -7,23 +7,23 @@
         <div class="clearfix">
           <h1>Add New Vendor</h1>
           <div class="mt-2 mb-2 grid">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="email" :disabled="($route.params.id)" label="Email Address" v-model="form.email" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="email" :disabled="($route.params.id)" label="Email Address" v-model="form.email" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('email') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="website" label="Website" v-model="form.website" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="website" label="Website" v-model="form.website" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('website') }}</span>
           </div>
           <div class="mt-2 mb-2 grid">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
           </div>
         </div>
@@ -135,16 +135,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

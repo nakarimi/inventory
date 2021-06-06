@@ -21,12 +21,12 @@
                   <has-error :form="form" field="branch"></has-error>
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
+                  <vs-input data-vv-validate-on="blur" label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('first_name') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="Last Name" name="last_name" placeholder="Last Name" v-model="form.last_name" class="w-full" />
+                  <vs-input data-vv-validate-on="blur" label-placeholder="Last Name" name="last_name" placeholder="Last Name" v-model="form.last_name" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('last_name') | remove_ }}</span>
 
                 </div>
@@ -37,12 +37,12 @@
 
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="Phone" name="phone" placeholder="Phone" v-model="form.phone" class="w-full" />
+                  <vs-input data-vv-validate-on="blur" label-placeholder="Phone" name="phone" placeholder="Phone" v-model="form.phone" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('phone') | remove_ }}</span>
 
                 </div>
                 <div class="mt-2 mb-2 grid">
-                  <vs-input v-validate="'required'" data-vv-validate-on="blur" label-placeholder="Address" name="address" placeholder="Address" v-model="form.address" class="w-full" />
+                  <vs-input data-vv-validate-on="blur" label-placeholder="Address" name="address" placeholder="Address" v-model="form.address" class="w-full" />
                   <span class="text-danger text-sm">{{ errors.first('address') | remove_ }}</span>
 
                 </div>
@@ -174,16 +174,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
 
     }

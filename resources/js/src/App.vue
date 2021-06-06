@@ -95,5 +95,21 @@ export default {
     window.removeEventListener('resize', this.handleWindowResize)
     window.removeEventListener('scroll', this.handleScroll)
   }
+  // Live watch form for validation.
+  //   watch: {
+  //   'form': {
+  //     deep: true, // detecting nested changes in objects
+  //     handler(newValue, oldValue) {
+  //       this.$validator.validateAll().then(result => {
+  //         if (result) {
+  //           console.log(true);
+  //         } else {
+  //           console.log(false);
+  //         }
+  //       })
+  //     }
+  //   }
+  // },
+
 }
 </script>

@@ -5,23 +5,23 @@
       <div class="clearfix">
         <h1>Add New Stock</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
+          <vs-input data-vv-validate-on="blur" name="name" label="Name" v-model="form.name" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" :disabled="($route.params.id)" class="w-full" />
+          <vs-input data-vv-validate-on="blur" name="code" label="Code" v-model="form.code" :disabled="($route.params.id)" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('code') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="manager" label="Manager" v-model="form.manager" class="w-full" />
+          <vs-input data-vv-validate-on="blur" name="manager" label="Manager" v-model="form.manager" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('manager') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
+          <vs-input data-vv-validate-on="blur" name="phone" label="Phone" v-model="form.phone" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('phone') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
+          <vs-input data-vv-validate-on="blur" name="address" label="Address" v-model="form.address" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('address') }}</span>
         </div>
         <form-error :form="form"></form-error>
@@ -93,16 +93,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

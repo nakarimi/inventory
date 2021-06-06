@@ -5,7 +5,7 @@
       <div class="clearfix">
         <h1>Add New Account</h1>
         <div class="mt-2 mb-2 grid">
-          <vs-input v-validate="'required'" data-vv-validate-on="blur" name="name" label="Label" v-model="form.name" class="w-full" />
+          <vs-input data-vv-validate-on="blur" name="name" label="Label" v-model="form.name" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('name') }}</span>
         </div>
         <div class="mt-2 mb-2 grid">

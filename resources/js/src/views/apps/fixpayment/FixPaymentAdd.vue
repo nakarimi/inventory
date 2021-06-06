@@ -7,13 +7,13 @@
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-2/3 xl:w-2/3 p-2">
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-full xl:w-full p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="title" label="Payment Title" v-model="form.title" class="w-full" />
+              <vs-input data-vv-validate-on="blur" name="title" label="Payment Title" v-model="form.title" class="w-full" />
               <span class="text-danger text-sm absolute">{{ errors.first('title') }}</span>
             </vs-col>
 
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Account</small></label>
-              <v-select label="name" name="account_id" v-validate="'required'" v-model="form.account_id" :options="accounts" />
+              <v-select label="name" name="account_id" v-model="form.account_id" :options="accounts" />
               <span class="text-danger text-sm absolute">{{ errors.first('account_id') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
@@ -23,26 +23,26 @@
             </vs-col>
 
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="ammount" label="Ammount" v-model="form.ammount" class="w-full" />
+              <vs-input type="number" data-vv-validate-on="blur" name="ammount" label="Ammount" v-model="form.ammount" class="w-full" />
               <span class="text-danger text-sm absolute">{{ errors.first('ammount') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="receiver" label="Paid To" v-model="form.receiver" class="w-full" />
+              <vs-input data-vv-validate-on="blur" name="receiver" label="Paid To" v-model="form.receiver" class="w-full" />
               <span class="text-danger text-sm absolute">{{ errors.first('receiver') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Type</small></label>
-              <v-select name="type" v-validate="'required'" v-model="form.type" :options="['In', 'Out']" />
+              <v-select name="type" v-model="form.type" :options="['In', 'Out']" />
               <span class="text-danger text-sm absolute">{{ errors.first('type') }}</span>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="approval_code" label="Approval Code" v-model="form.approval_code" class="w-full" />
+              <vs-input data-vv-validate-on="blur" name="approval_code" label="Approval Code" v-model="form.approval_code" class="w-full" />
               <span class="text-danger text-sm absolute">{{ errors.first('approval_code') }}</span>
             </vs-col>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
             <label for=""><small>Note</small></label>
-            <vs-textarea rows="6" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
+            <vs-textarea rows="6" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
           </vs-col>
         </vs-row>
@@ -129,16 +129,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

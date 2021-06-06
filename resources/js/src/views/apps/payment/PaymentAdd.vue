@@ -6,7 +6,7 @@
         <h1>Add New Payment</h1>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('reference_no') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
@@ -21,36 +21,36 @@
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Account</small></label>
-            <v-select label="name" name="account_id" v-validate="'required'" v-model="form.account_id" :options="accounts" />
+            <v-select label="name" name="account_id" v-model="form.account_id" :options="accounts" />
             <span class="text-danger text-sm absolute">{{ errors.first('account_id') }}</span>
           </vs-col>
 
         </vs-row>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="amount" label="Ammount" v-model="form.amount" class="w-full" />
+            <vs-input type="number" data-vv-validate-on="blur" name="amount" label="Ammount" v-model="form.amount" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('amount') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="paid_by" label="Paid By" v-model="form.paid_by" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="paid_by" label="Paid By" v-model="form.paid_by" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('paid_by') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="created_by" label="Created By" v-model="form.created_by" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="created_by" label="Created By" v-model="form.created_by" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('created_by') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Type</small></label>
-            <v-select name="type" v-validate="'required'" v-model="form.type" :options="['In', 'Out']" />
+            <v-select name="type" v-model="form.type" :options="['In', 'Out']" />
             <span class="text-danger text-sm absolute">{{ errors.first('type') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <label for=""><small>Note</small></label>
-            <vs-textarea rows="6" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
+            <vs-textarea rows="6" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="approval_code" label="Approval Code" v-model="form.approval_code" class="w-full" />
+            <vs-input data-vv-validate-on="blur" name="approval_code" label="Approval Code" v-model="form.approval_code" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('approval_code') }}</span>
           </vs-col>
         </vs-row>
@@ -154,16 +154,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }
