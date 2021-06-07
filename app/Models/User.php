@@ -34,6 +34,32 @@ class User extends Authenticatable
         'status',
         'branch_id'
     ];
+    /**
+     * rules of validation to be used for this model. It could be used for update and create.
+     *
+     * @param  mixed $id
+     * @param  mixed $merge
+     * @return array
+     */
+    public static function rules($id = 0, $merge = [])
+    {
+        return array_merge(
+            [            
+                'first_name' => 'required|max:191',
+                'last_name'  => 'required|max:191',
+                'branch'     => 'required|max:191',
+                'email'      => 'required|string|email|max:191|unique:users'. ($id ? ",email,$id" : ''),
+                'phone'      => 'required|max:12',
+                'address'    => 'required',
+                'password'   => 'required|string|min:6'
+                // 'user_type'  => 'required',
+                // 'position'   => 'required',
+                // 'status'     => 'required',
+    
+            ],
+            $merge
+        );
+    }
 
     /**
      * The attributes that should be hidden for arrays.
@@ -56,7 +82,7 @@ class User extends Authenticatable
 
     protected static function boot()
     {
-        parent::boot();
+        parent:: boot();
         // Just load users with same branch, except for adminstrator.
         if(auth()->guard('api')->user() && auth()->guard('api')->user()->id != 1){
             $bId = auth()->guard('api')->user()->branch_id;

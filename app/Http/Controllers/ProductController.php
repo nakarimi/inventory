@@ -43,12 +43,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'code' => 'required|code|unique:products',
-            'name' => 'required',
-            'cost' => 'required',
-            'supplier_price' => 'required',
-        ]);
+        $this->validate($request, Product::rules());
         $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
         $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
         DB::beginTransaction();
@@ -109,13 +104,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Extract the id from objects.
         $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
         $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
-        // $this->validate($request,[
-        //     'code' => 'required|code|unique:products',
-        //     'name' => 'required',
-        //     'cost' => 'required',
-        // ]);
+        $this->validate($request, Product::rules($id));
+
         DB::beginTransaction();
         try {
             $photoname = NULL;

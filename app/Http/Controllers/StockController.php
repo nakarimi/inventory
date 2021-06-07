@@ -41,12 +41,7 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'code' => 'required|unique:stocks',
-            'name' => 'required',
-            'manager' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Stock::rules());
         DB::beginTransaction();
         try {
         $result = Stock::create($request->all());
@@ -89,11 +84,7 @@ class StockController extends Controller
      */
     public function update(Request $request, Stock $stock)
     {
-        $this->validate($request,[
-            'name' => 'required',
-            'manager' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Stock::rules($stock->id));
         DB::beginTransaction();
         try {
             unset($request->code);

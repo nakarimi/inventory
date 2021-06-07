@@ -205,30 +205,32 @@ export default {
     },
 
     storeProduct() {
-      this.form.logo = this.form.image;
-
       // check to call update or store function in backend.
       if (this.$route.params.id) {
         var x = this.form.patch(`/api/products/${this.$route.params.id}`)
-        if (this.form.image.includes('/img/product/')) {
-          this.form.image = this.form.image.replace('/img/product/', '');
-        }
       } else {
         var x = this.form.post('/api/products')
       }
       x.then((response) => {
-        if (!this.$route.params.id) {
-          this.form.reset();
+        // By uploading the image, the failure repsonse is different.
+        // Here is extra step to extract error from string response and assing to form errors.
+        if(typeof response.data == 'string' && response.data.indexOf(`The given data was invalid`) >= 0){
+          var res = response.data.split(`{"message"`);
+          var data = JSON.parse(`{"message"` + res[1]);
+          this.form.errors.set(data.errors);
+        } else {
+          if (!this.$route.params.id) {
+            this.form.reset();
+          }
+          this.$vs.notify({
+            title: 'Success!',
+            text: 'Process completed successfully!',
+            color: 'success',
+            iconPack: 'feather',
+            icon: 'icon-check',
+            position: 'top-left'
+          })
         }
-        this.$vs.notify({
-          title: 'Success!',
-          text: 'Process completed successfully!',
-          color: 'success',
-          iconPack: 'feather',
-          icon: 'icon-check',
-          position: 'top-left'
-        })
-
       }).catch((error) => {
         this.$vs.notify({
           title: 'Failed!',

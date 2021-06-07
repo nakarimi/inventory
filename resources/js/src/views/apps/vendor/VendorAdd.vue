@@ -102,27 +102,32 @@ export default {
     storeVendor() {
       if (this.$route.params.id) {
         var x = this.form.patch(`/api/vendors/${this.$route.params.id}`)
-        if (this.form.image.includes('/img/vendor/')) {
-          this.form.image = this.form.image.replace('/img/vendor/', '');
-        }
       } else {
         this.form.logo = this.form.image;
         var x = this.form.post('/api/vendors')
       }
       x.then((response) => {
-        if (!this.$route.params.id) {
-          this.form.reset();
-        }else{
-          this.$router.push("/apps/list/vendor");
+        // By uploading the image, the failure repsonse is different.
+        // Here is extra step to extract error from string response and assing to form errors.
+        if(typeof response.data == 'string' && response.data.indexOf(`The given data was invalid`) >= 0){
+          var res = response.data.split(`{"message"`);
+          var data = JSON.parse(`{"message"` + res[1]);
+          this.form.errors.set(data.errors);
+        } else {
+          if (!this.$route.params.id) {
+            this.form.reset();
+          } else {
+            this.$router.push("/apps/list/vendor");
+          }
+          this.$vs.notify({
+            title: 'Success!',
+            text: 'Process completed successfully!',
+            color: 'success',
+            iconPack: 'feather',
+            icon: 'icon-check',
+            position: 'top-left'
+          })
         }
-        this.$vs.notify({
-          title: 'Success!',
-          text: 'Process completed successfully!',
-          color: 'success',
-          iconPack: 'feather',
-          icon: 'icon-check',
-          position: 'top-left'
-        })
 
       }).catch((error) => {
         this.$vs.notify({

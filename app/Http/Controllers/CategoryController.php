@@ -41,10 +41,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'slug' => 'required|unique:categories',
-            'name' => 'required',
-        ]);
+        $this->validate($request, Category::rules());
         return Category::create($request->all());
     }
 
@@ -79,10 +76,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'slug' => 'required|unique:categories',
-            'name' => 'required',
-        ]);
+        $this->validate($request, Category::rules($id));
+
         $category = Category::find($id);
         return $category->update($request->all());
     }

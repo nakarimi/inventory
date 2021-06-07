@@ -42,11 +42,7 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required|email|unique:customers',
-            'name' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Vendor::rules());
         DB::beginTransaction();
         try {
             $photoname = NULL;
@@ -96,10 +92,7 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Vendor::rules($vendor->id));
         DB::beginTransaction();
         try {
             $photoname = NULL;

@@ -48,6 +48,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Sale::rules());
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -123,6 +124,7 @@ class SaleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, Sale::rules($id));
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {

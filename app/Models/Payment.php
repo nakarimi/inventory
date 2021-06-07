@@ -20,6 +20,31 @@ class Payment extends Model
         'user_id',
     ];
 
+    /**
+     * rules of validation to be used for this model. It could be used for update and create.
+     *
+     * @param  mixed $id
+     * @param  mixed $merge
+     * @return array
+     */
+    public static function rules($id = 0, $merge = [])
+    {
+        return array_merge(
+            [            
+                'reference_no'  => 'required|unique:paymentss'. ($id ? ",reference_no,$id" : ''),
+                'amount'        => 'required',
+                'paid_by'       => 'required',
+                'created_by'    => 'required',
+                'type'          => 'required',
+                'note'          => 'required',
+                'approval_code' => 'required',
+                'sale_id'       => 'required',
+                'purchase_id'   => 'required',
+                'account_id'    => 'required',
+            ],
+            $merge
+        );
+    }
 
     // Payment Database relation diffinition.
     public function account_id()

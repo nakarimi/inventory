@@ -54,15 +54,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'branch' =>  'required|max:191',
-            'first_name' =>  'required|max:191',
-            'last_name' => 'required|max:191',
-            'email' => 'required|string|email|max:191|unique:users',
-            'phone' => 'required|max:12',
-            'address' => 'required',
-            'password' => 'required|string|min:6'
-        ]);
+        $this->validate($request, User::rules());
 
         DB::beginTransaction();
         try {

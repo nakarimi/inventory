@@ -59,4 +59,16 @@ class Helper
     {
         return User::where('branch_id', auth()->guard('api')->user()->branch_id)->pluck('id')->toArray();
     }
+
+    public static function file_upload_update(&$request, $field, $entity, $entity_name)
+    {
+        $photoname = NULL;
+        if ($request->image != null && strpos($request->image, ';base64,')) {
+            $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+            \Image::make($request->image)->save(public_path('img/'.$entity_name.'/') . $photoname);
+            $request->merge([$field => $photoname]);
+        } else {
+            $request[$field] = $entity->getOriginal($field);
+        }
+    }
 }

@@ -46,6 +46,8 @@ class FixPaymentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, FixPayment::rules());
+
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -113,6 +115,8 @@ class FixPaymentController extends Controller
      */
     public function update(Request $request, FixPayment $fixpayment)
     {
+        $this->validate($request, FixPayment::rules($fixpayment->id));
+
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {

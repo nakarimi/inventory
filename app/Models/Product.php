@@ -30,6 +30,25 @@ class Product extends Model
         'featured',
     ];
 
+    /**
+     * rules of validation to be used for this model. It could be used for update and create.
+     *
+     * @param  mixed $id
+     * @param  mixed $merge
+     * @return array
+     */
+    public static function rules($id = 0, $merge = [])
+    {
+        return array_merge(
+            [            
+                'code' => 'required|unique:products'. ($id ? ",code,$id" : ''),
+                'name' => 'required',
+                'cost' => 'required',
+                'supplier_price' => 'required',
+            ],
+            $merge
+        );
+    }
 
     // Relations
     public function category()

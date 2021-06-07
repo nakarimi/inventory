@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,20 +43,11 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required|email|unique:customers',
-            'name' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
-        DB::beginTransaction();
-        try {
-            $photoname = NULL;
-            if ($request->image != null) {
 
-                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                \Image::make($request->image)->save(public_path('img/customer/') . $photoname);
-                $request->merge(['logo' => $photoname]);
-            }
+        $this->validate($request, Customer::rules(), Customer::messages());
+        DB::beginTransaction(); 
+        try {
+            Helper::file_upload_update($request, 'logo', null, 'customer');
             $result = Customer::create($request->all());
             DB::commit();
             return $result;
@@ -96,23 +88,15 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Customer::rules($customer->id), Customer::messages());
+
         DB::beginTransaction();
         try {
             unset($request->email);
-            $photoname = NULL;
-            if ($request->image != null) {
-
-                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                \Image::make($request->image)->save(public_path('img/customer/') . $photoname);
-                $request->merge(['logo' => $photoname]);
-            }
+            Helper::file_upload_update($request, 'logo', $customer, 'customer');
             $result = $customer->update($request->all());
             DB::commit();
-            return $result;
+            return $request->all();
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);

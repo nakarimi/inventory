@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Response;
 
 class AccountController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -37,13 +41,9 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'account_user_id' => 'required',
-            'name' => 'required|min:3',
-            'status' => 'required',
-        ]);
+        $this->validate($request, Account::rules());
+
         $request['account_user_id'] = $request['account_user_id']['id'];
-        $request['user_id'] = auth()->guard('api')->user()->id;
         return Account::create($request->all());
     }
 
@@ -78,7 +78,9 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $this->validate($request, Account::rules($account->id));
+        $request['account_user_id'] = $request['account_user_id']['id'];
+        return $account->update($request->all());
     }
 
     /**

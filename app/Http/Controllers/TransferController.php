@@ -49,6 +49,7 @@ class TransferController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Transfer::rules());
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -113,6 +114,7 @@ class TransferController extends Controller
      */
     public function update(Request $request, Transfer $transfer)
     {
+        $this->validate($request, Transfer::rules($transfer->id));
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {

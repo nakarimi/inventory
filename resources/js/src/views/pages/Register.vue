@@ -62,9 +62,8 @@
                 <vs-checkbox v-if="!$route.params.id" v-model="isTermsConditionAccepted" class="mt-6">I accept the terms & conditions.</vs-checkbox>
                 <vs-button type="border" v-if="$route.params.id" @click="openPassword" class="mt-6">Change Password</vs-button>
                 <vs-button type="border" v-if="!$route.params.id" to="/pages/login" class="mt-6">Login</vs-button>
-                <vs-button class="float-right mt-6" @click="registerUser" :disabled="!validateForm">{{ $route.params.id ? 'Update' : 'Register' }}</vs-button>
+                <vs-button class="float-right mt-6" @click="registerUser" >{{ $route.params.id ? 'Update' : 'Register' }}</vs-button>
               </div>
-              <form-error :form="form"></form-error>
             </div>
           </div>
         </div>
@@ -79,7 +78,6 @@
 
 <script>
 import vSelect from "vue-select";
-import FormError from '../share/FormError'
 import PasswordChange from '../share/PasswordChange'
 
 export default {
@@ -103,14 +101,7 @@ export default {
   },
   components: {
     "v-select": vSelect,
-    FormError,
     PasswordChange,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      // return !this.form.errors.any() && this.form.first_name !== '' && this.form.email !== '' && this.form.password !== '' && this.form.confirm_password !== '' && this.isTermsConditionAccepted === true
-    }
   },
   created() {
     if (this.$route.params.id) {

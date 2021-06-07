@@ -38,11 +38,7 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'code' => 'required|unique:branches|min:3',
-            'name' => 'required|min:3',
-            'address' => 'required|min:10',
-        ]);
+        $this->validate($request, Branch::rules());
         DB::beginTransaction();
         try {
             Branch::create($request->all());
@@ -85,12 +81,7 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
-        // return $request;
-        $this->validate($request, [
-            'code' => 'required|unique:branches,code,'. $branch->id,
-            'name' => 'required',
-            'address' => 'required',
-        ]);
+        $this->validate($request, Branch::rules($branch->id));
         DB::beginTransaction();
         try {
             $branch->update($request->all());

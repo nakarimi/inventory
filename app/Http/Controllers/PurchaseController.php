@@ -49,6 +49,7 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Purchase::rules());
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -119,6 +120,8 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
+        $this->validate($request, Purchase::rules($purchase->id));
+
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
