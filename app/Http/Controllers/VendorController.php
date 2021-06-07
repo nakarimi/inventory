@@ -42,7 +42,7 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, Vendor::rules());
+        $this->validate($request, Vendor::rules(), Vendor::messages());
         DB::beginTransaction();
         try {
             $photoname = NULL;
@@ -92,7 +92,7 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        $this->validate($request, Vendor::rules($vendor->id));
+        $this->validate($request, Vendor::rules($vendor->id), Vendor::messages());
         DB::beginTransaction();
         try {
             $photoname = NULL;

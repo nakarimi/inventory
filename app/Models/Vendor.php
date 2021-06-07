@@ -28,9 +28,16 @@ class Vendor extends Model
             [
                 'email' => 'required|email|unique:customers'. ($id ? ",email,$id" : ''),
                 'name'  => 'required',
-                'phone' => 'required|min:11|numeric',
+                'phone' => 'required|digits:10|numeric|regex:/(07)[0-9]{8}/',
             ],
             $merge
         );
+    }
+    public static function messages($id = 0)
+    {
+        return
+            [
+                'phone.regex' => 'Phone number should follow this format: 07--------',
+            ];
     }
 }

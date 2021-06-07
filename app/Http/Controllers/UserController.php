@@ -54,7 +54,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, User::rules());
+        $this->validate($request, User::rules(), User::messages());
 
         DB::beginTransaction();
         try {

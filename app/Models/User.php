@@ -49,7 +49,7 @@ class User extends Authenticatable
                 'last_name'  => 'required|max:191',
                 'branch'     => 'required|max:191',
                 'email'      => 'required|string|email|max:191|unique:users'. ($id ? ",email,$id" : ''),
-                'phone'      => 'required|max:12',
+                'phone'      => 'required|digits:10|numeric|regex:/(07)[0-9]{8}/',
                 'address'    => 'required',
                 'password'   => 'required|string|min:6'
                 // 'user_type'  => 'required',
@@ -60,7 +60,13 @@ class User extends Authenticatable
             $merge
         );
     }
-
+    public static function messages($id = 0)
+    {
+        return
+            [
+                'phone.regex' => 'Phone number should follow this format: 07--------',
+            ];
+    }
     /**
      * The attributes that should be hidden for arrays.
      *
