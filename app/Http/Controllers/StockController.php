@@ -44,13 +44,19 @@ class StockController extends Controller
         $this->validate($request, Stock::rules());
         DB::beginTransaction();
         try {
-        $result = Stock::create($request->all());
-        DB::commit();
-        return $result;
-    } catch (Exception $e) {
-        DB::rollback();
-        return Response::json($e, 400);
-    }
+            $stock = Stock::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($stock)
+                ->withProperties($stock)
+                ->log('Created');
+            DB::commit();
+            return $stock;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -88,13 +94,19 @@ class StockController extends Controller
         DB::beginTransaction();
         try {
             unset($request->code);
-        $result = $stock->update($request->all());
-        DB::commit();
-        return $result;
-    } catch (Exception $e) {
-        DB::rollback();
-        return Response::json($e, 400);
-    }
+            $result = $stock->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($stock)
+                ->withProperties($stock)
+                ->log('Updated');
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -108,6 +120,12 @@ class StockController extends Controller
         DB::beginTransaction();
         try {
             $result = $stock->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($stock)
+                ->withProperties($stock)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

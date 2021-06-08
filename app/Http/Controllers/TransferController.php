@@ -57,17 +57,24 @@ class TransferController extends Controller
             Helper::get_id($request, 'source_stock');
             Helper::get_id($request, 'target_stock');
             $request['ammount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
-            $result = Transfer::create($request->all());
+            $transfer = Transfer::create($request->all());
 
             // Add all items to the stock from the target stock.
             $request['stock_id'] = (isset($request['target_stock']) && $request['target_stock'] != null) ? $request['target_stock'] : null;
-            Helper::store_items('in-transfer', $result->id, $request, true);
+            Helper::store_items('in-transfer', $transfer->id, $request, true);
 
             // decrement all items from source stock.
             $request['stock_id'] = (isset($request['source_stock']) && $request['source_stock'] != null) ? $request['source_stock'] : null;
-            Helper::store_items('out-transfer', $result->id, $request);
+            Helper::store_items('out-transfer', $transfer->id, $request);
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($transfer)
+                ->withProperties($transfer)
+                ->log('Created');
+            
             DB::commit();
-            return $result;
+            return $transfer;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -131,6 +138,13 @@ class TransferController extends Controller
             // decrement all items from source stock.
             $request['stock_id'] = (isset($request['source_stock']) && $request['source_stock'] != null) ? $request['source_stock'] : null;
             Helper::store_items('out-transfer', $transfer->id, $request);
+
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($transfer)
+                ->withProperties($transfer)
+                ->log('Updated');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -152,6 +166,12 @@ class TransferController extends Controller
         DB::beginTransaction();
         try {
             $result = $transfer->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($transfer)
+                ->withProperties($transfer)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

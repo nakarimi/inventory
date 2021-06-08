@@ -48,10 +48,16 @@ class Helper
                 ->where('type_id', $data['type_id'])->update([
                     'status' => 'rejected'
                 ]);
-            Transaction::create($data);
+            $trs = Transaction::create($data);
         } else {
-            Transaction::create($data);
+            $trs = Transaction::create($data);
         }
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($trs)
+            ->withProperties($trs)
+            ->log('Created');
     }
 
     // Get users ids where branch id is same as logged in user branch.
@@ -65,7 +71,7 @@ class Helper
         $photoname = NULL;
         if ($request->image != null && strpos($request->image, ';base64,')) {
             $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-            \Image::make($request->image)->save(public_path('img/'.$entity_name.'/') . $photoname);
+            \Image::make($request->image)->save(public_path('img/' . $entity_name . '/') . $photoname);
             $request->merge([$field => $photoname]);
         } else {
             $request[$field] = $entity->getOriginal($field);

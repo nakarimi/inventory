@@ -42,7 +42,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, Category::rules());
-        return Category::create($request->all());
+        $category = Category::create($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($category)
+            ->withProperties($category)
+            ->log('Created');
+        return $category;
     }
 
     /**
@@ -79,7 +86,15 @@ class CategoryController extends Controller
         $this->validate($request, Category::rules($id));
 
         $category = Category::find($id);
-        return $category->update($request->all());
+        $category->update($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($category)
+            ->withProperties($category)
+            ->log('Updated');
+
+        return $category;
     }
 
     /**
@@ -94,6 +109,12 @@ class CategoryController extends Controller
         DB::beginTransaction();
         try {
             $result = $category->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($category)
+                ->withProperties($category)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

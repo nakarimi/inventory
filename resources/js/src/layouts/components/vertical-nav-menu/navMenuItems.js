@@ -161,9 +161,14 @@ export default [
         icon: "SettingsIcon",
         submenu: [
             {
-                url: {name: 'manage-category'},
+                url: '/manage/category',
                 name: "Category Management",
                 slug: "category",
+            },
+            {
+                url: '/manage/activity-log',
+                name: "Activity Log",
+                slug: "activity-log",
             },
         ]
     },

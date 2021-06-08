@@ -47,9 +47,15 @@ class VendorController extends Controller
         DB::beginTransaction();
         try {
             Helper::file_upload_update($request, 'logo', null, 'product');
-            $result = Vendor::create($request->all());
+            $vendor = Vendor::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($vendor)
+                ->withProperties($vendor)
+                ->log('Created');
             DB::commit();
-            return $result;
+            return $vendor;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
@@ -91,9 +97,14 @@ class VendorController extends Controller
         DB::beginTransaction();
         try {
             Helper::file_upload_update($request, 'logo', $vendor, 'vendor');
-
             unset($request->email);
             $result = $vendor->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($vendor)
+                ->withProperties($vendor)
+                ->log('Updated');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -113,6 +124,12 @@ class VendorController extends Controller
         DB::beginTransaction();
         try {
             $result = $vendor->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($vendor)
+                ->withProperties($vendor)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

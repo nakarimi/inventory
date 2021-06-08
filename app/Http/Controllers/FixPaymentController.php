@@ -58,23 +58,28 @@ class FixPaymentController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'account_id');
 
-            $result = FixPayment::create($request->all());
-
+            $fixpayment = FixPayment::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($fixpayment)
+                ->withProperties($fixpayment)
+                ->log('Created');
             // Add transaction records.
             $data = [
                 'type' => 'fixpayment',
-                'type_id' => $result->id,
-                'credit' => ($result->type == 'In') ? $result->ammount : 0,
-                'debit' => ($result->type == 'Out') ? $result->ammount : 0,
+                'type_id' => $fixpayment->id,
+                'credit' => ($fixpayment->type == 'In') ? $fixpayment->ammount : 0,
+                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->ammount : 0,
                 'account_id' => $request->account_id,
-                'status' => $result->type,
+                'status' => $fixpayment->type,
                 'description' => '---',
                 'user_id' => $request->user_id,
             ];
             Helper::do_transaction($data);
 
             DB::commit();
-            return $result;
+            return $fixpayment;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -127,8 +132,13 @@ class FixPaymentController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'account_id');
 
-            $result = $fixpayment->update($request->all());
-
+            $fixpayment->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($fixpayment)
+                ->withProperties($fixpayment)
+                ->log('Updated');
 
             // Add Transaction recored.
             $data = [
@@ -142,6 +152,7 @@ class FixPaymentController extends Controller
                 'user_id' => $request->user_id,
             ];
             Helper::do_transaction($data, true);
+
 
             DB::commit();
             return $fixpayment;
@@ -164,6 +175,12 @@ class FixPaymentController extends Controller
         DB::beginTransaction();
         try {
             $result = $fixpayment->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($fixpayment)
+                ->withProperties($fixpayment)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

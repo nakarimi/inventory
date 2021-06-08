@@ -31,15 +31,15 @@ class Payment extends Model
     {
         return array_merge(
             [            
-                'reference_no'  => 'required|unique:paymentss'. ($id ? ",reference_no,$id" : ''),
+                'reference_no'  => 'required|unique:payments'. ($id ? ",reference_no,$id" : ''),
                 'amount'        => 'required',
                 'paid_by'       => 'required',
                 'created_by'    => 'required',
                 'type'          => 'required',
                 'note'          => 'required',
                 'approval_code' => 'required',
-                'sale_id'       => 'required',
-                'purchase_id'   => 'required',
+                'sale_id'       => '',
+                'purchase_id'   => '',
                 'account_id'    => 'required',
             ],
             $merge

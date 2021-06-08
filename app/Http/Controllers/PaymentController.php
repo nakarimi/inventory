@@ -62,22 +62,28 @@ class PaymentController extends Controller
             Helper::get_id($request, 'sale_id');
             Helper::get_id($request, 'purchase_id');
 
-            $result = Payment::create($request->all());
+            $payment = Payment::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($payment)
+                ->withProperties($payment)
+                ->log('Created');
             // Add transaction records.
             $data = [
                 'type' => 'payment',
-                'type_id' => $result->id,
-                'credit' => ($result->type == 'In') ? $result->amount : 0,
-                'debit' => ($result->type == 'Out') ? $result->amount : 0,
+                'type_id' => $payment->id,
+                'credit' => ($payment->type == 'In') ? $payment->amount : 0,
+                'debit' => ($payment->type == 'Out') ? $payment->amount : 0,
                 'account_id' => $request->account_id,
-                'status' => $result->type,
+                'status' => $payment->type,
                 'description' => '---',
                 'user_id' => $request->user_id,
             ];
             Helper::do_transaction($data);
 
             DB::commit();
-            return $result;
+            return $payment;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -134,6 +140,12 @@ class PaymentController extends Controller
             Helper::get_id($request, 'purchase_id');
 
             $result = $payment->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($payment)
+                ->withProperties($payment)
+                ->log('Updated');
 
 
             $data = [
@@ -169,6 +181,12 @@ class PaymentController extends Controller
         DB::beginTransaction();
         try {
             $result = $payment->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($payment)
+                ->withProperties($payment)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

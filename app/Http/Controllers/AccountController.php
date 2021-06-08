@@ -44,7 +44,15 @@ class AccountController extends Controller
         $this->validate($request, Account::rules());
 
         $request['account_user_id'] = $request['account_user_id']['id'];
-        return Account::create($request->all());
+        $account = Account::create($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($account)
+            ->withProperties($account)
+            ->log('Created');
+
+        return $account;
     }
 
     /**
@@ -80,7 +88,15 @@ class AccountController extends Controller
     {
         $this->validate($request, Account::rules($account->id));
         $request['account_user_id'] = $request['account_user_id']['id'];
-        return $account->update($request->all());
+        $account->update($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($account)
+            ->withProperties($account)
+            ->log('Updated');
+
+        return $account;
     }
 
     /**
@@ -94,12 +110,17 @@ class AccountController extends Controller
         DB::beginTransaction();
         try {
             $result = $account->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($account)
+                ->withProperties($account)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
         }
-
     }
 }

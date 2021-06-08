@@ -65,12 +65,17 @@ class SaleController extends Controller
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'biller_id');
             Helper::get_id($request, 'customer_id');
-            $result = Sale::create($request->all());
-
+            $sale = Sale::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($sale)
+                ->withProperties($sale)
+                ->log('Created');
             // store related items.
-            Helper::store_items('sale', $result->id, $request);
+            Helper::store_items('sale', $sale->id, $request);
             DB::commit();
-            return $result;
+            return $sale;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -146,6 +151,12 @@ class SaleController extends Controller
             // Load the main sale object and update it with new data.
             $sale = Sale::find($id);
             $sale->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($sale)
+                ->withProperties($sale)
+                ->log('Updated');
             Helper::store_items('sale', $id, $request);
             DB::commit();
             return $sale;
@@ -168,6 +179,12 @@ class SaleController extends Controller
         DB::beginTransaction();
         try {
             $result = $sale->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($sale)
+                ->withProperties($sale)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

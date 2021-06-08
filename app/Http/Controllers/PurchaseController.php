@@ -64,10 +64,17 @@ class PurchaseController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'vendor_id');
-            $result = Purchase::create($request->all());
-            Helper::store_items('purchase', $result->id, $request, true);
+            $purchase = Purchase::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($purchase)
+                ->withProperties($purchase)
+                ->log('Created');
+
+            Helper::store_items('purchase', $purchase->id, $request, true);
             DB::commit();
-            return $result;
+            return $purchase;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -101,7 +108,7 @@ class PurchaseController extends Controller
         // These should be object to be fill by default in select list.
         $purchase['vendor_id'] = Vendor::find($purchase['vendor_id']);
         $purchase['stock_id'] = Stock::find($purchase['stock_id']);
-        
+
         // Find Items based on type and it.
         $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
@@ -137,6 +144,12 @@ class PurchaseController extends Controller
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'vendor_id');
             $purchase->create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($purchase)
+                ->withProperties($purchase)
+                ->log('Updated');
             Helper::store_items('purchase', $purchase->id, $request, true);
             DB::commit();
             return $purchase;
@@ -159,6 +172,12 @@ class PurchaseController extends Controller
         DB::beginTransaction();
         try {
             $result = $purchase->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($purchase)
+                ->withProperties($purchase)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

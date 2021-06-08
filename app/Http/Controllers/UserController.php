@@ -9,6 +9,7 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Response;
 
 
@@ -70,6 +71,12 @@ class UserController extends Controller
                 'password' => Hash::make($request['password']),
             ];
             $user = User::create($create);
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($user)
+                ->withProperties($user)
+                ->log('Created');
             DB::commit();
             return ['msg' => 'user successfully inserted', $user];
         } catch (Exception $e) {
@@ -133,6 +140,12 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $password = Hash::make($request['new_password']);
             $user->update(['password' => $password]);
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($user)
+                ->withProperties($user)
+                ->log('Updated - Password Changed');
             return User::findOrFail($id);
         } else {
             DB::beginTransaction();
@@ -148,10 +161,21 @@ class UserController extends Controller
                 $request['branch_id'] = $request['branch']['id'];
                 $user = User::find($id);
                 $user->update($request->all());
+                // Log this activity to the system by user and entity data.
+                activity()
+                    ->causedBy(auth()->guard('api')->user())
+                    ->performedOn($user)
+                    ->withProperties($user)
+                    ->log('Updated');
                 DB::commit();
                 return ["Success"];
             } catch (Exception $e) {
                 DB::rollback();
+                // Log this activity to the system by user and entity data.
+                activity()
+                    ->causedBy(auth()->guard('api')->user())
+                    ->withProperties($e)
+                    ->log('Operation Failed');
                 return Response::json($e, 400);
             }
         }
@@ -167,12 +191,25 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($user)
+            ->withProperties($user)
+            ->log('Deleted');
         return ['message' => 'User Deleted'];
     }
 
     // Approve user status
-    public function approve($id){
+    public function approve($id)
+    {
         $user = User::findOrFail($id);
         $user->update(['status' => 'Approved']);
+    }
+
+    public function activity_log()
+    {
+        $act = Activity::with(['subject', 'causer'])->latest()->get();
+        return $act;
     }
 }

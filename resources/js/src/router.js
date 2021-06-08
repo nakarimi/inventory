@@ -512,6 +512,17 @@ const router = new Router({
                 }
               },
               {
+                path: '/manage/activity-log',
+                name: 'manage-activity-log',
+                component: () => import('./views/apps/ActivityLog.vue'),
+                meta: {
+                  breadcrumb: [
+                    { title: 'Home', url: '/' },
+                    { title: 'Activity Log', active: true },
+                  ],
+                }
+              },
+              {
                 path: '/pages/logout',
                 name: 'page-logout',
               },

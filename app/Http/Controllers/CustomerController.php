@@ -45,12 +45,18 @@ class CustomerController extends Controller
     {
 
         $this->validate($request, Customer::rules(), Customer::messages());
-        DB::beginTransaction(); 
+        DB::beginTransaction();
         try {
             Helper::file_upload_update($request, 'logo', null, 'customer');
-            $result = Customer::create($request->all());
+            $customer = Customer::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($customer)
+                ->withProperties($customer)
+                ->log('Created');
             DB::commit();
-            return $result;
+            return $customer;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
@@ -94,14 +100,20 @@ class CustomerController extends Controller
         try {
             unset($request->email);
             Helper::file_upload_update($request, 'logo', $customer, 'customer');
-            $result = $customer->update($request->all());
+            $customer->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($customer)
+                ->withProperties($customer)
+                ->log('Updated');
+
             DB::commit();
             return $request->all();
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
         }
-
     }
 
     /**
@@ -115,6 +127,12 @@ class CustomerController extends Controller
         DB::beginTransaction();
         try {
             $result = $customer->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($customer)
+                ->withProperties($customer)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

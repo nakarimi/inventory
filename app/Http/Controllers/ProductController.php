@@ -51,9 +51,15 @@ class ProductController extends Controller
         try {
             Helper::file_upload_update($request, 'image', null, 'product');
             // Product being create.
-            $result = Product::create($request->all());
+            $product = Product::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($product)
+                ->withProperties($product)
+                ->log('Created');
             DB::commit();
-            return $result;
+            return $product;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
@@ -106,6 +112,12 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             Helper::file_upload_update($request, 'image', $product, 'product');
             $result = $product->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($product)
+                ->withProperties($product)
+                ->log('Updated');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -125,6 +137,12 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $result = $product->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($product)
+                ->withProperties($product)
+                ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {

@@ -41,7 +41,14 @@ class BranchController extends Controller
         $this->validate($request, Branch::rules());
         DB::beginTransaction();
         try {
-            Branch::create($request->all());
+            $branch = Branch::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($branch)
+            ->withProperties($branch)
+            ->log('Created');
+
             DB::commit();
             return ['msg' => 'Branch successfully inserted'];
         } catch (Exception $e) {
@@ -85,7 +92,15 @@ class BranchController extends Controller
         DB::beginTransaction();
         try {
             $branch->update($request->all());
-            DB::commit();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($branch)
+                ->withProperties($branch->getChanges())
+                ->log('Updated');
+            if ($branch->getChanges()) {
+                DB::commit();
+            }
             return ['msg' => 'Branch successfully updated'];
         } catch (Exception $e) {
             DB::rollback();
@@ -103,7 +118,15 @@ class BranchController extends Controller
     {
         DB::beginTransaction();
         try {
+            
             $result = $branch->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($branch)
+            ->withProperties($branch)
+            ->log('Deleted');
+
             DB::commit();
             return $result;
         } catch (Exception $e) {
