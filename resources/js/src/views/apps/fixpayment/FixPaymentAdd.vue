@@ -53,7 +53,7 @@
             <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
           </vs-col>
         </vs-row>
-        <vs-button class="float-right mt-6" @click="storePayment" :disabled="form.busy">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storePayment" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>

@@ -4,6 +4,7 @@
     <vs-table ref="table" :data="products" stripe>
       <template slot="thead">
         <vs-th>#</vs-th>
+        <vs-th>Photo</vs-th>
         <vs-th>Name</vs-th>
         <vs-th>Code</vs-th>
         <vs-th>Quantity</vs-th>
@@ -18,6 +19,12 @@
             <vs-td>
               <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
             </vs-td>
+            <vs-td>
+              <p>
+                <vs-avatar class="rectangle" size="80px" :src="`/img/product/${(tr.image) ? tr.image : 'default.jpg'}`" />
+              </p>
+            </vs-td>
+
             <vs-td>
               <p>{{ tr.name }}</p>
             </vs-td>

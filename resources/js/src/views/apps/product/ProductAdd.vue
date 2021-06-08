@@ -123,7 +123,7 @@
             <has-error class="text-danger text-sm" :form="form" field="featured"></has-error>
           </vs-col>
         </vs-row>
-        <vs-button class="float-right mt-6" @click="storeProduct" :disabled="form.busy">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeProduct" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>

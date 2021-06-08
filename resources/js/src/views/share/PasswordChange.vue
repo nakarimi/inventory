@@ -14,7 +14,7 @@
     <span class="text-danger text-sm absolute">{{ errors.first('new_password_confirmation') | remove_ }}</span>
   </div>
   <form-error :form="form"></form-error>
-  <vs-button class="float-right mt-6" @click="updatePassword">Send</vs-button>
+  <vs-button class="float-right mt-6" @click="updatePassword">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
 
 </div>
 </template>

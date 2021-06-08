@@ -51,7 +51,7 @@
           <vs-button @click="$refs.uploadImgInput.click()">Upload</vs-button>
         </div>
       </div>
-      <vs-button class="float-right mt-6" @click="storeVendor" :disabled="form.busy">Send</vs-button>
+      <vs-button class="float-right mt-6" @click="storeVendor" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
     </div>
   </vx-card>
   <!-- </div> -->
@@ -111,9 +111,9 @@ export default {
         // Here is extra step to extract error from string response and assing to form errors.
         if(typeof response.data == 'string' && response.data.indexOf(`The given data was invalid`) >= 0){
           var res = response.data.split(`{"message"`);
-          var data = JSON.parse(`{"message"` + res[1]);
+          var data = JSON.parse(`{"message"`+res[1]);
           this.form.errors.set(data.errors);
-        } else {
+        }else{
           if (!this.$route.params.id) {
             this.form.reset();
           } else {

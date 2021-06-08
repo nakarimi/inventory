@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Helper\Helper;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,16 +49,7 @@ class ProductController extends Controller
         $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
         DB::beginTransaction();
         try {
-
-            // Image Upload/Store.
-            $photoname = NULL;
-            if ($request->image != null) {
-
-                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                \Image::make($request->image)->save(public_path('img/product/') . $photoname);
-                $request->merge(['image' => $photoname]);
-            }
-
+            Helper::file_upload_update($request, 'image', null, 'product');
             // Product being create.
             $result = Product::create($request->all());
             DB::commit();
@@ -111,15 +103,8 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
-            $photoname = NULL;
             $product = Product::findOrFail($id);
-            if (!($product->image == $request->image)) {
-                if ($request->image != null) {
-                    $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                    \Image::make($request->image)->save(public_path('img/product/') . $photoname);
-                    $request->merge(['image' => $photoname]);
-                }
-            }
+            Helper::file_upload_update($request, 'image', $product, 'product');
             $result = $product->update($request->all());
             DB::commit();
             return $result;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,13 +46,7 @@ class VendorController extends Controller
         $this->validate($request, Vendor::rules(), Vendor::messages());
         DB::beginTransaction();
         try {
-            $photoname = NULL;
-            if ($request->image != null) {
-
-                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                \Image::make($request->image)->save(public_path('img/vendor/') . $photoname);
-                $request->merge(['logo' => $photoname]);
-            }
+            Helper::file_upload_update($request, 'logo', null, 'product');
             $result = Vendor::create($request->all());
             DB::commit();
             return $result;
@@ -95,14 +90,8 @@ class VendorController extends Controller
         $this->validate($request, Vendor::rules($vendor->id), Vendor::messages());
         DB::beginTransaction();
         try {
-            $photoname = NULL;
-            if (!($vendor->image == $request->image)) {
-                if ($request->image != null && !str_contains($request->image, 'vendor/')) {
-                    $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                    \Image::make($request->image)->save(public_path('img/vendor/') . $photoname);
-                    $request->merge(['logo' => $photoname]);
-                }
-            }
+            Helper::file_upload_update($request, 'logo', $vendor, 'vendor');
+
             unset($request->email);
             $result = $vendor->update($request->all());
             DB::commit();

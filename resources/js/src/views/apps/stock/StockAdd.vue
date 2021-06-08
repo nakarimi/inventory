@@ -24,7 +24,7 @@
           <vs-input name="address" label="Address" v-model="form.address" @input="form.errors.errors.address = []" class="w-full" />
           <has-error class="text-danger text-sm" :form="form" field="address"></has-error>
         </div>
-        <vs-button class="float-right mt-6" @click="storeStock" :disabled="form.busy">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeStock" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>

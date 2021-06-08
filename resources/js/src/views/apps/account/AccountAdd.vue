@@ -24,7 +24,7 @@
           </vs-switch>
           <has-error class="text-danger text-sm" :form="form" field="status"></has-error>
         </div>
-        <vs-button class="float-right mt-6" @click="storeAccount" :disabled="form.busy">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeAccount" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>

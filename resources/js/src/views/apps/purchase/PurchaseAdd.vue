@@ -55,7 +55,7 @@
             </vs-col>
           </vs-col>
         </vs-row>
-        <vs-button class="float-right mt-6" @click="storePurchase" :disabled="form.busy">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storePurchase" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>

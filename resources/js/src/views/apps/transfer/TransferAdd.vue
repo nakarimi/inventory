@@ -27,7 +27,7 @@
         <vs-input type="number" name="total" label="Ammount" v-model="form.total" @input="form.errors.errors.total = []" class="w-full" />
           <has-error class="text-danger text-sm" :form="form" field="total"></has-error>
       </vs-col>
-      <vs-button class="float-right mt-6" @click="storeTransfer" :disabled="form.busy">Send</vs-button>
+      <vs-button class="float-right mt-6" @click="storeTransfer" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
     </div>
   </vx-card>
 </div>
