@@ -44,10 +44,10 @@ class BranchController extends Controller
             $branch = Branch::create($request->all());
             // Log this activity to the system by user and entity data.
             activity()
-            ->causedBy(auth()->guard('api')->user())
-            ->performedOn($branch)
-            ->withProperties($branch)
-            ->log('Created');
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($branch)
+                ->withProperties($branch)
+                ->log('Created');
 
             DB::commit();
             return ['msg' => 'Branch successfully inserted'];
@@ -118,14 +118,14 @@ class BranchController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $result = $branch->delete();
             // Log this activity to the system by user and entity data.
             activity()
-            ->causedBy(auth()->guard('api')->user())
-            ->performedOn($branch)
-            ->withProperties($branch)
-            ->log('Deleted');
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($branch)
+                ->withProperties($branch)
+                ->log('Deleted');
 
             DB::commit();
             return $result;
