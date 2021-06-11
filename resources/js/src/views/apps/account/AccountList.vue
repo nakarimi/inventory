@@ -1,20 +1,20 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="accounts" stripe>
+    <vs-table ref="table" :data="accounts" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Label</vs-th>
-        <vs-th>User</vs-th>
-        <vs-th>Branch</vs-th>
-        <vs-th>Status</vs-th>
-        <vs-th></vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="name">Label</vs-th>
+        <vs-th sort-key="">User</vs-th>
+        <vs-th sort-key="">Branch</vs-th>
+        <vs-th sort-key="status">Status</vs-th>
+        <vs-th sort-key=""></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.name }}</p>

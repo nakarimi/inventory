@@ -2,22 +2,22 @@
 <div>
   <items />
   <vx-card>
-    <vs-table ref="table" :data="purchases" stripe>
+    <vs-table ref="table" :data="purchases" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Date</vs-th>
-        <vs-th>Reference Code</vs-th>
-        <vs-th>Customer</vs-th>
-        <vs-th>Total</vs-th>
-        <vs-th>Stock</vs-th>
-        <vs-th>Due Date</vs-th>
-        <vs-th></vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="date">Date</vs-th>
+        <vs-th sort-key="reference_no">Reference Code</vs-th>
+        <vs-th sort-key="vendor">Customer</vs-th>
+        <vs-th sort-key="total">Total</vs-th>
+        <vs-th sort-key="stock">Stock</vs-th>
+        <vs-th sort-key="due_date">Due Date</vs-th>
+        <vs-th sort-key=""></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.date | formatDate }}</p>

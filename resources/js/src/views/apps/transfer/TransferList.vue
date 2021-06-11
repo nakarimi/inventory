@@ -1,21 +1,21 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="transfers" stripe>
+    <vs-table ref="table" :data="transfers" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Ammount</vs-th>
-        <vs-th>Destination</vs-th>
-        <vs-th>Source</vs-th>
-        <vs-th>Status</vs-th>
-        <vs-th>Created At</vs-th>
-        <vs-th>-</vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="ammount">Ammount</vs-th>
+        <vs-th sort-key="target_stock">Destination</vs-th>
+        <vs-th sort-key="source_stock">Source</vs-th>
+        <vs-th sort-key="status">Status</vs-th>
+        <vs-th sort-key="created_at">Created At</vs-th>
+        <vs-th sort-key="">-</vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.ammount }}</p>

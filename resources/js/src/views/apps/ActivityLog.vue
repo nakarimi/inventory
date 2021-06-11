@@ -1,15 +1,15 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="activity_log" stripe pagination :max-items="50">
+    <vs-table ref="table" :data="activity_log" search stripe pagination :max-items="50">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Description</vs-th>
-        <vs-th>Causer</vs-th>
-        <vs-th>Type</vs-th>
-        <vs-th>ID</vs-th>
-        <vs-th>Date</vs-th>
-        <vs-th>Data</vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="description">Description</vs-th>
+        <vs-th sort-key="">Causer</vs-th>
+        <vs-th sort-key="subject_type">Type</vs-th>
+        <vs-th sort-key="subject_id">ID</vs-th>
+        <vs-th sort-key="created_at">Date</vs-th>
+        <vs-th sort-key="">Data</vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>

@@ -1,22 +1,22 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="vendors" stripe>
+    <vs-table ref="table" :data="vendors" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Logo</vs-th>
-        <vs-th>Name</vs-th>
-        <vs-th>Email</vs-th>
-        <vs-th>Phone</vs-th>
-        <vs-th>Address</vs-th>
-        <vs-th>Website</vs-th>
-        <vs-th></vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="">Logo</vs-th>
+        <vs-th sort-key="name">Name</vs-th>
+        <vs-th sort-key="email">Email</vs-th>
+        <vs-th sort-key="phone">Phone</vs-th>
+        <vs-th sort-key="address">Address</vs-th>
+        <vs-th sort-key="website">Website</vs-th>
+        <vs-th sort-key=""></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
               <vs-avatar size="40px" :src="`/img/vendor/${(tr.logo) ? tr.logo : 'default.jpg'}`" />

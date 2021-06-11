@@ -19,16 +19,16 @@
       <div class="sm:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 p-4">
         <vs-table ref="table" :data="categories" stripe>
           <template slot="thead">
-            <vs-th>#</vs-th>
-            <vs-th>Name</vs-th>
-            <vs-th>Slug</vs-th>
-            <vs-th></vs-th>
+            <vs-th sort-key="">#</vs-th>
+            <vs-th sort-key="name">Name</vs-th>
+            <vs-th sort-key="slug">Slug</vs-th>
+            <vs-th sort-key=""></vs-th>
           </template>
           <template slot-scope="{data}">
             <tbody>
               <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
                 <vs-td>
-                  <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+                  <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
                 </vs-td>
                 <vs-td>
                   <p>{{ tr.name }}</p>

@@ -1,7 +1,7 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="users" stripe>
+    <vs-table ref="table" :data="users" stripe pagination :max-items="10">
       <template slot="thead">
         <vs-th>#</vs-th>
         <vs-th>Email</vs-th>
@@ -15,7 +15,7 @@
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.email }}</p>
