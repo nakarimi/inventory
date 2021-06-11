@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import acl from './acl/acl'
 
 // Vuesax Component Framework
 import Vuesax from 'vuesax'
@@ -27,26 +28,7 @@ Vue.use(VueAxios, axios)
 import moment from 'moment'
 Vue.prototype.moment = moment
 
-
-// Custom filters.
-Vue.filter('formatDate', function(value) {
-    if (value) {
-      return moment(String(value)).format('YYYY-MM-DD')
-    }
-  })
-Vue.filter('formatDateTime', function(value) {
-    if (value) {
-      return moment(String(value)).format('YYYY-MM-DD H:m:s')
-    }
-  })
-Vue.filter('remove_', function(value) {
-    if (value) {
-      return value.replaceAll("_", " ")
-    }
-  })
-
-
-  // start sweetalert
+// start sweetalert
 import Swal from 'sweetalert2'
 window.swal = Swal
 
@@ -76,36 +58,14 @@ Vue.use(VueHammer)
 // Feather font icon
 require('@assets/css/iconfont.css')
 
-// VueProgressBar
-import VueProgressBar from 'vue-progressbar'
-Vue.use(VueProgressBar, {
-    color: '#432e81',
-    // backgound: "linear-gradient(calc(360deg - 175deg), rgba(86, 45, 183, 0.5) 6%, rgba(245, 82, 82, 0.8) 130%) !important",
-    failedColor: 'red',
-    thickness: '4px',
-    transition: {
-        speed: '0.2s',
-        opacity: '0.6s',
-        termination: 300
-    },
-    autoRevert: true,
-    // location: "left",
-    inverse: true,
-    autoFinish: true
-})
-
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 Vue.component('VuePerfectScrollbar', VuePerfectScrollbar)
 
 // define a mixin object
 const Mixin = {
         methods: {
-            Alerta() {
-                alert('WORK!')
-            }
         }
     }
-    //ahmadi
 const MyPlugin = {
     install(Vue, options) {
         Vue.prototype.startProcesAndLoad = () => {}
@@ -120,6 +80,23 @@ new Vue({
     el: '#app'
 })
 
+// Custom filters.
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('YYYY-MM-DD')
+  }
+})
+Vue.filter('formatDateTime', function(value) {
+  if (value) {
+    return moment(String(value)).format('YYYY-MM-DD H:m:s')
+  }
+})
+Vue.filter('remove_', function(value) {
+  if (value) {
+    return value.replaceAll("_", " ")
+  }
+})
+
 // Vue select css
 // Note: In latest version you have to add it separately
 // import 'vue-select/dist/vue-select.css';
@@ -129,5 +106,6 @@ Vue.config.productionTip = false
 new Vue({
     router,
     store,
+    acl,
     render: h => h(App)
 }).$mount('#app')

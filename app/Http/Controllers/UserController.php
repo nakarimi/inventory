@@ -8,6 +8,7 @@ use App\Models\Branch;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Response;
@@ -16,13 +17,15 @@ use Illuminate\Support\Facades\Response;
 class UserController extends Controller
 {
 
-    public function home(Request $request)
+    public function __construct(Request $request)
     {
-        return 'API CONNECED';
+        $user = auth()->guard('api')->user();
+        $request['user_id'] = $user->id;
     }
+
     public function user(Request $request)
     {
-        $user = $request->user();
+        $user = User::with('roles')->find($request->user()->id);
         $user['branch_id'] = Branch::find($user->branch_id);
         return $user;
     }
@@ -34,7 +37,7 @@ class UserController extends Controller
     public function index()
     {
         // load all users except admin and current user
-        return User::with('branch')->whereNotIn('id', [1, auth()->guard('api')->user()->id])->get();
+        return User::with(['branch', 'roles'])->whereNotIn('id', [1, auth()->guard('api')->user()->id])->get();
     }
 
     /**
@@ -201,10 +204,15 @@ class UserController extends Controller
     }
 
     // Approve user status
-    public function approve($id)
+    public function approve($id, Request $request)
     {
         $user = User::findOrFail($id);
-        $user->update(['status' => 'Approved']);
+        $user->update([
+            'status' => 'Approved',
+        ]);
+        // All current roles will be removed from the user and replaced by the array given
+
+        $user->syncRoles($request->user_role);
     }
 
     public function activity_log()
