@@ -6,6 +6,7 @@ use App\Models\Sale;
 use App\Models\User;
 use App\Models\Stock;
 use App\Helper\Helper;
+use App\Models\Payment;
 use App\Models\Customer;
 use App\Models\StockRecord;
 use Illuminate\Http\Request;
@@ -181,15 +182,29 @@ class SaleController extends Controller
             $result = $sale->delete();
             // Log this activity to the system by user and entity data.
             activity()
-                ->causedBy(auth()->guard('api')->user())
-                ->performedOn($sale)
-                ->withProperties($sale)
-                ->log('Deleted');
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($sale)
+            ->withProperties($sale)
+            ->log('Deleted');
             DB::commit();
             return $result;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
         }
+    }    
+    /**
+     * Calculate the paid ammount for the sale or purchase.
+     *
+     * @param  mixed $type
+     * @param  mixed $id
+     * @return void
+     */
+    public function sale_max_value($type, $id){
+        $paid = 0;
+        foreach (Payment::where($type .'_id', $id)->get() as $key => $pay) {
+            $paid += $pay->amount;
+        }
+        return $paid;
     }
 }

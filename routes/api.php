@@ -38,6 +38,7 @@ Route::resource('fixpayments', 'FixPaymentController');
 Route::resource('transfers', 'TransferController');
 Route::get('transactions', 'TransferController@transactions');
 Route::get('activity_log', 'UserController@activity_log');
+Route::get('sale_max_value/{type}/{id}', 'SaleController@sale_max_value');
 
 // Custom Routes
 Route::get('home', 'UserController@home');

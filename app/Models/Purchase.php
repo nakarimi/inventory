@@ -35,7 +35,7 @@ class Purchase extends Model
                 'reference_no'   => 'required|unique:purchases'. ($id ? ",reference_no,$id" : ''),
                 'date'           => 'required',
                 'vendor_id'      => 'required',
-                'vendor'         => 'required',
+                // 'vendor'         => 'required',
                 'stock_id'       => 'required',
                 'note'           => 'required',
                 'total'          => 'required',
