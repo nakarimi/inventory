@@ -4,7 +4,7 @@
     <vs-table ref="table" :data="transfers" search stripe pagination :max-items="10">
       <template slot="thead">
         <vs-th sort-key="">#</vs-th>
-        <vs-th sort-key="ammount">Ammount</vs-th>
+        <vs-th sort-key="amount">amount</vs-th>
         <vs-th sort-key="target_stock">Destination</vs-th>
         <vs-th sort-key="source_stock">Source</vs-th>
         <vs-th sort-key="status">Status</vs-th>
@@ -18,7 +18,7 @@
               <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.ammount }}</p>
+              <p>{{ tr.amount }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.target_stock.name }}</p>

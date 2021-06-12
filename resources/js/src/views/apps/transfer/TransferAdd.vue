@@ -24,7 +24,7 @@
       <items :form="form" />
 
       <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-        <vs-input type="number" name="total" label="Ammount" v-model="form.total" @input="form.errors.errors.total = []" class="w-full" />
+        <vs-input type="number" name="total" label="amount" v-model="form.total" @input="form.errors.errors.total = []" class="w-full" />
           <has-error class="text-danger text-sm" :form="form" field="total"></has-error>
       </vs-col>
       <vs-button class="float-right mt-6" @click="storeTransfer" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
@@ -45,7 +45,7 @@ export default {
           category_id: "",
           item_id: "",
           unit_id: "",
-          ammount: "0",
+          amount: "0",
           unit_price: "0",
           total_price: "0",
         }, ],

@@ -77,7 +77,7 @@ export default {
           category_id: "",
           item_id: "",
           unit_id: "",
-          ammount: "0",
+          amount: "0",
           unit_price: "0",
           total_price: "0",
         }, ],

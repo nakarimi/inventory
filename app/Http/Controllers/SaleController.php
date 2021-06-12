@@ -116,7 +116,7 @@ class SaleController extends Controller
         // Find Items based on type and it.
         $sale['items'] = StockRecord::where('type', 'sale')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
-            ->select('decrement AS ammount', 'stock_records.*')
+            ->select('decrement AS amount', 'stock_records.*')
             ->get();
         return $sale;
     }
@@ -194,7 +194,7 @@ class SaleController extends Controller
         }
     }    
     /**
-     * Calculate the paid ammount for the sale or purchase.
+     * Calculate the paid amount for the sale or purchase.
      *
      * @param  mixed $type
      * @param  mixed $id

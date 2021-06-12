@@ -25,10 +25,10 @@ class Helper
             $item['type'] = $type;
             $item['type_id'] = $type_id;
             if ($in) {
-                $item['increment'] = $item['ammount'];
+                $item['increment'] = $item['amount'];
                 $item['decrement'] = 0;
             } else {
-                $item['decrement'] = $item['ammount'];
+                $item['decrement'] = $item['amount'];
                 $item['increment'] = 0;
             }
             Helper::get_id($item, 'unit_id');

@@ -9,7 +9,7 @@ class Transfer extends Model
     protected $fillable = [
         'source_stock',
         'target_stock',
-        'ammount',
+        'amount',
         'approval_status',
         'user_id',
     ];
@@ -26,7 +26,7 @@ class Transfer extends Model
             [            
                 'source_stock'    => 'required',
                 'target_stock'    => 'required',
-                'ammount'         => 'required',
+                'amount'         => 'required',
                 'approval_status' => 'required',
             ],
             $merge

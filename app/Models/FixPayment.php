@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FixPayment extends Model
 {
     protected $fillable = [
-        'ammount',
+        'amount',
         'receiver',
         'title',
         'type',
@@ -36,7 +36,7 @@ class FixPayment extends Model
     {
         return array_merge(
             [            
-                'ammount'        => 'required',
+                'amount'        => 'required',
                 'receiver'       => 'required',
                 'title'          => 'required',
                 'type'           => 'required',

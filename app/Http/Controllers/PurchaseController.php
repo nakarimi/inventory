@@ -112,7 +112,7 @@ class PurchaseController extends Controller
         // Find Items based on type and it.
         $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
-            ->select('increment AS ammount', 'stock_records.*')
+            ->select('increment AS amount', 'stock_records.*')
             ->get();
 
         return $purchase;

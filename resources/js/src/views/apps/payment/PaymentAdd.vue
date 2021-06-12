@@ -32,7 +32,7 @@
         </vs-row>
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input type="number" name="amount" :max="max_allowed_pay" :label="`Ammount(max: ${max_allowed_pay})`" v-model="form.amount" @input="form.errors.errors.amount = []" class="w-full" />
+            <vs-input type="number" name="amount" :max="max_allowed_pay" :label="`amount(max: ${max_allowed_pay})`" v-model="form.amount" @input="form.errors.errors.amount = []" class="w-full" />
             <has-error class="text-danger text-sm" :form="form" field="amount"></has-error>
 
           </vs-col>
@@ -152,7 +152,7 @@ export default {
       if(this.max_allowed_pay < this.form.amount){
           this.$vs.notify({
             title: 'Failed!',
-            text: 'Ammount must be less or equal to max allowed!',
+            text: 'amount must be less or equal to max allowed!',
             color: 'danger',
             iconPack: 'feather',
             icon: 'icon-cross',

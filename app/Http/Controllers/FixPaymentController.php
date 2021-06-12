@@ -69,8 +69,8 @@ class FixPaymentController extends Controller
             $data = [
                 'type' => 'fixpayment',
                 'type_id' => $fixpayment->id,
-                'credit' => ($fixpayment->type == 'In') ? $fixpayment->ammount : 0,
-                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->ammount : 0,
+                'credit' => ($fixpayment->type == 'In') ? $fixpayment->amount : 0,
+                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->amount : 0,
                 'account_id' => $request->account_id,
                 'status' => $fixpayment->type,
                 'description' => '---',
@@ -144,8 +144,8 @@ class FixPaymentController extends Controller
             $data = [
                 'type' => 'fixpayment',
                 'type_id' => $fixpayment->id,
-                'credit' => ($fixpayment->type == 'In') ? $fixpayment->ammount : 0,
-                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->ammount : 0,
+                'credit' => ($fixpayment->type == 'In') ? $fixpayment->amount : 0,
+                'debit' => ($fixpayment->type == 'Out') ? $fixpayment->amount : 0,
                 'account_id' => $request->account_id,
                 'status' => $fixpayment->type,
                 'description' => '---',

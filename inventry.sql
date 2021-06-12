@@ -119,7 +119,7 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `fix_purchases` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ammount` decimal(10,3) NOT NULL,
+  `amount` decimal(10,3) NOT NULL,
   `receiver` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `source_account_id` bigint(20) UNSIGNED NOT NULL,
   `date` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -537,7 +537,7 @@ CREATE TABLE `transfers` (
   `source_account` bigint(20) UNSIGNED NOT NULL,
   `target_account` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `ammount` decimal(10,3) NOT NULL,
+  `amount` decimal(10,3) NOT NULL,
   `approval_status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL

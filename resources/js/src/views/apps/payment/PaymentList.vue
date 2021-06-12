@@ -6,7 +6,7 @@
         <vs-th sort-key="">#</vs-th>
         <vs-th sort-key="reference_no">Reference Code</vs-th>
         <vs-th sort-key="account_id">Account</vs-th>
-        <vs-th sort-key="amount">Ammount</vs-th>
+        <vs-th sort-key="amount">amount</vs-th>
         <vs-th sort-key="">Source</vs-th>
         <vs-th sort-key="created_at">Date</vs-th>
         <vs-th sort-key=""></vs-th>

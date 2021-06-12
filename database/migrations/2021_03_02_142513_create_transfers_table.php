@@ -17,7 +17,7 @@ class CreateTransfersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('source_stock');
             $table->unsignedBigInteger('target_stock');
-            $table->decimal('ammount', 10, 3);
+            $table->decimal('amount', 10, 3);
             $table->string('approval_status');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -20,8 +20,8 @@
           <span class="text-danger text-sm absolute">{{ errors.first('unit_id') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
-          <vs-input name="ammount" label="Ammount" v-model="i.ammount" class="w-full" />
-          <span class="text-danger text-sm absolute">{{ errors.first('ammount') }}</span>
+          <vs-input name="amount" label="amount" v-model="i.amount" class="w-full" />
+          <span class="text-danger text-sm absolute">{{ errors.first('amount') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
           <vs-input name="unit_price" label="Unit Price" v-model="i.unit_price" class="w-full" />
@@ -86,7 +86,7 @@ export default {
         if (this.form.items[key].id) {
           this.form.items[key].unit_id = this.units.find(e => e.id == this.form.items[key].unit_id || e.id == this.form.items[key].unit_id.id);
         }
-        this.form.items[key].total_price = (this.form.items[key].unit_price * this.form.items[key].ammount);
+        this.form.items[key].total_price = (this.form.items[key].unit_price * this.form.items[key].amount);
         main_price += this.form.items[key].total_price;
       }
       this.form.total = main_price;
@@ -101,7 +101,7 @@ export default {
         category_id: "",
         item_id: "",
         unit_id: "",
-        ammount: "0",
+        amount: "0",
         unit_price: "0",
         total_price: "0",
       });

@@ -26,8 +26,8 @@
             </vs-col>
 
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input type="number" name="ammount" label="Ammount" v-model="form.ammount" @input="form.errors.errors.ammount = []" class="w-full" />
-              <has-error class="text-danger text-sm" :form="form" field="ammount"></has-error>
+              <vs-input type="number" name="amount" label="amount" v-model="form.amount" @input="form.errors.errors.amount = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="amount"></has-error>
 
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       form: new Form({
-        ammount: '',
+        amount: '',
         receiver: '',
         title: '',
         type: '',

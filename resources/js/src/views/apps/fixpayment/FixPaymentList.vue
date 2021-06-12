@@ -6,7 +6,7 @@
         <vs-th sort-key="">#</vs-th>
         <vs-th sort-key="title">Title</vs-th>
         <vs-th sort-key="account_id">Account</vs-th>
-        <vs-th sort-key="ammount">Ammount</vs-th>
+        <vs-th sort-key="amount">amount</vs-th>
         <vs-th sort-key="receiver">Paid To</vs-th>
         <vs-th sort-key="created_at">Date</vs-th>
         <vs-th sort-key=""></vs-th>
@@ -24,7 +24,7 @@
               <p>{{ tr.account_id.name }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.ammount }}</p>
+              <p>{{ tr.amount }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.receiver }}</p>

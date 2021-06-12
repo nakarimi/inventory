@@ -56,7 +56,7 @@ class TransferController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'source_stock');
             Helper::get_id($request, 'target_stock');
-            $request['ammount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
+            $request['amount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
             $transfer = Transfer::create($request->all());
 
             // Add all items to the stock from the target stock.
@@ -107,7 +107,7 @@ class TransferController extends Controller
         // Find Items based on type and it.
         $data['items'] = StockRecord::where('type', 'out-transfer')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
-            ->select('decrement AS ammount', 'stock_records.*')
+            ->select('decrement AS amount', 'stock_records.*')
             ->get();
         return $data;
     }
@@ -128,7 +128,7 @@ class TransferController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'source_stock');
             Helper::get_id($request, 'target_stock');
-            $request['ammount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
+            $request['amount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
             $result = $transfer->update($request->all());
 
             // Add all items to the stock from the source stock.
