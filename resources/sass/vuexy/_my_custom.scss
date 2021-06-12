@@ -61,3 +61,8 @@ th .sort-th, th .vs-table-text{
 .sort-th .th-sort-icon {
     font-size: 1.5rem !important;
 }
+.vs--single .vs__selected{
+    white-space: nowrap;
+    max-width: 75%;
+    overflow: hidden;
+}

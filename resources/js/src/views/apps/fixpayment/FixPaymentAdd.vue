@@ -20,7 +20,7 @@
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Date</small></label>
-              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime @input="form.errors.errors."></> = []"
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date" @input="form.errors.errors.date"></datetime>
               <has-error class="text-danger text-sm" :form="form" field="date"></has-error>
 
             </vs-col>
@@ -31,14 +31,13 @@
 
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input name="receiver" label="Paid To" v-model="form.receiver" @input="form.errors.errors.receiver = []" class="w-full" />
-              <has-error class="text-danger text-sm" :form="form" field="receiver"></has-error>
-
+              <label for=""><small>Type</small></label>
+              <v-select name="type" v-model="form.type" :clearable="false" @input="form.errors.errors.type = []" :options="['In', 'Out']" />
+              <has-error class="text-danger text-sm" :form="form" field="type"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <label for=""><small>Type</small></label>
-              <v-select name="type" v-model="form.type" @input="form.errors.errors.type = []" :options="['In', 'Out']" />
-              <has-error class="text-danger text-sm" :form="form" field="type"></has-error>
+              <vs-input name="receiver" :label="`Paid ${(form.type == 'In') ? 'From' : 'To'}`" v-model="form.receiver" @input="form.errors.errors.receiver = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="receiver"></has-error>
 
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">

@@ -21,6 +21,7 @@ class Helper
     public static function store_items($type, $type_id, $request, $in = false)
     {
         StockRecord::where('type', $type)->where('type_id', $type_id)->delete();
+        DB::table('item_records')->where('type', $type)->where('type_id', $type_id)->delete();
         foreach ($request->items as $key => $item) {
             $item['type'] = $type;
             $item['type_id'] = $type_id;
@@ -39,6 +40,27 @@ class Helper
             $item['user_id'] = $request['user_id'];
 
             $result = StockRecord::create($item);
+        }
+    }
+
+    public static function store_fix_items($type, $type_id, $request, $in = false)
+    {
+        DB::table('item_records')->where('type', $type)->where('type_id', $type_id)->delete();
+        StockRecord::where('type', $type)->where('type_id', $type_id)->delete();
+        foreach ($request->fix_items as $key => $item) {
+            $item['type'] = $type;
+            $item['type_id'] = $type_id;
+            if ($in) {
+                $item['increment'] = $item['amount'];
+                $item['decrement'] = 0;
+            } else {
+                $item['decrement'] = $item['amount'];
+                $item['increment'] = 0;
+            }
+            unset($item['amount']);
+            $item['stock_id'] = $request->stock_id;
+            $item['user_id'] = $request->user_id;
+            $result = DB::table('item_records')->insert($item);
         }
     }
     public static function do_transaction($data, $update = false)

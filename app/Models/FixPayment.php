@@ -36,7 +36,7 @@ class FixPayment extends Model
     {
         return array_merge(
             [            
-                'amount'        => 'required',
+                'amount'        => 'required|min:1',
                 'receiver'       => 'required',
                 'title'          => 'required',
                 'type'           => 'required',

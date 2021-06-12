@@ -19,6 +19,7 @@ class Purchase extends Model
         'payment_status',
         'due_date',
         'user_id',
+        'item_fix',
     ];
 
     /**
@@ -38,9 +39,9 @@ class Purchase extends Model
                 // 'vendor'         => 'required',
                 'stock_id'       => 'required',
                 'note'           => 'required',
-                'total'          => 'required',
-                'discount'       => 'required',
-                'total_tax'      => 'required',
+                'total'          => 'required|min:1',
+                'discount'       => 'required|min:0',
+                'total_tax'      => 'required|number|min:0',
                 'payment_status' => 'required',
                 'due_date'       => 'required',
             ],

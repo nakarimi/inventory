@@ -43,7 +43,7 @@ class Sale extends Model
                 'customer_id'    => 'required',
                 'biller_id'      => 'required',
                 'stock_id'       => 'required',
-                'total'          => 'required',
+                'total'          => 'required|min:1',
                 'due_date'       => 'required',
                 // 'note'           => 'required',
                 // 'discount'       => 'required',

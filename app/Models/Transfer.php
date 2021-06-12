@@ -26,7 +26,7 @@ class Transfer extends Model
             [            
                 'source_stock'    => 'required',
                 'target_stock'    => 'required',
-                'amount'         => 'required',
+                'total'         => 'required',
                 'approval_status' => 'required',
             ],
             $merge

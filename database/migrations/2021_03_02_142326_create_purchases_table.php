@@ -23,6 +23,7 @@ class CreatePurchasesTable extends Migration
             $table->unsignedBigInteger('stock_id');
             $table->text('note')->nullable();
             $table->decimal('total', 10, 3);
+            $table->boolean('item_fix')->default(false);
             $table->decimal('discount', 10, 3)->nullable();
             $table->decimal('total_tax', 10, 3)->nullable();
             $table->string('payment_status'); //Pendding, Paid, Done, Dude

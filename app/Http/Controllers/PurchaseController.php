@@ -64,15 +64,20 @@ class PurchaseController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'vendor_id');
-            $purchase = Purchase::create($request->all());
+            $data = $request->all();
+            unset($data['item_fix']);
+            $purchase = Purchase::create($data);
             // Log this activity to the system by user and entity data.
             activity()
                 ->causedBy(auth()->guard('api')->user())
                 ->performedOn($purchase)
                 ->withProperties($purchase)
                 ->log('Created');
-
-            Helper::store_items('purchase', $purchase->id, $request, true);
+            if ($request->item_fix) {
+                Helper::store_fix_items('purchase', $purchase->id, $request, true);
+            } else {
+                Helper::store_items('purchase', $purchase->id, $request, true);
+            }
             DB::commit();
             return $purchase;
         } catch (Exception $e) {
@@ -108,12 +113,36 @@ class PurchaseController extends Controller
         // These should be object to be fill by default in select list.
         $purchase['vendor_id'] = Vendor::find($purchase['vendor_id']);
         $purchase['stock_id'] = Stock::find($purchase['stock_id']);
-
-        // Find Items based on type and it.
-        $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
-            ->with(['category_id', 'item_id'])
-            ->select('increment AS amount', 'stock_records.*')
-            ->get();
+        $purchase['item_fix'] = DB::table('item_records')->where('type', 'purchase')->where('type_id', $id)->get();
+        if (count($purchase['item_fix']) > 0) {
+            $purchase['item_fix'] = true;
+            $purchase['fix_items'] = DB::table('item_records')->where('type', 'purchase')->where('type_id', $id)
+                ->select('increment AS amount', 'item_records.*')
+                ->get();
+            $purchase['items'] = [[
+                'category_id' => "",
+                'item_id' => "",
+                'unit_id' => "",
+                'amount' => "0",
+                'unit_price' => "0",
+                'total_price' => "0",
+            ]];
+        } else {
+            $purchase['item_fix'] = false;
+            // Find Items based on type and it.
+            $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
+                ->with(['category_id', 'item_id'])
+                ->select('increment AS amount', 'stock_records.*')
+                ->get();
+                $purchase['fix_items'] = [[
+                    'item' => "",
+                    'unit' => "",
+                    'amount' => "0",
+                    'unit_price' => "0",
+                    'total_price' => "0",
+                ]];
+    
+        }
 
         return $purchase;
     }
@@ -143,14 +172,20 @@ class PurchaseController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'vendor_id');
-            $purchase->create($request->all());
+            $data = $request->all();
+            unset($data['item_fix']);
+            $purchase->update($data);
             // Log this activity to the system by user and entity data.
             activity()
                 ->causedBy(auth()->guard('api')->user())
                 ->performedOn($purchase)
                 ->withProperties($purchase)
                 ->log('Updated');
-            Helper::store_items('purchase', $purchase->id, $request, true);
+            if ($request->item_fix) {
+                Helper::store_fix_items('purchase', $purchase->id, $request, true);
+            } else {
+                Helper::store_items('purchase', $purchase->id, $request, true);
+            }
             DB::commit();
             return $purchase;
         } catch (Exception $e) {

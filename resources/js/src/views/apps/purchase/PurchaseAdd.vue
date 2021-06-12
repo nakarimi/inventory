@@ -24,10 +24,16 @@
             <v-select label="name" name="stock_id" v-model="form.stock_id" @input="form.errors.errors.stock_id = []" :options="stocks" />
             <has-error class="text-danger text-sm" :form="form" field="stock_id"></has-error>
           </vs-col>
+          <!-- Import the items component from another component -->
+          <label for="" class="mx-3"><small>ADD FIX ITEMS</small></label>
+          <vs-switch color="success" v-model="form.item_fix">
+            <span slot="common">Common</span>
+            <span slot="fix">Fix</span>
+          </vs-switch>
         </vs-row>
 
-        <!-- Import the items component from another component -->
-        <items :form="form" />
+        <items :form="form" v-if="!form.item_fix" />
+        <rare-items :form="form" v-if="form.item_fix" />
 
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
@@ -68,6 +74,7 @@ import {
   Datetime
 } from 'vue-datetime';
 import Items from '../../share/Items'
+import RareItems from '../../share/RareItems'
 
 export default {
   data() {
@@ -80,7 +87,15 @@ export default {
           amount: "0",
           unit_price: "0",
           total_price: "0",
-        }, ],
+        },],
+        fix_items: [{
+          item: "",
+          unit: "",
+          amount: "0",
+          unit_price: "0",
+          total_price: "0",
+        },],
+        item_fix: false,
         reference_no: '',
         date: '',
         vendor_id: '',
@@ -102,6 +117,7 @@ export default {
     datetime: Datetime,
     "v-select": vSelect,
     Items,
+    RareItems,
   },
   created() {
     if (this.$route.params.id) {
@@ -111,6 +127,9 @@ export default {
     this.loadVendors()
   },
   methods: {
+    change_item() {
+      console.log(this.form);
+    },
     loadStocks() {
       this.axios.get('/api/stocks').then((response) => {
         this.stocks = response.data
@@ -121,7 +140,7 @@ export default {
         this.form.fill(response.data);
       }).catch(() => {})
     },
-    
+
     loadVendors() {
       this.axios.get('/api/vendors').then((response) => {
         this.vendors = response.data
