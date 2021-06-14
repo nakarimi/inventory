@@ -73,6 +73,8 @@ class TransferController extends Controller
                 ->withProperties($transfer)
                 ->log('Created');
             
+            // add related notification to this operation in system
+            Helper::notify('A new transfer had been created in the system!' , 'Creation', 'transfer', $transfer->id, 'success');
             DB::commit();
             return $transfer;
         } catch (Exception $e) {
@@ -145,6 +147,9 @@ class TransferController extends Controller
                 ->performedOn($transfer)
                 ->withProperties($transfer)
                 ->log('Updated');
+
+            // add related notification to this operation in system
+            Helper::notify('A transfer had been updated in the system!' , 'Modification', 'transfer', $transfer->id, 'warning');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -172,6 +177,9 @@ class TransferController extends Controller
                 ->performedOn($transfer)
                 ->withProperties($transfer)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A transfer removed from system!' , 'Deletion', 'transfer', $transfer->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

@@ -55,6 +55,8 @@ class CustomerController extends Controller
                 ->performedOn($customer)
                 ->withProperties($customer)
                 ->log('Created');
+            // add related notification to this operation in system
+            Helper::notify('A new customer had been created in the system!' , 'Creation', 'customer', $customer->id, 'success');
             DB::commit();
             return $customer;
         } catch (Exception $e) {
@@ -107,7 +109,8 @@ class CustomerController extends Controller
                 ->performedOn($customer)
                 ->withProperties($customer)
                 ->log('Updated');
-
+            // add related notification to this operation in system
+            Helper::notify('A customer had been updated in the system!' , 'Modification', 'customer', $customer->id, 'warning');
             DB::commit();
             return $request->all();
         } catch (Exception $e) {
@@ -133,6 +136,8 @@ class CustomerController extends Controller
                 ->performedOn($customer)
                 ->withProperties($customer)
                 ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('A customer removed from system!' , 'Deletion', 'customer', $customer->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

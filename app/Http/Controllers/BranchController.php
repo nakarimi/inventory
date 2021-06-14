@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,8 +49,9 @@ class BranchController extends Controller
                 ->performedOn($branch)
                 ->withProperties($branch)
                 ->log('Created');
-
-            DB::commit();
+                DB::commit();
+            // add related notification to this operation in system
+            Helper::notify('A new branch had been created in the system!' , 'Creation', 'branch', $branch->id, 'success');
             return ['msg' => 'Branch successfully inserted'];
         } catch (Exception $e) {
             DB::rollback();
@@ -98,6 +100,8 @@ class BranchController extends Controller
                 ->performedOn($branch)
                 ->withProperties($branch->getChanges())
                 ->log('Updated');
+            // add related notification to this operation in system
+            Helper::notify('A branch had been updated in the system!' , 'Modification', 'branch', $branch->id, 'warning');
             if ($branch->getChanges()) {
                 DB::commit();
             }
@@ -127,6 +131,8 @@ class BranchController extends Controller
                 ->withProperties($branch)
                 ->log('Deleted');
 
+            // add related notification to this operation in system
+            Helper::notify('A Branch removed from system!' , 'Deletion', 'branch', $branch->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

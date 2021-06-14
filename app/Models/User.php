@@ -90,7 +90,7 @@ class User extends Authenticatable
     {
         parent:: boot();
         // Just load users with same branch, except for adminstrator.
-        if(auth()->guard('api')->user() && auth()->guard('api')->user()->id != 1){
+        if(auth()->guard('api')->user() && auth()->guard('api')->user()->id != 2){
             $bId = auth()->guard('api')->user()->branch_id;
             static::addGlobalScope('branch_id', function (Builder $builder) use ($bId) {
                 $builder->where('branch_id',  $bId);

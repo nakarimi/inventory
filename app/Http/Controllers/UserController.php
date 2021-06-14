@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 
-use App\Models\Branch;
+use App\Helper\Helper;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -80,6 +81,9 @@ class UserController extends Controller
                 ->performedOn($user)
                 ->withProperties($user)
                 ->log('Created');
+
+            // add related notification to this operation in system
+            Helper::notify('A new user had been created in the system!' , 'Creation', 'user', $user->id, 'success');
             DB::commit();
             return ['msg' => 'user successfully inserted', $user];
         } catch (Exception $e) {
@@ -170,6 +174,9 @@ class UserController extends Controller
                     ->performedOn($user)
                     ->withProperties($user)
                     ->log('Updated');
+
+                // add related notification to this operation in system
+                Helper::notify('A user removed from system!', 'Modification', 'user', $user->id, 'warning');
                 DB::commit();
                 return ["Success"];
             } catch (Exception $e) {
@@ -200,6 +207,8 @@ class UserController extends Controller
             ->performedOn($user)
             ->withProperties($user)
             ->log('Deleted');
+        // add related notification to this operation in system
+        Helper::notify('A user removed from system!', 'Deletion', 'user', $user->id, 'danger');
         return ['message' => 'User Deleted'];
     }
 

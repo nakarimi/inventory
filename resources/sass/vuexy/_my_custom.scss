@@ -66,3 +66,9 @@ th .sort-th, th .vs-table-text{
     max-width: 75%;
     overflow: hidden;
 }
+.con-vs-dropdown--menu{
+    z-index: 99999 !important;
+}
+.v-nav-menu .notif .feather-icon{
+    margin-right: 0px !important;
+}

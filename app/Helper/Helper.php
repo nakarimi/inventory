@@ -99,4 +99,21 @@ class Helper
             $request[$field] = $entity->getOriginal($field);
         }
     }
+    public static function notifyStatus($id, $status){
+        DB::table('notifs')->where('id', $id)->update(['status' => $status]);
+    }
+    public static function notify($msg, $action, $type, $type_id, $color = 'primary')
+    {
+        $data = [
+            'action' => $action,
+            'msg' => $msg,
+            'color' => $color,
+            'type' => $type,
+            'type_id' => $type_id,
+            'user_id' => auth()->guard('api')->user()->id,
+            'branch_id' => auth()->guard('api')->user()->branch_id,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ];
+        $result = DB::table('notifs')->insert($data);
+    }
 }

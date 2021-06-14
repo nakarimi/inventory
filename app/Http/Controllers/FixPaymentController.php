@@ -78,6 +78,8 @@ class FixPaymentController extends Controller
             ];
             Helper::do_transaction($data);
 
+            // add related notification to this operation in system
+            Helper::notify('A new fixpayment had been created in the system!' , 'Creation', 'fixpayment', $fixpayment->id, 'success');
             DB::commit();
             return $fixpayment;
         } catch (Exception $e) {
@@ -152,6 +154,8 @@ class FixPaymentController extends Controller
                 'user_id' => $request->user_id,
             ];
             Helper::do_transaction($data, true);
+            // add related notification to this operation in system
+            Helper::notify('A Fix payment had been updated in the system!' , 'Modification', 'fixpayment', $fixpayment->id, 'warning');
 
 
             DB::commit();
@@ -181,6 +185,9 @@ class FixPaymentController extends Controller
                 ->performedOn($fixpayment)
                 ->withProperties($fixpayment)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A Fix payment removed from system!' , 'Deletion', 'fixpayment', $fixpayment->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

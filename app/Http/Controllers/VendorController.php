@@ -54,6 +54,9 @@ class VendorController extends Controller
                 ->performedOn($vendor)
                 ->withProperties($vendor)
                 ->log('Created');
+
+            // add related notification to this operation in system
+            Helper::notify('A new vendor had been created in the system!' , 'Creation', 'vendor', $vendor->id, 'success');
             DB::commit();
             return $vendor;
         } catch (Exception $e) {
@@ -105,6 +108,8 @@ class VendorController extends Controller
                 ->performedOn($vendor)
                 ->withProperties($vendor)
                 ->log('Updated');
+            // add related notification to this operation in system
+            Helper::notify('A vendor had been updated in the system!' , 'Modification', 'vendor', $vendor->id, 'warning');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -130,6 +135,9 @@ class VendorController extends Controller
                 ->performedOn($vendor)
                 ->withProperties($vendor)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A vendor removed from system!' , 'Deletion', 'vendor', $vendor->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

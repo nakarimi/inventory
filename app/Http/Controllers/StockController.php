@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -51,6 +52,9 @@ class StockController extends Controller
                 ->performedOn($stock)
                 ->withProperties($stock)
                 ->log('Created');
+
+            // add related notification to this operation in system
+            Helper::notify('A new stock had been created in the system!' , 'Creation', 'stock', $stock->id, 'success');
             DB::commit();
             return $stock;
         } catch (Exception $e) {
@@ -101,6 +105,9 @@ class StockController extends Controller
                 ->performedOn($stock)
                 ->withProperties($stock)
                 ->log('Updated');
+
+            // add related notification to this operation in system
+            Helper::notify('A stock had been updated in the system!' , 'Modification', 'stock', $stock->id, 'warning');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -126,6 +133,9 @@ class StockController extends Controller
                 ->performedOn($stock)
                 ->withProperties($stock)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('An stock removed from system!' , 'Deletion', 'stock', $stock->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

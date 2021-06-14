@@ -75,6 +75,10 @@ class SaleController extends Controller
                 ->log('Created');
             // store related items.
             Helper::store_items('sale', $sale->id, $request);
+            Helper::notify('New Sale created!' , 'Creation', 'sale', $sale->id);
+
+            // add related notification to this operation in system
+            Helper::notify('A new sale had been created in the system!' , 'Creation', 'sale', $sale->id, 'success');
             DB::commit();
             return $sale;
         } catch (Exception $e) {
@@ -159,6 +163,8 @@ class SaleController extends Controller
                 ->withProperties($sale)
                 ->log('Updated');
             Helper::store_items('sale', $id, $request);
+            // add related notification to this operation in system
+            Helper::notify('A Sale updated in system!' , 'Modification', 'sale', $sale->id, 'warning');
             DB::commit();
             return $sale;
         } catch (Exception $e) {
@@ -186,6 +192,8 @@ class SaleController extends Controller
             ->performedOn($sale)
             ->withProperties($sale)
             ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('A Sale removed from system!' , 'Deletion', 'sale', $sale->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

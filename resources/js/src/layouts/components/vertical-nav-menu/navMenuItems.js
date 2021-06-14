@@ -170,6 +170,11 @@ export default [
                 name: "Activity Log",
                 slug: "activity-log",
             },
+            {
+                url: '/manage/notifications',
+                name: "All Notifications",
+                slug: "manage-notifications",
+            },
         ]
     },
     {

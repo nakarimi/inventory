@@ -82,6 +82,8 @@ class PaymentController extends Controller
             ];
             Helper::do_transaction($data);
 
+            // add related notification to this operation in system
+            Helper::notify('A new payment had been created in the system!' , 'Creation', 'payment', $payment->id, 'success');
             DB::commit();
             return $payment;
         } catch (Exception $e) {
@@ -159,6 +161,8 @@ class PaymentController extends Controller
                 'user_id' => $request->user_id,
             ];
             Helper::do_transaction($data, true);
+            // add related notification to this operation in system
+            Helper::notify('A payment had been updated in the system!' , 'Modification', 'payment', $payment->id, 'warning');
 
             DB::commit();
             return $payment;
@@ -187,6 +191,9 @@ class PaymentController extends Controller
                 ->performedOn($payment)
                 ->withProperties($payment)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A payment removed from system!', 'Deletion', 'payment', $payment->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

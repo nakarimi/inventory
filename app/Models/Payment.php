@@ -32,7 +32,7 @@ class Payment extends Model
         return array_merge(
             [            
                 'reference_no'  => 'required|unique:payments'. ($id ? ",reference_no,$id" : ''),
-                'amount'        => 'required',
+                'amount'        => 'required|min:1',
                 'paid_by'       => 'required',
                 'created_by'    => 'required',
                 'type'          => 'required',

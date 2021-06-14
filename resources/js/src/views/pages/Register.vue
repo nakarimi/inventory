@@ -22,47 +22,42 @@
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input label-placeholder="First Name" name="first_name" placeholder="First Name" v-model="form.first_name" class="w-full" />
-                  <span class="text-danger text-sm">{{ errors.first('first_name') | remove_ }}</span>
-
+                  <has-error class="text-danger text-sm" :form="form" field="first_name"></has-error>
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input label-placeholder="Last Name" name="last_name" placeholder="Last Name" v-model="form.last_name" class="w-full" />
-                  <span class="text-danger text-sm">{{ errors.first('last_name') | remove_ }}</span>
-
+                  <has-error class="text-danger text-sm" :form="form" field="last_name"></has-error>
                 </div>
 
                 <div class="mt-2 mb-2 grid">
                   <vs-input v-validate="'required|email'" :disabled="$route.params.id" @input="form.email = form.email.toLowerCase()" name="email" type="email" label-placeholder="Email" placeholder="Email" v-model="form.email" class="w-full" />
-                  <span class="text-danger text-sm">{{ errors.first('email') | remove_ }}</span>
-
+                  <has-error class="text-danger text-sm" :form="form" field="email"></has-error>
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input label-placeholder="Phone" name="phone" placeholder="Phone" v-model="form.phone" class="w-full" />
-                  <span class="text-danger text-sm">{{ errors.first('phone') | remove_ }}</span>
-
+                  <has-error class="text-danger text-sm" :form="form" field="phone"></has-error>
                 </div>
                 <div class="mt-2 mb-2 grid">
                   <vs-input label-placeholder="Address" name="address" placeholder="Address" v-model="form.address" class="w-full" />
-                  <span class="text-danger text-sm">{{ errors.first('address') | remove_ }}</span>
-
+                  <has-error class="text-danger text-sm" :form="form" field="address"></has-error>
                 </div>
 
                 <!-- If it is an edit page, don't show the password fields -->
                 <div v-if="!$route.params.id">
                   <div class="mt-2 mb-2 grid">
                     <vs-input ref="password" type="password" v-validate="'required|min:6'" name="password" label-placeholder="Password" placeholder="Password" v-model="form.password" class="w-full" />
-                    <span class="text-danger text-sm">{{ errors.first('password') | remove_ }}</span>
+                    <has-error class="text-danger text-sm" :form="form" field="password"></has-error>
                   </div>
                   <div class="mt-2 mb-2 grid">
                     <vs-input type="password" v-validate="'min:6|confirmed:password'" data-vv-as="password" name="confirm_password" label-placeholder="Confirm Password" placeholder="Confirm Password" v-model="form.confirm_password" class="w-full" />
-                    <span class="text-danger text-sm">{{ errors.first('confirm_password') | remove_ }}</span>
+                    <has-error class="text-danger text-sm" :form="form" field="confirm_password"></has-error>
                   </div>
                 </div>
 
                 <vs-checkbox v-if="!$route.params.id" v-model="isTermsConditionAccepted" class="mt-6">I accept the terms & conditions.</vs-checkbox>
                 <vs-button type="border" v-if="$route.params.id" @click="openPassword" class="mt-6">Change Password</vs-button>
                 <vs-button type="border" v-if="!$route.params.id" to="/pages/login" class="mt-6">Login</vs-button>
-                <vs-button class="float-right mt-6" @click="registerUser" >{{ $route.params.id ? 'Update' : 'Register' }}</vs-button>
+                <vs-button class="float-right mt-6" @click="registerUser">{{ $route.params.id ? 'Update' : 'Register' }}</vs-button>
               </div>
             </div>
           </div>

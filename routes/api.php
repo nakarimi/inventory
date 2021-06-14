@@ -39,6 +39,9 @@ Route::resource('transfers', 'TransferController');
 Route::get('transactions', 'TransferController@transactions');
 Route::get('activity_log', 'UserController@activity_log');
 Route::get('sale_max_value/{type}/{id}', 'SaleController@sale_max_value');
+Route::get('unread_notifications', 'ApplicationController@unreadNotifications');
+Route::get('read_notifications', 'ApplicationController@readNotifications');
+Route::post('make_read_notif', 'ApplicationController@MakeReadNotif');
 
 // Custom Routes
 Route::get('home', 'UserController@home');

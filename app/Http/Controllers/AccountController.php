@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,8 @@ class AccountController extends Controller
             ->performedOn($account)
             ->withProperties($account)
             ->log('Created');
+        // add related notification to this operation in system
+        Helper::notify('A new account had been created in the system!' , 'Creation', 'account', $account->id, 'success');
 
         return $account;
     }
@@ -95,7 +98,8 @@ class AccountController extends Controller
             ->performedOn($account)
             ->withProperties($account)
             ->log('Updated');
-
+            // add related notification to this operation in system
+            Helper::notify('An account had been updated in the system!' , 'Modification', 'account', $account->id, 'warning');
         return $account;
     }
 
@@ -117,6 +121,8 @@ class AccountController extends Controller
                 ->withProperties($account)
                 ->log('Deleted');
             DB::commit();
+            // add related notification to this operation in system
+            Helper::notify('An account removed from system!' , 'Deletion', 'account', $account->id, 'danger');
             return $result;
         } catch (Exception $e) {
             DB::rollback();

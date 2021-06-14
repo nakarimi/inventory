@@ -1,34 +1,25 @@
 <template>
-  <div class="parentx">
+<div class="parentx">
 
-    <vs-sidebar
-      class="v-nav-menu items-no-padding"
-      v-model="isVerticalNavMenuActive"
-      ref="verticalNavMenu"
-      default-index="-1"
-      :click-not-close="clickNotClose"
-      :reduce-not-rebound="reduceNotRebound"
-      :parent="parent"
-      :hiddenBackground="clickNotClose"
-      :reduce="reduce"
-      v-hammer:swipe="onMenuSwipe">
+  <vs-sidebar class="v-nav-menu items-no-padding" v-model="isVerticalNavMenuActive" ref="verticalNavMenu" default-index="-1" :click-not-close="clickNotClose" :reduce-not-rebound="reduceNotRebound" :parent="parent" :hiddenBackground="clickNotClose" :reduce="reduce" v-hammer:swipe="onMenuSwipe">
 
-      <div @mouseenter="mouseEnter" @mouseleave="mouseLeave">
+    <div @mouseenter="mouseEnter" @mouseleave="mouseLeave">
 
-        <!-- Header -->
-        <div class="header-sidebar flex items-end justify-between" slot="header">
+      <!-- Header -->
+      <div class="header-sidebar flex items-end justify-between" slot="header">
 
-          <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
+        <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
           <div class="inline-grid">
             <span class="vx-logo-text text-primary" v-if="title">{{ title }}{{ (branch) ? ' / ' + branch : '' }}</span>
-            
+
             <!-- Add the loged in user name in system. -->
-            <span class="text-success" v-if="user">{{ user.first_name }} {{ user.last_name }} 
+            <span class="text-success" v-if="user">{{ user.first_name }} {{ user.last_name }}
               <small>(Logged In)</small>
             </span>
           </div>
-          </router-link>
-          <!-- Menu Buttons -->
+        </router-link>
+        <!-- Menu Buttons -->
+        <div class="text-right flex-root">
           <div>
             <!-- Close Button -->
             <template v-if="showCloseButton">
@@ -37,79 +28,59 @@
 
             <!-- Toggle Buttons -->
             <template v-else-if="!showCloseButton && !verticalNavMenuItemsMin">
-              <feather-icon
-                id="btnVNavMenuMinToggler"
-                class="mr-0 cursor-pointer"
-                :icon="reduce ? 'CircleIcon' : 'DiscIcon'"
-                svg-classes="stroke-current text-primary"
-                @click="toggleReduce(!reduce)" />
+              <feather-icon id="btnVNavMenuMinToggler" class="mr-0 cursor-pointer" :icon="reduce ? 'CircleIcon' : 'DiscIcon'" svg-classes="stroke-current text-primary" @click="toggleReduce(!reduce)" />
             </template>
           </div>
           <!-- /Menu Toggle Buttons -->
+          <notification-drop-down v-if="$acl.check('isAdmin')" />
         </div>
-        <!-- /Header -->
-
-        <!-- Header Shadow -->
-        <div class="shadow-bottom" v-show="showShadowBottom" />
-
-        <!-- Menu Items -->
-        <component :is="scrollbarTag" ref="verticalNavMenuPs" class="scroll-area-v-nav-menu pt-2" :settings="settings" @ps-scroll-y="psSectionScroll" @scroll="psSectionScroll" :key="$vs.rtl">
-          <template v-for="(item, index) in menuItemsUpdated">
-
-            <!-- Group Header -->
-            <span v-if="item.header && !verticalNavMenuItemsMin" class="navigation-header truncate" :key="`header-${index}`">
-              {{ item.header }}
-            </span>
-            <!-- /Group Header -->
-
-            <template v-else-if="!item.header">
-
-              <!-- Nav-Item -->
-              <v-nav-menu-item
-                v-if="!item.submenu"
-                :key="`item-${index}`"
-                :index="index"
-                :to="item.slug !== 'external' ? item.url : null"
-                :href="item.slug === 'external' ? item.url : null"
-                :icon="item.icon" :target="item.target"
-                :isDisabled="item.isDisabled"
-                :slug="item.slug">
-                  <span v-show="!verticalNavMenuItemsMin" class="truncate">{{ item.name }}</span>
-                  <vs-chip class="ml-auto" :color="item.tagColor" v-if="item.tag && (isMouseEnter || !reduce)">{{ item.tag }}</vs-chip>
-              </v-nav-menu-item>
-
-              <!-- Nav-Group -->
-              <template v-else>
-                <v-nav-menu-group
-                  :key="`group-${index}`"
-                  :openHover="openGroupHover"
-                  :group="item"
-                  :groupIndex="index"
-                  :open="isGroupActive(item)" />
-              </template>
-              <!-- /Nav-Group -->
-            </template>
-          </template>
-        </component>
-        <!-- /Menu Items -->
       </div>
-    </vs-sidebar>
+      <!-- /Header -->
 
-    <!-- Swipe Gesture -->
-    <div
-      v-if="!isVerticalNavMenuActive"
-      class="v-nav-menu-swipe-area"
-      v-hammer:swipe="onSwipeAreaSwipe" />
-    <!-- /Swipe Gesture -->
-  </div>
+      <!-- Header Shadow -->
+      <div class="shadow-bottom" v-show="showShadowBottom" />
+
+      <!-- Menu Items -->
+      <component :is="scrollbarTag" ref="verticalNavMenuPs" class="scroll-area-v-nav-menu pt-2" :settings="settings" @ps-scroll-y="psSectionScroll" @scroll="psSectionScroll" :key="$vs.rtl">
+        <template v-for="(item, index) in menuItemsUpdated">
+
+          <!-- Group Header -->
+          <span v-if="item.header && !verticalNavMenuItemsMin" class="navigation-header truncate" :key="`header-${index}`">
+            {{ item.header }}
+          </span>
+          <!-- /Group Header -->
+
+          <template v-else-if="!item.header">
+
+            <!-- Nav-Item -->
+            <v-nav-menu-item v-if="!item.submenu" :key="`item-${index}`" :index="index" :to="item.slug !== 'external' ? item.url : null" :href="item.slug === 'external' ? item.url : null" :icon="item.icon" :target="item.target" :isDisabled="item.isDisabled" :slug="item.slug">
+              <span v-show="!verticalNavMenuItemsMin" class="truncate">{{ item.name }}</span>
+              <vs-chip class="ml-auto" :color="item.tagColor" v-if="item.tag && (isMouseEnter || !reduce)">{{ item.tag }}</vs-chip>
+            </v-nav-menu-item>
+
+            <!-- Nav-Group -->
+            <template v-else>
+              <v-nav-menu-group :key="`group-${index}`" :openHover="openGroupHover" :group="item" :groupIndex="index" :open="isGroupActive(item)" />
+            </template>
+            <!-- /Nav-Group -->
+          </template>
+        </template>
+      </component>
+      <!-- /Menu Items -->
+    </div>
+  </vs-sidebar>
+
+  <!-- Swipe Gesture -->
+  <div v-if="!isVerticalNavMenuActive" class="v-nav-menu-swipe-area" v-hammer:swipe="onSwipeAreaSwipe" />
+  <!-- /Swipe Gesture -->
+</div>
 </template>
 
-
 <script>
+import NotificationDropDown from '../navbar/components/NotificationDropDown.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import VNavMenuGroup from './VerticalNavMenuGroup.vue'
 import VNavMenuItem from './VerticalNavMenuItem.vue'
-
 
 export default {
   name: 'v-nav-menu',
@@ -117,39 +88,58 @@ export default {
     VNavMenuGroup,
     VNavMenuItem,
     VuePerfectScrollbar,
+    NotificationDropDown,
+    NotificationDropDown
   },
   props: {
-    openGroupHover:   { type: Boolean, default: false },
-    parent:           { type: String },
-    reduceNotRebound: { type: Boolean, default: true },
-    navMenuItems:     { type: Array,   required: true },
-    title:            { type: String }
+    openGroupHover: {
+      type: Boolean,
+      default: false
+    },
+    parent: {
+      type: String
+    },
+    reduceNotRebound: {
+      type: Boolean,
+      default: true
+    },
+    navMenuItems: {
+      type: Array,
+      required: true
+    },
+    title: {
+      type: String
+    }
   },
   data: () => ({
-    clickNotClose       : false, // disable close navMenu on outside click
-    isMouseEnter        : false,
-    reduce              : false, // determines if navMenu is reduce - component property
-    showCloseButton     : false, // show close button in smaller devices
-    settings            : {      // perfectScrollbar settings
+    clickNotClose: false, // disable close navMenu on outside click
+    isMouseEnter: false,
+    reduce: false, // determines if navMenu is reduce - component property
+    showCloseButton: false, // show close button in smaller devices
+    settings: { // perfectScrollbar settings
       maxScrollbarLength: 60,
-      wheelSpeed        : 1,
-      swipeEasing       : true
+      wheelSpeed: 1,
+      swipeEasing: true
     },
-    showShadowBottom    : false,
+    showShadowBottom: false,
     branch: null,
     user: null,
   }),
   computed: {
-    isGroupActive () {
+    isGroupActive() {
       return (item) => {
-        const path        = this.$route.fullPath
+        const path = this.$route.fullPath
         const routeParent = this.$route.meta ? this.$route.meta.parent : undefined
-        let open          = false
+        let open = false
 
         const func = (item) => {
           if (item.submenu) {
             item.submenu.forEach((item) => {
-              if (item.url && (path === item.url || routeParent === item.slug)) { open = true } else if (item.submenu) { func(item) }
+              if (item.url && (path === item.url || routeParent === item.slug)) {
+                open = true
+              } else if (item.submenu) {
+                func(item)
+              }
             })
           }
         }
@@ -157,7 +147,7 @@ export default {
         return open
       }
     },
-    menuItemsUpdated () {
+    menuItemsUpdated() {
       const clone = this.navMenuItems.slice()
 
       for (const [index, item] of this.navMenuItems.entries()) {
@@ -172,24 +162,42 @@ export default {
       return clone
     },
     isVerticalNavMenuActive: {
-      get ()    { return this.$store.state.isVerticalNavMenuActive },
-      set (val) { this.$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', val) }
+      get() {
+        return this.$store.state.isVerticalNavMenuActive
+      },
+      set(val) {
+        this.$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', val)
+      }
     },
-    layoutType () { return this.$store.state.mainLayoutType },
+    layoutType() {
+      return this.$store.state.mainLayoutType
+    },
     reduceButton: {
-      get ()    { return this.$store.state.reduceButton },
-      set (val) { this.$store.commit('TOGGLE_REDUCE_BUTTON', val) }
+      get() {
+        return this.$store.state.reduceButton
+      },
+      set(val) {
+        this.$store.commit('TOGGLE_REDUCE_BUTTON', val)
+      }
     },
-    isVerticalNavMenuReduced () { return Boolean(this.reduce && this.reduceButton) },
-    verticalNavMenuItemsMin ()  { return this.$store.state.verticalNavMenuItemsMin },
-    scrollbarTag ()             { return this.$store.getters.scrollbarTag          },
-    windowWidth ()              { return this.$store.state.windowWidth             }
+    isVerticalNavMenuReduced() {
+      return Boolean(this.reduce && this.reduceButton)
+    },
+    verticalNavMenuItemsMin() {
+      return this.$store.state.verticalNavMenuItemsMin
+    },
+    scrollbarTag() {
+      return this.$store.getters.scrollbarTag
+    },
+    windowWidth() {
+      return this.$store.state.windowWidth
+    }
   },
   watch: {
-    '$route' () {
+    '$route'() {
       if (this.isVerticalNavMenuActive && this.showCloseButton) this.$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', false)
     },
-    reduce (val) {
+    reduce(val) {
       const verticalNavMenuWidth = val ? 'reduced' : this.$store.state.windowWidth < 1200 ? 'no-nav-menu' : 'default'
       this.$store.dispatch('updateVerticalNavMenuWidth', verticalNavMenuWidth)
 
@@ -197,12 +205,18 @@ export default {
         window.dispatchEvent(new Event('resize'))
       }, 100)
     },
-    layoutType ()   { this.setVerticalNavMenuWidth() },
-    reduceButton () { this.setVerticalNavMenuWidth() },
-    windowWidth ()  { this.setVerticalNavMenuWidth() }
+    layoutType() {
+      this.setVerticalNavMenuWidth()
+    },
+    reduceButton() {
+      this.setVerticalNavMenuWidth()
+    },
+    windowWidth() {
+      this.setVerticalNavMenuWidth()
+    }
   },
   methods: {
-    onMenuSwipe (event) {
+    onMenuSwipe(event) {
       if (event.direction === 4 && this.$vs.rtl) {
 
         // Swipe Right
@@ -214,7 +228,7 @@ export default {
         if (this.isVerticalNavMenuActive && this.showCloseButton) this.isVerticalNavMenuActive = false
       }
     },
-    onSwipeAreaSwipe (event) {
+    onSwipeAreaSwipe(event) {
 
       if (event.direction === 4 && !this.$vs.rtl) {
 
@@ -226,19 +240,19 @@ export default {
         if (!this.isVerticalNavMenuActive && this.showCloseButton) this.isVerticalNavMenuActive = true
       }
     },
-    psSectionScroll () {
+    psSectionScroll() {
       const scroll_el = this.$refs.verticalNavMenuPs.$el || this.$refs.verticalNavMenuPs
       this.showShadowBottom = scroll_el.scrollTop > 0
     },
-    mouseEnter () {
+    mouseEnter() {
       if (this.reduce) this.$store.commit('UPDATE_VERTICAL_NAV_MENU_ITEMS_MIN', false)
       this.isMouseEnter = true
     },
-    mouseLeave () {
+    mouseLeave() {
       if (this.reduce) this.$store.commit('UPDATE_VERTICAL_NAV_MENU_ITEMS_MIN', true)
       this.isMouseEnter = false
     },
-    setVerticalNavMenuWidth () {
+    setVerticalNavMenuWidth() {
 
       if (this.windowWidth > 1200) {
         if (this.layoutType === 'vertical') {
@@ -254,10 +268,10 @@ export default {
           this.$store.commit('UPDATE_VERTICAL_NAV_MENU_ITEMS_MIN', verticalNavMenuItemsMin)
 
           // Menu Action buttons
-          this.clickNotClose   = true
+          this.clickNotClose = true
           this.showCloseButton = false
 
-          const verticalNavMenuWidth   = this.isVerticalNavMenuReduced ? 'reduced' : 'default'
+          const verticalNavMenuWidth = this.isVerticalNavMenuReduced ? 'reduced' : 'default'
           this.$store.dispatch('updateVerticalNavMenuWidth', verticalNavMenuWidth)
 
           return
@@ -272,7 +286,7 @@ export default {
 
       // Menu Action buttons
       this.showCloseButton = true
-      this.clickNotClose   = false
+      this.clickNotClose = false
 
       // Update NavMenu Width
       this.$store.dispatch('updateVerticalNavMenuWidth', 'no-nav-menu')
@@ -280,24 +294,22 @@ export default {
       // Remove Only Icon in Menu
       this.$store.commit('UPDATE_VERTICAL_NAV_MENU_ITEMS_MIN', false)
     },
-    toggleReduce (val) {
+    toggleReduce(val) {
       this.reduceButton = val
       this.setVerticalNavMenuWidth()
     }
   },
-  mounted () {
+  mounted() {
     this.setVerticalNavMenuWidth()
   },
-  created () {
+  created() {
     this.user = JSON.parse(localStorage.getItem('user'));
-    if(this.user){
+    if (this.user) {
       this.branch = (this.user.branch_id) ? this.user.branch_id.name : '';
     }
   },
 }
-
 </script>
-
 
 <style lang="scss">
 @import "@sass/vuexy/components/verticalNavMenu.scss"

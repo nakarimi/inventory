@@ -78,6 +78,10 @@ class PurchaseController extends Controller
             } else {
                 Helper::store_items('purchase', $purchase->id, $request, true);
             }
+
+            // add related notification to this operation in system
+            Helper::notify('A new purchase had been created in the system!' , 'Creation', 'purchase', $purchase->id, 'success');
+
             DB::commit();
             return $purchase;
         } catch (Exception $e) {
@@ -134,14 +138,13 @@ class PurchaseController extends Controller
                 ->with(['category_id', 'item_id'])
                 ->select('increment AS amount', 'stock_records.*')
                 ->get();
-                $purchase['fix_items'] = [[
-                    'item' => "",
-                    'unit' => "",
-                    'amount' => "0",
-                    'unit_price' => "0",
-                    'total_price' => "0",
-                ]];
-    
+            $purchase['fix_items'] = [[
+                'item' => "",
+                'unit' => "",
+                'amount' => "0",
+                'unit_price' => "0",
+                'total_price' => "0",
+            ]];
         }
 
         return $purchase;
@@ -186,6 +189,9 @@ class PurchaseController extends Controller
             } else {
                 Helper::store_items('purchase', $purchase->id, $request, true);
             }
+
+            // add related notification to this operation in system
+            Helper::notify('A purchase had been updated in the system!' , 'Modification', 'purchase', $purchase->id, 'warning');
             DB::commit();
             return $purchase;
         } catch (Exception $e) {
@@ -213,6 +219,9 @@ class PurchaseController extends Controller
                 ->performedOn($purchase)
                 ->withProperties($purchase)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A purchase removed from system!', 'Deletion', 'purchase', $purchase->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

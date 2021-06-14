@@ -396,6 +396,20 @@ const router = new Router({
             btn_list_path: '/apps/list/transfer',
           }
         },
+        {
+          path: '/apps/add/order',
+          name: 'add-order',
+          component: () => import('./views/apps/order/OrderAdd.vue'),
+          meta: {
+            rule: 'isCustomer',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Orders List', url: { name: 'list-order' } },
+              { title: 'Add Order', active: true }
+            ],
+            btn_list_path: '/apps/list/order',
+          }
+        },
         // End of add routes
         // Edit Routes
         {
@@ -565,8 +579,23 @@ const router = new Router({
           }
         },
         {
+          path: '/manage/notifications',
+          name: 'manage-notifications',
+          component: () => import('./views/apps/AllNotifications.vue'),
+          meta: {
+            rule: 'isAdmin',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'All Notifications', active: true },
+            ],
+          }
+        },
+        {
           path: '/pages/logout',
           name: 'page-logout',
+          meta: {
+            rule: 'isCustomer',
+          }
         },
       ],
     },

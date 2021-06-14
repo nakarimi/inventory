@@ -58,6 +58,9 @@ class ProductController extends Controller
                 ->performedOn($product)
                 ->withProperties($product)
                 ->log('Created');
+
+            // add related notification to this operation in system
+            Helper::notify('A new product had been created in the system!' , 'Creation', 'product', $product->id, 'success');
             DB::commit();
             return $product;
         } catch (Exception $e) {
@@ -118,6 +121,9 @@ class ProductController extends Controller
                 ->performedOn($product)
                 ->withProperties($product)
                 ->log('Updated');
+
+            // add related notification to this operation in system
+            Helper::notify('A product had been updated in the system!' , 'Modification', 'product', $product->id, 'warning');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -143,6 +149,10 @@ class ProductController extends Controller
                 ->performedOn($product)
                 ->withProperties($product)
                 ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A product removed from system!' , 'Deletion', 'product', $product->id, 'danger');
+
             DB::commit();
             return $result;
         } catch (Exception $e) {

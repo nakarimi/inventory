@@ -7,7 +7,7 @@ Vue.use(AclInstaller)
 let initialRole = 'customer'
 
 const userInfo = JSON.parse(localStorage.getItem('user'))
-if (userInfo && userInfo.roles) initialRole = userInfo.roles[0].name
+if (userInfo && userInfo.roles[0]) initialRole = userInfo.roles[0].name
 
 export default new AclCreate({
   initial: initialRole,

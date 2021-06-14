@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,9 @@ class CategoryController extends Controller
             ->performedOn($category)
             ->withProperties($category)
             ->log('Created');
+
+        // add related notification to this operation in system
+        Helper::notify('A new category had been created in the system!', 'Creation', 'category', $category->id, 'success');
         return $category;
     }
 
@@ -93,7 +97,8 @@ class CategoryController extends Controller
             ->performedOn($category)
             ->withProperties($category)
             ->log('Updated');
-
+        // add related notification to this operation in system
+        Helper::notify('A category had been updated in the system!', 'Modification', 'category', $category->id, 'warning');
         return $category;
     }
 
@@ -115,6 +120,8 @@ class CategoryController extends Controller
                 ->performedOn($category)
                 ->withProperties($category)
                 ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('A category removed from system!', 'Deletion', 'category', $category->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {
