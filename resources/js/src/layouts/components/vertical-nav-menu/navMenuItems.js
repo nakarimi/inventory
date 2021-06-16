@@ -132,6 +132,11 @@ export default [
                 url: "/apps/add/transfer",
                 name: "Transfer",
                 slug: "transfer-add",
+            },
+            {
+                url: "/apps/add/order",
+                name: "Order",
+                slug: "order-add",
             }
         ].reverse()
     },

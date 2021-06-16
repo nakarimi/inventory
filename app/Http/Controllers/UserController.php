@@ -176,7 +176,7 @@ class UserController extends Controller
                     ->log('Updated');
 
                 // add related notification to this operation in system
-                Helper::notify('A user removed from system!', 'Modification', 'user', $user->id, 'warning');
+                Helper::notify('A user updated in the system!', 'Modification', 'user', $user->id, 'warning');
                 DB::commit();
                 return ["Success"];
             } catch (Exception $e) {

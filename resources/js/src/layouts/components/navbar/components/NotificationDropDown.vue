@@ -5,14 +5,14 @@
 
   <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
-    <div class="notification-top text-center p-5 bg-primary text-white">
+    <div class="notification-top text-center p-1 bg-primary text-white">
       <h3 class="text-white">{{ unreadNotifications.length }} New</h3>
       <p>Notifications</p>
     </div>
 
     <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl">
       <ul class="bordered-items">
-        <li v-for="ntf in unreadNotifications" :key="ntf.id" class="flex justify-between px-4 py-4 notification cursor-pointer">
+        <li v-for="ntf in unreadNotifications" :key="ntf.id" @click.stop="makeRead(ntf)" :class="`div-with-loading-${ntf.id}`" class="vs-con-loading__container flex justify-between px-4 py-4 notification cursor-pointer">
           <div class="flex items-start">
             <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.color}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
             <div class="mx-2">
@@ -88,11 +88,16 @@ export default {
     loadNotifs() {
       this.axios.get('/api/unread_notifications').then((response) => {
         this.unreadNotifications = response.data
+          this.$vs.loading.close()
       }).catch(() => {})
     },
     makeRead(data) {
+      this.$vs.loading({
+        background: 'rgb(255, 255, 255)',
+        container: `.div-with-loading-${data.id}`,
+      })
       this.axios.post('/api/make_read_notif', data).then((response) => {
-        this.unreadNotifications = response.data
+        this.loadNotifs();
       }).catch(() => {})
     },
     elapsedTime(startTime) {
