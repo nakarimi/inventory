@@ -137,6 +137,9 @@ export default {
     Items,
   },
   created() {
+    if (this.$route.query.order) {
+      this.loadOrderItems()
+    }
     if (this.$route.params.id) {
       this.loadSale(this.$route.params.id)
     }
@@ -145,6 +148,13 @@ export default {
     this.loadBillers()
   },
   methods: {
+    loadOrderItems() {
+      this.axios.get('/api/get/items/orders/' + this.$route.query.order).then((response) => {
+        this.items = response.data
+        this.form.items = JSON.parse(this.items[0].items)
+        this.form.customer_id = this.items[0].customer
+      }).catch(() => {})
+    },
     loadStocks() {
       this.axios.get('/api/stocks').then((response) => {
         this.stocks = response.data

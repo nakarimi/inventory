@@ -20,6 +20,8 @@ export default new AclCreate({
   globalRules: {
     isAdmin: new AclRule('admin').generate(),
     isAccounter: new AclRule('accounter').or('admin').generate(),
+    onlyAccounter: new AclRule('accounter').generate(),
     isCustomer: new AclRule('customer').or('accounter').or('admin').generate(),
+    onlyCustomer: new AclRule('customer').generate(),
   }
 })

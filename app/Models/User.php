@@ -85,12 +85,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
+    // Load data based on user branch
     protected static function boot()
     {
         parent:: boot();
         // Just load users with same branch, except for adminstrator.
-        if(auth()->guard('api')->user() && auth()->guard('api')->user()->id != 2){
+        if(auth()->guard('api')->user() && !auth()->guard('api')->user()->hasRole('admin')){
             $bId = auth()->guard('api')->user()->branch_id;
             static::addGlobalScope('branch_id', function (Builder $builder) use ($bId) {
                 $builder->where('branch_id',  $bId);

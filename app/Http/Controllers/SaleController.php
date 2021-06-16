@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Sale;
 use App\Models\User;
 use App\Models\Stock;
@@ -12,6 +13,8 @@ use App\Models\StockRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+
+use function GuzzleHttp\json_decode;
 
 class SaleController extends Controller
 {
@@ -30,6 +33,18 @@ class SaleController extends Controller
     {
         return Sale::with(['customer', 'stock'])->get();
     }
+    public function storeOrderList()
+    {
+        if(auth()->guard('api')->user()->hasRole('customer')){
+            $orders = DB::table('orders')
+            ->where('user_id', auth()->guard('api')->user()->id)
+            ->get();
+        }else{
+            $orders = DB::table('orders')->get();
+        }
+        return $orders;
+        
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -47,6 +62,17 @@ class SaleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function storeOrder(Request $request){
+        $data = [
+            'title' => $request->title,
+            'note' => $request->note,
+            'items' => json_encode($request->items),
+            'user_id' => auth()->guard('api')->user()->id,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ];
+
+        DB::table('orders')->insert($data);
+    }
     public function store(Request $request)
     {
         $this->validate($request, Sale::rules());
@@ -95,9 +121,12 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function show(Sale $sale)
+    public function storeOrderGetItems($id)
     {
-        //
+        $data = DB::table('orders')->where('id', $id)->get();
+        $data[0]->customer = Customer::where('email', User::find($data[0]->user_id)->email)->first();
+        
+        return $data;
     }
 
     /**
@@ -194,6 +223,25 @@ class SaleController extends Controller
             ->log('Deleted');
             // add related notification to this operation in system
             Helper::notify('A Sale removed from system!' , 'Deletion', 'sale', $sale->id, 'danger');
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
+    }   
+    public function storeOrderDelete($id)
+    {
+        DB::beginTransaction();
+        try {
+            $result = DB::table('orders')->where('id', $id)->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->withProperties($id)
+            ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('An Order removed from system!' , 'Deletion', 'Order', $id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

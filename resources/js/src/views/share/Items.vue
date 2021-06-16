@@ -24,11 +24,11 @@
           <span class="text-danger text-sm absolute">{{ errors.first('amount') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
-          <vs-input name="unit_price" label="Unit Price" v-model="i.unit_price" class="w-full" />
+          <vs-input :disabled="isOrder" name="unit_price" label="Unit Price" v-model="i.unit_price" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('unit_price') }}</span>
         </vs-col>
         <vs-col class="my-1 sm:w-1 md:w-1/2 lg:w-1/6 xl:w-1/6 px-2">
-          <vs-input name="total_price" label="Total Price" :value="i.total_price" :data="items_total" class="w-full" />
+          <vs-input :disabled="isOrder" name="total_price" label="Total Price" :value="i.total_price" :data="items_total" class="w-full" />
           <span class="text-danger text-sm absolute">{{ errors.first('total_price') }}</span>
         </vs-col>
       </vs-row>
@@ -50,7 +50,13 @@ import {
 } from "vee-validate";
 
 export default {
-  props: ['form'],
+  props: {
+    'form': Object,
+    isOrder: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
       units: [{

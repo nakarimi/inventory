@@ -42,13 +42,13 @@ class Transaction extends Model
     {
         parent::boot();
         // Just load users with same branch, except for adminstrator.
-        if(auth()->guard('api')->user()){
+        if(auth()->guard('api')->user() && !auth()->guard('api')->user()->hasRole('admin')){
             $user_ids_in_same_branch = Helper::sameBranchUsers();
             static::addGlobalScope('user_id', function (Builder $builder) use ($user_ids_in_same_branch) {
                 $builder->whereIn('user_id',  $user_ids_in_same_branch);
             });
         }
-    }    
+    }
     
     public function account_id()
     {

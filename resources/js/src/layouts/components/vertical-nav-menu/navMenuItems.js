@@ -3,12 +3,14 @@ export default [
         url: "/",
         name: "Home",
         slug: "home",
-        icon: "HomeIcon"
+        icon: "HomeIcon",
+        rule: 'isAdmin',
     },
     {
         url: null,
         name: "Content List",
         icon: "ListIcon",
+        rule: 'isCustomer',
         submenu: [
             {
                 url: "/apps/list/branch",
@@ -69,6 +71,11 @@ export default [
                 url: "/apps/list/transaction",
                 name: "Transactions",
                 slug: "transaction-list",
+            },
+            {
+                url: "/apps/list/order",
+                name: "Order",
+                slug: "order-list",
             }
         ].reverse()
     },
@@ -77,6 +84,7 @@ export default [
         name: "Add Content",
         icon: "PlusSquareIcon",
         // i18n: 'eCommerce',
+        rule: 'isCustomer',
         submenu: [
             {
                 url: "/apps/add/branch",
@@ -144,7 +152,7 @@ export default [
         url: null,
         name: "Users",
         icon: "UsersIcon",
-        // i18n: 'eCommerce',
+        rule: 'isAccounter',
         submenu: [
             {
                 url: "/user/register",
@@ -164,6 +172,7 @@ export default [
         url: null,
         name: "General",
         icon: "SettingsIcon",
+        rule: 'isAdmin',
         submenu: [
             {
                 url: '/manage/category',

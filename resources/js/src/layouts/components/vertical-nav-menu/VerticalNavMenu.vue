@@ -60,7 +60,7 @@
 
             <!-- Nav-Group -->
             <template v-else>
-              <v-nav-menu-group :key="`group-${index}`" :openHover="openGroupHover" :group="item" :groupIndex="index" :open="isGroupActive(item)" />
+              <v-nav-menu-group v-if="$acl.check(item.rule)" :key="`group-${index}`" :openHover="openGroupHover" :group="item" :groupIndex="index" :open="isGroupActive(item)" />
             </template>
             <!-- /Nav-Group -->
           </template>

@@ -21,6 +21,10 @@ const router = new Router({
         {
           path: '/',
           name: 'home',
+          redirect:
+          JSON.parse(localStorage.getItem('user')) && JSON.parse(localStorage.getItem('user')).roles[0].name === 'customer'
+              ? "/apps/add/order"
+              : null,
           component: () => import('./views/Home.vue'),
           meta: {
             rule: 'isAccounter',
@@ -159,6 +163,19 @@ const router = new Router({
               { title: 'Sales List', active: true }
             ],
             btn_plus_path: '/apps/add/sale',
+          }
+        },
+        {
+          path: '/apps/list/order',
+          name: 'list-order',
+          component: () => import('./views/apps/sale/OrderList.vue'),
+          meta: {
+            rule: 'isCustomer',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Orders List', active: true }
+            ],
+            btn_plus_path: '/apps/add/order',
           }
         },
         {
@@ -313,6 +330,20 @@ const router = new Router({
           }
         },
         {
+          path: '/apps/add/order',
+          name: 'add-order',
+          component: () => import('./views/apps/sale/OrderAdd.vue'),
+          meta: {
+            rule: 'onlyCustomer',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Orders List', url: { name: 'list-order' } },
+              { title: 'Add Order', active: true }
+            ],
+            btn_list_path: '/apps/list/order',
+          }
+        },
+        {
           path: '/apps/add/account',
           name: 'add-account',
           component: () => import('./views/apps/account/AccountAdd.vue'),
@@ -394,20 +425,6 @@ const router = new Router({
               { title: 'Add Transfer', active: true }
             ],
             btn_list_path: '/apps/list/transfer',
-          }
-        },
-        {
-          path: '/apps/add/order',
-          name: 'add-order',
-          component: () => import('./views/apps/order/OrderAdd.vue'),
-          meta: {
-            rule: 'isCustomer',
-            breadcrumb: [
-              { title: 'Home', url: '/' },
-              { title: 'Orders List', url: { name: 'list-order' } },
-              { title: 'Add Order', active: true }
-            ],
-            btn_list_path: '/apps/list/order',
           }
         },
         // End of add routes

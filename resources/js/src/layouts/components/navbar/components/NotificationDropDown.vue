@@ -6,8 +6,8 @@
   <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
     <div class="notification-top text-center p-1 bg-primary text-white">
-      <h3 class="text-white">{{ unreadNotifications.length }} New</h3>
-      <p>Notifications</p>
+      <h3 class="text-white">{{ unreadNotifications.length }} Unread</h3>
+      <p>Notification{{ (unreadNotifications.length > 1) ? 's' : '' }}</p>
     </div>
 
     <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl">
@@ -20,7 +20,7 @@
                 <small>(by: {{ ntf.first_name }} {{ ntf.last_name }})</small>
               </span>
               <small class="font-bold">{{ ntf.msg }}</small>
-              <small class="font-bold text-danger">#{{ ntf.id }}</small>
+              <small class="font-bold text-danger">#{{ ntf.type_id }}</small>
             </div>
           </div>
           <div>
