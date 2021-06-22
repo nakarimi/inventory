@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Sale;
 use App\Models\User;
 use App\Models\Stock;
 use App\Helper\Helper;
+use App\Models\Payment;
 use App\Models\Customer;
 use App\Models\StockRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+
+use function GuzzleHttp\json_decode;
 
 class SaleController extends Controller
 {
@@ -30,6 +34,20 @@ class SaleController extends Controller
         return Sale::with(['customer', 'stock'])->get();
     }
 
+    // Load all orders, based on customer and admin rule.
+    public function storeOrderList()
+    {
+        if(auth()->guard('api')->user()->hasRole('customer')){
+            $orders = DB::table('orders')
+            ->where('user_id', auth()->guard('api')->user()->id)
+            ->get();
+        }else{
+            $orders = DB::table('orders')->get();
+        }
+        return $orders;
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -46,8 +64,20 @@ class SaleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function storeOrder(Request $request){
+        $data = [
+            'title' => $request->title,
+            'note' => $request->note,
+            'items' => json_encode($request->items),
+            'user_id' => auth()->guard('api')->user()->id,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ];
+
+        DB::table('orders')->insert($data);
+    }
     public function store(Request $request)
     {
+        $this->validate($request, Sale::rules());
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -64,10 +94,21 @@ class SaleController extends Controller
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'biller_id');
             Helper::get_id($request, 'customer_id');
-            $result = Sale::create($request->all());
-            Helper::store_items('sale', $result->id, $request);
+            $sale = Sale::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($sale)
+                ->withProperties($sale)
+                ->log('Created');
+            // store related items.
+            Helper::store_items('sale', $sale->id, $request);
+            Helper::notify('New Sale created!' , 'Creation', 'sale', $sale->id);
+
+            // add related notification to this operation in system
+            Helper::notify('A new sale had been created in the system!' , 'Creation', 'sale', $sale->id, 'success');
             DB::commit();
-            return $result;
+            return $sale;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -82,9 +123,12 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function show(Sale $sale)
+    public function storeOrderGetItems($id)
     {
-        //
+        $data = DB::table('orders')->where('id', $id)->get();
+        $data[0]->customer = Customer::where('email', User::find($data[0]->user_id)->email)->first();
+        
+        return $data;
     }
 
     /**
@@ -107,7 +151,7 @@ class SaleController extends Controller
         // Find Items based on type and it.
         $sale['items'] = StockRecord::where('type', 'sale')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
-            ->select('decrement AS ammount', 'stock_records.*')
+            ->select('decrement AS amount', 'stock_records.*')
             ->get();
         return $sale;
     }
@@ -121,6 +165,7 @@ class SaleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, Sale::rules($id));
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -142,7 +187,15 @@ class SaleController extends Controller
             // Load the main sale object and update it with new data.
             $sale = Sale::find($id);
             $sale->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($sale)
+                ->withProperties($sale)
+                ->log('Updated');
             Helper::store_items('sale', $id, $request);
+            // add related notification to this operation in system
+            Helper::notify('A Sale updated in system!' , 'Modification', 'sale', $sale->id, 'warning');
             DB::commit();
             return $sale;
         } catch (Exception $e) {
@@ -164,11 +217,52 @@ class SaleController extends Controller
         DB::beginTransaction();
         try {
             $result = $sale->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($sale)
+            ->withProperties($sale)
+            ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('A Sale removed from system!' , 'Deletion', 'sale', $sale->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
         }
+    }   
+    public function storeOrderDelete($id)
+    {
+        DB::beginTransaction();
+        try {
+            $result = DB::table('orders')->where('id', $id)->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->withProperties($id)
+            ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('An Order removed from system!' , 'Deletion', 'Order', $id, 'danger');
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
+    }    
+    /**
+     * Calculate the paid amount for the sale or purchase.
+     *
+     * @param  mixed $type
+     * @param  mixed $id
+     * @return void
+     */
+    public function sale_max_value($type, $id){
+        $paid = 0;
+        foreach (Payment::where($type .'_id', $id)->get() as $key => $pay) {
+            $paid += $pay->amount;
+        }
+        return $paid;
     }
 }

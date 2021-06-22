@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Stock;
 use App\Helper\Helper;
 use App\Models\Transfer;
@@ -48,24 +49,34 @@ class TransferController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Transfer::rules());
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'source_stock');
             Helper::get_id($request, 'target_stock');
-            $request['ammount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
-            $result = Transfer::create($request->all());
+            $request['amount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
+            $transfer = Transfer::create($request->all());
 
-            // Add all items to the stock from the source stock.
+            // Add all items to the stock from the target stock.
             $request['stock_id'] = (isset($request['target_stock']) && $request['target_stock'] != null) ? $request['target_stock'] : null;
-            Helper::store_items('in-transfer', $result->id, $request, true);
+            Helper::store_items('in-transfer', $transfer->id, $request, true);
 
             // decrement all items from source stock.
             $request['stock_id'] = (isset($request['source_stock']) && $request['source_stock'] != null) ? $request['source_stock'] : null;
-            Helper::store_items('out-transfer', $result->id, $request);
+            Helper::store_items('out-transfer', $transfer->id, $request);
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($transfer)
+                ->withProperties($transfer)
+                ->log('Created');
+            
+            // add related notification to this operation in system
+            Helper::notify('A new transfer had been created in the system!' , 'Creation', 'transfer', $transfer->id, 'success');
             DB::commit();
-            return $result;
+            return $transfer;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -98,7 +109,7 @@ class TransferController extends Controller
         // Find Items based on type and it.
         $data['items'] = StockRecord::where('type', 'out-transfer')->where('type_id', $id)
             ->with(['category_id', 'item_id'])
-            ->select('decrement AS ammount', 'stock_records.*')
+            ->select('decrement AS amount', 'stock_records.*')
             ->get();
         return $data;
     }
@@ -112,13 +123,14 @@ class TransferController extends Controller
      */
     public function update(Request $request, Transfer $transfer)
     {
+        $this->validate($request, Transfer::rules($transfer->id));
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'source_stock');
             Helper::get_id($request, 'target_stock');
-            $request['ammount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
+            $request['amount'] = (isset($request['total']) && $request['total'] != null) ? $request['total'] : null;
             $result = $transfer->update($request->all());
 
             // Add all items to the stock from the source stock.
@@ -128,6 +140,16 @@ class TransferController extends Controller
             // decrement all items from source stock.
             $request['stock_id'] = (isset($request['source_stock']) && $request['source_stock'] != null) ? $request['source_stock'] : null;
             Helper::store_items('out-transfer', $transfer->id, $request);
+
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($transfer)
+                ->withProperties($transfer)
+                ->log('Updated');
+
+            // add related notification to this operation in system
+            Helper::notify('A transfer had been updated in the system!' , 'Modification', 'transfer', $transfer->id, 'warning');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -149,6 +171,15 @@ class TransferController extends Controller
         DB::beginTransaction();
         try {
             $result = $transfer->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($transfer)
+                ->withProperties($transfer)
+                ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A transfer removed from system!' , 'Deletion', 'transfer', $transfer->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

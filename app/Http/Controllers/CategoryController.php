@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,11 +42,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'slug' => 'required|unique:categories',
-            'name' => 'required',
-        ]);
-        return Category::create($request->all());
+        $this->validate($request, Category::rules());
+        $category = Category::create($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($category)
+            ->withProperties($category)
+            ->log('Created');
+
+        // add related notification to this operation in system
+        Helper::notify('A new category had been created in the system!', 'Creation', 'category', $category->id, 'success');
+        return $category;
     }
 
     /**
@@ -79,12 +87,19 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'slug' => 'required|unique:categories',
-            'name' => 'required',
-        ]);
+        $this->validate($request, Category::rules($id));
+
         $category = Category::find($id);
-        return $category->update($request->all());
+        $category->update($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($category)
+            ->withProperties($category)
+            ->log('Updated');
+        // add related notification to this operation in system
+        Helper::notify('A category had been updated in the system!', 'Modification', 'category', $category->id, 'warning');
+        return $category;
     }
 
     /**
@@ -99,6 +114,14 @@ class CategoryController extends Controller
         DB::beginTransaction();
         try {
             $result = $category->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($category)
+                ->withProperties($category)
+                ->log('Deleted');
+            // add related notification to this operation in system
+            Helper::notify('A category removed from system!', 'Deletion', 'category', $category->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

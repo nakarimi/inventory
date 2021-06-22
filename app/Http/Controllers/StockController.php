@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -41,21 +42,25 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'code' => 'required|unique:stocks',
-            'name' => 'required',
-            'manager' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Stock::rules());
         DB::beginTransaction();
         try {
-        $result = Stock::create($request->all());
-        DB::commit();
-        return $result;
-    } catch (Exception $e) {
-        DB::rollback();
-        return Response::json($e, 400);
-    }
+            $stock = Stock::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($stock)
+                ->withProperties($stock)
+                ->log('Created');
+
+            // add related notification to this operation in system
+            Helper::notify('A new stock had been created in the system!' , 'Creation', 'stock', $stock->id, 'success');
+            DB::commit();
+            return $stock;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -77,7 +82,7 @@ class StockController extends Controller
      */
     public function edit(Stock $stock)
     {
-        //
+        return $stock;
     }
 
     /**
@@ -89,7 +94,26 @@ class StockController extends Controller
      */
     public function update(Request $request, Stock $stock)
     {
-        //
+        $this->validate($request, Stock::rules($stock->id));
+        DB::beginTransaction();
+        try {
+            unset($request->code);
+            $result = $stock->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($stock)
+                ->withProperties($stock)
+                ->log('Updated');
+
+            // add related notification to this operation in system
+            Helper::notify('A stock had been updated in the system!' , 'Modification', 'stock', $stock->id, 'warning');
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -103,6 +127,15 @@ class StockController extends Controller
         DB::beginTransaction();
         try {
             $result = $stock->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($stock)
+                ->withProperties($stock)
+                ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('An stock removed from system!' , 'Deletion', 'stock', $stock->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

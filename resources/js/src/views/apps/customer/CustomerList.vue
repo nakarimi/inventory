@@ -1,21 +1,27 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="customers" stripe>
+    <vs-table ref="table" :data="customers" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Name</vs-th>
-        <vs-th>Email</vs-th>
-        <vs-th>Phone</vs-th>
-        <vs-th>Address</vs-th>
-        <vs-th>Website</vs-th>
-        <vs-th>Logo</vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="">Logo</vs-th>
+        <vs-th sort-key="name">Name</vs-th>
+        <vs-th sort-key="email">Email</vs-th>
+        <vs-th sort-key="phone">Phone</vs-th>
+        <vs-th sort-key="address">Address</vs-th>
+        <vs-th sort-key="website">Website</vs-th>
+        <vs-th sort-key=""></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
+            </vs-td>
+            <vs-td>
+              <p>
+                <vs-avatar size="40px" :src="`/img/customer/${(tr.logo) ? tr.logo : 'default.jpg'}`" />
+              </p>
             </vs-td>
             <vs-td>
               <p>{{ tr.name }}</p>
@@ -32,10 +38,8 @@
             <vs-td>
               <p>{{ tr.website }}</p>
             </vs-td>
-            <vs-td>
-              <p>
-                <vs-avatar size="40px" :src="`/img/customer/${(tr.logo) ? tr.logo : 'default.jpg'}`" />
-              </p>
+            <vs-td v-if="tr">
+              <action-buttons :parent_data.sync="customers" entity="customer" entity_plural="customers" :id="tr.id" ></action-buttons>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -46,12 +50,15 @@
 </template>
 
 <script>
+import ActionButtons from '../../share/ActionButtons'
+
 export default {
   data() {
     return {
       customers: [],
     }
   },
+  components:{ActionButtons},
   created() {
     this.loadCustomers()
   },

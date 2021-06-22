@@ -16,7 +16,7 @@ class CreateFixPaymentsTable extends Migration
         Schema::create('fix_payments', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->decimal('ammount', 10, 3);
+            $table->decimal('amount', 10, 3);
             $table->string('receiver');
             $table->unsignedBigInteger('account_id');
             $table->string('date');

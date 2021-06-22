@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('position')->nullable();
             $table->string('email')->unique();
             $table->string('phone');
+            $table->string('status')->default('Pending');
             $table->text('address');
             $table->string('password');
             $table->timestamp('deleted_at')->nullable();

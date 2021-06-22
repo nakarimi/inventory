@@ -7,47 +7,52 @@
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-2/3 xl:w-2/3 p-2">
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-full xl:w-full p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="title" label="Payment Title" v-model="form.title" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('title') }}</span>
+              <vs-input name="title" label="Payment Title" v-model="form.title" @input="form.errors.errors.title = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="title"></has-error>
+
             </vs-col>
 
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Account</small></label>
-              <v-select label="name" name="account_id" v-validate="'required'" v-model="form.account_id" :options="accounts" />
-              <span class="text-danger text-sm absolute">{{ errors.first('account_id') }}</span>
+              <v-select label="name" name="account_id" v-model="form.account_id" @input="form.errors.errors.account_id = []" :options="accounts" />
+              <has-error class="text-danger text-sm" :form="form" field="account_id"></has-error>
+
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Date</small></label>
-              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime>
-              <span class="text-danger text-sm absolute">{{ errors.first('date') }}</span>
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date" @input="form.errors.errors.date"></datetime>
+              <has-error class="text-danger text-sm" :form="form" field="date"></has-error>
+
             </vs-col>
 
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="ammount" label="Ammount" v-model="form.ammount" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('ammount') }}</span>
-            </vs-col>
-            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="receiver" label="Paid To" v-model="form.receiver" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('receiver') }}</span>
+              <vs-input type="number" name="amount" label="amount" v-model="form.amount" @input="form.errors.errors.amount = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="amount"></has-error>
+
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Type</small></label>
-              <v-select name="type" v-validate="'required'" v-model="form.type" :options="['In', 'Out']" />
-              <span class="text-danger text-sm absolute">{{ errors.first('type') }}</span>
+              <v-select name="type" v-model="form.type" :clearable="false" @input="form.errors.errors.type = []" :options="['In', 'Out']" />
+              <has-error class="text-danger text-sm" :form="form" field="type"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="approval_code" label="Approval Code" v-model="form.approval_code" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('approval_code') }}</span>
+              <vs-input name="receiver" :label="`Paid ${(form.type == 'In') ? 'From' : 'To'}`" v-model="form.receiver" @input="form.errors.errors.receiver = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="receiver"></has-error>
+
+            </vs-col>
+            <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
+              <vs-input name="approval_code" label="Approval Code" v-model="form.approval_code" @input="form.errors.errors.approval_code = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="approval_code"></has-error>
+
             </vs-col>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
             <label for=""><small>Note</small></label>
-            <vs-textarea rows="6" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
+            <vs-textarea rows="6" name="note" v-model="form.note" @input="form.errors.errors.note = []" class="w-full" />
             <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
           </vs-col>
         </vs-row>
-        <form-error :form="form"></form-error>
-        <vs-button class="float-right mt-6" @click="storePayment" :disabled="!validateForm">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storePayment" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>
@@ -55,7 +60,6 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 import {
   Datetime
@@ -65,7 +69,7 @@ export default {
   data() {
     return {
       form: new Form({
-        ammount: '',
+        amount: '',
         receiver: '',
         title: '',
         type: '',
@@ -77,17 +81,8 @@ export default {
     }
   },
   components: {
-    FormError,
     datetime: Datetime,
     "v-select": vSelect,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      // return this.form.name !== '' &&
-      //   this.form.code !== '' &&
-      //   this.form.phone !== ''
-    }
   },
   created() {
     if (this.$route.params.id) {
@@ -129,16 +124,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

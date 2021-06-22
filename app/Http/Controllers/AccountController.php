@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,10 @@ use Illuminate\Support\Facades\Response;
 
 class AccountController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $request['user_id'] = auth()->guard('api')->user()->id;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -37,9 +42,20 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Account::rules());
+
         $request['account_user_id'] = $request['account_user_id']['id'];
-        $request['user_id'] = auth()->guard('api')->user()->id;
-        return Account::create($request->all());
+        $account = Account::create($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($account)
+            ->withProperties($account)
+            ->log('Created');
+        // add related notification to this operation in system
+        Helper::notify('A new account had been created in the system!' , 'Creation', 'account', $account->id, 'success');
+
+        return $account;
     }
 
     /**
@@ -73,7 +89,18 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $this->validate($request, Account::rules($account->id));
+        $request['account_user_id'] = $request['account_user_id']['id'];
+        $account->update($request->all());
+        // Log this activity to the system by user and entity data.
+        activity()
+            ->causedBy(auth()->guard('api')->user())
+            ->performedOn($account)
+            ->withProperties($account)
+            ->log('Updated');
+            // add related notification to this operation in system
+            Helper::notify('An account had been updated in the system!' , 'Modification', 'account', $account->id, 'warning');
+        return $account;
     }
 
     /**
@@ -87,12 +114,19 @@ class AccountController extends Controller
         DB::beginTransaction();
         try {
             $result = $account->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($account)
+                ->withProperties($account)
+                ->log('Deleted');
             DB::commit();
+            // add related notification to this operation in system
+            Helper::notify('An account removed from system!' , 'Deletion', 'account', $account->id, 'danger');
             return $result;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
         }
-
     }
 }

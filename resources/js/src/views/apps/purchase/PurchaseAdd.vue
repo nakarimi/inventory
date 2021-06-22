@@ -7,56 +7,61 @@
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Date</small></label>
-            <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime>
-            <span class="text-danger text-sm absolute">{{ errors.first('date') }}</span>
+            <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date" @input="form.errors.errors.date = []"></datetime>
+            <has-error class="text-danger text-sm" :form="form" field="date"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
-            <vs-input v-validate="'required'" data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('reference_no') }}</span>
+            <vs-input name="reference_no" label="Reference No" v-model="form.reference_no" @input="form.errors.errors.reference_no = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="reference_no"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Vendor</small></label>
-            <v-select label="name" name="vendor_id" v-validate="'required'" v-model="form.vendor_id" :options="vendors" />
-            <span class="text-danger text-sm absolute">{{ errors.first('vendor_id') }}</span>
+            <v-select label="name" name="vendor_id" v-model="form.vendor_id" @input="form.errors.errors.vendor_id = []" :options="vendors" />
+            <has-error class="text-danger text-sm" :form="form" field="vendor_id"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Stock</small></label>
-            <v-select label="name" name="stock_id" v-validate="'required'" v-model="form.stock_id" :options="stocks" />
-            <span class="text-danger text-sm absolute">{{ errors.first('stock_id') }}</span>
+            <v-select label="name" name="stock_id" v-model="form.stock_id" @input="form.errors.errors.stock_id = []" :options="stocks" />
+            <has-error class="text-danger text-sm" :form="form" field="stock_id"></has-error>
           </vs-col>
+          <!-- Import the items component from another component -->
+          <label for="" class="mx-3"><small>ADD FIX ITEMS</small></label>
+          <vs-switch color="success" v-model="form.item_fix">
+            <span slot="common">Common</span>
+            <span slot="fix">Fix</span>
+          </vs-switch>
         </vs-row>
 
-        <!-- Import the items component from another component -->
-        <items :form="form" />
+        <items :form="form" v-if="!form.item_fix" />
+        <rare-items :form="form" v-if="form.item_fix" />
 
         <vs-row>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <label for=""><small>Note</small></label>
-            <vs-textarea rows="6" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
+            <vs-textarea rows="6" name="note" v-model="form.note" @input="form.errors.errors.note = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="note"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="discount" label="Discount" v-model="form.discount" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('discount') }}</span>
+              <vs-input type="number" name="discount" label="Discount" v-model="form.discount" @input="form.errors.errors.discount = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="discount"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total_tax" label="Total Tax" v-model="form.total_tax" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('total_tax') }}</span>
+              <vs-input type="number" name="total_tax" label="Total Tax" v-model="form.total_tax" @input="form.errors.errors.total_tax = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="total_tax"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total" label="Total" v-model="form.total" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('total') }}</span>
+              <vs-input type="number" name="total" label="Total" v-model="form.total" @input="form.errors.errors.total = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="total"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
               <label for=""><small>Due Date</small></label>
-              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date"></datetime>
-              <span class="text-danger text-sm absolute">{{ errors.first('due_date') }}</span>
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date" @input="form.errors.errors.due_date = []"></datetime>
+              <has-error class="text-danger text-sm" :form="form" field="due_date"></has-error>
             </vs-col>
           </vs-col>
         </vs-row>
-        <form-error :form="form"></form-error>
-        <vs-button class="float-right mt-6" @click="storePurchase" :disabled="!validateForm">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storePurchase" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>
@@ -64,12 +69,12 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 import {
   Datetime
 } from 'vue-datetime';
 import Items from '../../share/Items'
+import RareItems from '../../share/RareItems'
 
 export default {
   data() {
@@ -79,10 +84,18 @@ export default {
           category_id: "",
           item_id: "",
           unit_id: "",
-          ammount: "0",
+          amount: "0",
           unit_price: "0",
           total_price: "0",
-        }, ],
+        },],
+        fix_items: [{
+          item: "",
+          unit: "",
+          amount: "0",
+          unit_price: "0",
+          total_price: "0",
+        },],
+        item_fix: false,
         reference_no: '',
         date: '',
         vendor_id: '',
@@ -101,18 +114,10 @@ export default {
     }
   },
   components: {
-    FormError,
     datetime: Datetime,
     "v-select": vSelect,
     Items,
-  },
-  computed: {
-    validateForm() {
-      return true;
-      // return this.form.name !== '' &&
-      //   this.form.code !== '' &&
-      //   this.form.phone !== ''
-    }
+    RareItems,
   },
   created() {
     if (this.$route.params.id) {
@@ -122,6 +127,9 @@ export default {
     this.loadVendors()
   },
   methods: {
+    change_item() {
+      console.log(this.form);
+    },
     loadStocks() {
       this.axios.get('/api/stocks').then((response) => {
         this.stocks = response.data
@@ -132,7 +140,7 @@ export default {
         this.form.fill(response.data);
       }).catch(() => {})
     },
-    
+
     loadVendors() {
       this.axios.get('/api/vendors').then((response) => {
         this.vendors = response.data
@@ -160,16 +168,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }

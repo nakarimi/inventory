@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,23 +43,22 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required|email|unique:customers',
-            'name' => 'required',
-            'phone' => 'required|min:11|numeric',
-        ]);
+        $this->validate($request, Vendor::rules(), Vendor::messages());
         DB::beginTransaction();
         try {
-            $photoname = NULL;
-            if ($request->image != null) {
+            Helper::file_upload_update($request, 'logo', null, 'product');
+            $vendor = Vendor::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($vendor)
+                ->withProperties($vendor)
+                ->log('Created');
 
-                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                \Image::make($request->image)->save(public_path('img/vendor/') . $photoname);
-                $request->merge(['logo' => $photoname]);
-            }
-            $result = Vendor::create($request->all());
+            // add related notification to this operation in system
+            Helper::notify('A new vendor had been created in the system!' , 'Creation', 'vendor', $vendor->id, 'success');
             DB::commit();
-            return $result;
+            return $vendor;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
@@ -84,7 +84,7 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor)
     {
-        //
+        return $vendor;
     }
 
     /**
@@ -96,7 +96,26 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        //
+        $this->validate($request, Vendor::rules($vendor->id), Vendor::messages());
+        DB::beginTransaction();
+        try {
+            Helper::file_upload_update($request, 'logo', $vendor, 'vendor');
+            unset($request->email);
+            $result = $vendor->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($vendor)
+                ->withProperties($vendor)
+                ->log('Updated');
+            // add related notification to this operation in system
+            Helper::notify('A vendor had been updated in the system!' , 'Modification', 'vendor', $vendor->id, 'warning');
+            DB::commit();
+            return $result;
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -110,6 +129,15 @@ class VendorController extends Controller
         DB::beginTransaction();
         try {
             $result = $vendor->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($vendor)
+                ->withProperties($vendor)
+                ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A vendor removed from system!' , 'Deletion', 'vendor', $vendor->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

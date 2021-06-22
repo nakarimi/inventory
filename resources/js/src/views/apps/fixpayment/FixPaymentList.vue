@@ -1,21 +1,21 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="fixpayments" stripe>
+    <vs-table ref="table" :data="fixpayments" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Title</vs-th>
-        <vs-th>Account</vs-th>
-        <vs-th>Ammount</vs-th>
-        <vs-th>Paid To</vs-th>
-        <vs-th>Date</vs-th>
-        <vs-th></vs-th>
+        <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="title">Title</vs-th>
+        <vs-th sort-key="account_id">Account</vs-th>
+        <vs-th sort-key="amount">amount</vs-th>
+        <vs-th sort-key="receiver">Paid To</vs-th>
+        <vs-th sort-key="created_at">Date</vs-th>
+        <vs-th sort-key=""></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.title }}</p>
@@ -24,7 +24,7 @@
               <p>{{ tr.account_id.name }}</p>
             </vs-td>
             <vs-td>
-              <p>{{ tr.ammount }}</p>
+              <p>{{ tr.amount }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.receiver }}</p>
@@ -32,13 +32,8 @@
             <vs-td>
               <p>{{ tr.created_at | formatDate }}</p>
             </vs-td>
-            <vs-td>
-              <span class="cursor-pointer" @click="$router.push(`/apps/edit/fixpayment/${tr.id}`).catch(() => {})">
-                <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
-              </span>
-              <span class="cursor-pointer hover:text-danger" @click="deleteEntity(tr.id)">
-                <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
-              </span>
+            <vs-td v-if="tr">
+              <action-buttons :parent_data.sync="fixpayments" entity="fixpayment" entity_plural="fixpayments" :id="tr.id" ></action-buttons>
             </vs-td>
           </vs-tr>
         </tbody>
@@ -49,7 +44,9 @@
 </template>
 
 <script>
+import ActionButtons from '../../share/ActionButtons.vue'
 export default {
+  components: { ActionButtons },
   data() {
     return {
       fixpayments: [],

@@ -49,6 +49,7 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Purchase::rules());
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -63,10 +64,26 @@ class PurchaseController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'vendor_id');
-            $result = Purchase::create($request->all());
-            Helper::store_items('purchase', $result->id, $request, true);
+            $data = $request->all();
+            unset($data['item_fix']);
+            $purchase = Purchase::create($data);
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($purchase)
+                ->withProperties($purchase)
+                ->log('Created');
+            if ($request->item_fix) {
+                Helper::store_fix_items('purchase', $purchase->id, $request, true);
+            } else {
+                Helper::store_items('purchase', $purchase->id, $request, true);
+            }
+
+            // add related notification to this operation in system
+            Helper::notify('A new purchase had been created in the system!' , 'Creation', 'purchase', $purchase->id, 'success');
+
             DB::commit();
-            return $result;
+            return $purchase;
         } catch (Exception $e) {
 
             // Rollback the invalid changes on database. and throw the error to API.
@@ -100,12 +117,35 @@ class PurchaseController extends Controller
         // These should be object to be fill by default in select list.
         $purchase['vendor_id'] = Vendor::find($purchase['vendor_id']);
         $purchase['stock_id'] = Stock::find($purchase['stock_id']);
-        
-        // Find Items based on type and it.
-        $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
-            ->with(['category_id', 'item_id'])
-            ->select('increment AS ammount', 'stock_records.*')
-            ->get();
+        $purchase['item_fix'] = DB::table('item_records')->where('type', 'purchase')->where('type_id', $id)->get();
+        if (count($purchase['item_fix']) > 0) {
+            $purchase['item_fix'] = true;
+            $purchase['fix_items'] = DB::table('item_records')->where('type', 'purchase')->where('type_id', $id)
+                ->select('increment AS amount', 'item_records.*')
+                ->get();
+            $purchase['items'] = [[
+                'category_id' => "",
+                'item_id' => "",
+                'unit_id' => "",
+                'amount' => "0",
+                'unit_price' => "0",
+                'total_price' => "0",
+            ]];
+        } else {
+            $purchase['item_fix'] = false;
+            // Find Items based on type and it.
+            $purchase['items'] = StockRecord::where('type', 'purchase')->where('type_id', $id)
+                ->with(['category_id', 'item_id'])
+                ->select('increment AS amount', 'stock_records.*')
+                ->get();
+            $purchase['fix_items'] = [[
+                'item' => "",
+                'unit' => "",
+                'amount' => "0",
+                'unit_price' => "0",
+                'total_price' => "0",
+            ]];
+        }
 
         return $purchase;
     }
@@ -119,6 +159,8 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
+        $this->validate($request, Purchase::rules($purchase->id));
+
         // Using transaction that if process failed the invalid data will be cleared.
         DB::beginTransaction();
         try {
@@ -133,8 +175,23 @@ class PurchaseController extends Controller
             // Get Id From object as the object can't be stored in DB.
             Helper::get_id($request, 'stock_id');
             Helper::get_id($request, 'vendor_id');
-            $purchase->create($request->all());
-            Helper::store_items('purchase', $purchase->id, $request, true);
+            $data = $request->all();
+            unset($data['item_fix']);
+            $purchase->update($data);
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($purchase)
+                ->withProperties($purchase)
+                ->log('Updated');
+            if ($request->item_fix) {
+                Helper::store_fix_items('purchase', $purchase->id, $request, true);
+            } else {
+                Helper::store_items('purchase', $purchase->id, $request, true);
+            }
+
+            // add related notification to this operation in system
+            Helper::notify('A purchase had been updated in the system!' , 'Modification', 'purchase', $purchase->id, 'warning');
             DB::commit();
             return $purchase;
         } catch (Exception $e) {
@@ -156,6 +213,15 @@ class PurchaseController extends Controller
         DB::beginTransaction();
         try {
             $result = $purchase->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($purchase)
+                ->withProperties($purchase)
+                ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A purchase removed from system!', 'Deletion', 'purchase', $purchase->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

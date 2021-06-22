@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Helper\Helper;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,25 +44,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, Product::rules());
         $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
         $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
-        // $this->validate($request,[
-        //     'code' => 'required|code|unique:products',
-        //     'name' => 'required',
-        //     'cost' => 'required',
-        // ]);
         DB::beginTransaction();
         try {
-            $photoname = NULL;
-            if ($request->image != null) {
+            Helper::file_upload_update($request, 'image', null, 'product');
+            // Product being create.
+            $product = Product::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($product)
+                ->withProperties($product)
+                ->log('Created');
 
-                $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                \Image::make($request->image)->save(public_path('img/product/') . $photoname);
-                $request->merge(['image' => $photoname]);
-            }
-            $result = Product::create($request->all());
+            // add related notification to this operation in system
+            Helper::notify('A new product had been created in the system!' , 'Creation', 'product', $product->id, 'success');
             DB::commit();
-            return $result;
+            return $product;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
@@ -88,6 +89,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $data = Product::with('category')->with('stock')->where('id', $id)->first();
+
+        // Add exist object for select option.
         $data->stock_id = Stock::find($data['stock_id']);
         $data['category_id'] = $data['category'];
         return $data;
@@ -102,25 +105,25 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Extract the id from objects.
         $request['category_id'] = (isset($request['category_id']) && $request['category_id'] != null) ? $request['category_id']['id'] : null;
         $request['stock_id'] = isset($request['stock_id']) && $request['stock_id'] != null ? $request['stock_id']['id'] : null;
-        // $this->validate($request,[
-        //     'code' => 'required|code|unique:products',
-        //     'name' => 'required',
-        //     'cost' => 'required',
-        // ]);
+        $this->validate($request, Product::rules($id));
+
         DB::beginTransaction();
         try {
-            $photoname = NULL;
             $product = Product::findOrFail($id);
-            if (!($product->image == $request->image)) {
-                if ($request->image != null) {
-                    $photoname = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                    \Image::make($request->image)->save(public_path('img/product/') . $photoname);
-                    $request->merge(['image' => $photoname]);
-                }
-            }
+            Helper::file_upload_update($request, 'image', $product, 'product');
             $result = $product->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($product)
+                ->withProperties($product)
+                ->log('Updated');
+
+            // add related notification to this operation in system
+            Helper::notify('A product had been updated in the system!' , 'Modification', 'product', $product->id, 'warning');
             DB::commit();
             return $result;
         } catch (Exception $e) {
@@ -140,12 +143,21 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $result = $product->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($product)
+                ->withProperties($product)
+                ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A product removed from system!' , 'Deletion', 'product', $product->id, 'danger');
+
             DB::commit();
             return $result;
         } catch (Exception $e) {
             DB::rollback();
             return Response::json($e, 400);
         }
-
     }
 }

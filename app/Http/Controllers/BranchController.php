@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,24 +39,19 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-        $this->validate($request,[
-            'code' => 'required|unique:branches',
-            'name' => 'required',
-            'address' => 'required',
-        ]);
-        // $customMessages = [
-        //     'customer.required' => 'Select a Customer first!.',
-        //     'customer_id.integer' => 'Invalid Customer!.'
-        // ];
-        // $validator = Validator::make($request, $rules);
-        // if ($validator->fails()) {
-        //     return $validator;
-        // }
+        $this->validate($request, Branch::rules());
         DB::beginTransaction();
         try {
-            Branch::create($request->all());
-            DB::commit();
+            $branch = Branch::create($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($branch)
+                ->withProperties($branch)
+                ->log('Created');
+                DB::commit();
+            // add related notification to this operation in system
+            Helper::notify('A new branch had been created in the system!' , 'Creation', 'branch', $branch->id, 'success');
             return ['msg' => 'Branch successfully inserted'];
         } catch (Exception $e) {
             DB::rollback();
@@ -82,7 +78,7 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
-        //
+        return $branch;
     }
 
     /**
@@ -94,7 +90,26 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
-        //
+        $this->validate($request, Branch::rules($branch->id));
+        DB::beginTransaction();
+        try {
+            $branch->update($request->all());
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($branch)
+                ->withProperties($branch->getChanges())
+                ->log('Updated');
+            // add related notification to this operation in system
+            Helper::notify('A branch had been updated in the system!' , 'Modification', 'branch', $branch->id, 'warning');
+            if ($branch->getChanges()) {
+                DB::commit();
+            }
+            return ['msg' => 'Branch successfully updated'];
+        } catch (Exception $e) {
+            DB::rollback();
+            return Response::json($e, 400);
+        }
     }
 
     /**
@@ -107,7 +122,17 @@ class BranchController extends Controller
     {
         DB::beginTransaction();
         try {
+
             $result = $branch->delete();
+            // Log this activity to the system by user and entity data.
+            activity()
+                ->causedBy(auth()->guard('api')->user())
+                ->performedOn($branch)
+                ->withProperties($branch)
+                ->log('Deleted');
+
+            // add related notification to this operation in system
+            Helper::notify('A Branch removed from system!' , 'Deletion', 'branch', $branch->id, 'danger');
             DB::commit();
             return $result;
         } catch (Exception $e) {

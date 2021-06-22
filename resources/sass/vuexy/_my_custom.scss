@@ -52,3 +52,23 @@ d.vs-icon {
 a.my-text-black{
   color: #626262;
 }
+.rectangle .vs-avatar--con-img{
+    border-radius: 5px !important;
+} 
+th .sort-th, th .vs-table-text{
+    font-size: 1.2rem !important;
+}
+.sort-th .th-sort-icon {
+    font-size: 1.5rem !important;
+}
+.vs--single .vs__selected{
+    white-space: nowrap;
+    max-width: 75%;
+    overflow: hidden;
+}
+.con-vs-dropdown--menu{
+    z-index: 99999 !important;
+}
+.v-nav-menu .notif .feather-icon{
+    margin-right: 0px !important;
+}

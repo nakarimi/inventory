@@ -62,15 +62,16 @@ export default {
       })
     }
   },
-  created() {    
+  created() {
     this.checkLogin();
   },
   methods: {
     checkLogin() {
       if (localStorage.getItem('token')) {
-        this.$router.push({
-          path: '/'
-        });
+        setTimeout(() => {
+          this.$router.go(0);
+          window.location.href = '/';
+        }, 500);
         this.$vs.notify({
           title: 'You have access to the system!',
           color: 'success',
@@ -93,7 +94,11 @@ export default {
             icon: 'icon-check',
             position: 'top-right'
           })
-          window.location.replace("/");
+          setTimeout(() => {
+            this.$router.go(0);
+            window.location.href = '/';
+          }, 500);
+
         })
         .catch(() => {
           this.$vs.notify({
@@ -113,7 +118,7 @@ export default {
   },
   computed: {
     validateForm() {
-      return !this.errors.any() && this.form.email !== '' && this.form.password !== '' 
+      return !this.errors.any() && this.form.email !== '' && this.form.password !== ''
     }
   },
 }

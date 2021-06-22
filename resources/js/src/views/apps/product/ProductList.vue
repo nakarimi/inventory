@@ -1,23 +1,33 @@
 <template lang="">
 <div>
   <vx-card>
-    <vs-table ref="table" :data="products" stripe>
+
+    
+
+    <vs-table ref="table" :data="products" search stripe pagination :max-items="10">
       <template slot="thead">
-        <vs-th>#</vs-th>
-        <vs-th>Name</vs-th>
-        <vs-th>Code</vs-th>
-        <vs-th>Quantity</vs-th>
-        <vs-th>Price</vs-th>
-        <vs-th>Stock</vs-th>
-        <vs-th>Category</vs-th>
-        <vs-th></vs-th>
+        <vs-th vs-th:sort="true">#</vs-th>
+        <vs-th sort-key="">Photo</vs-th>
+        <vs-th sort-key="name">Name</vs-th>
+        <vs-th sort-key="code">Code</vs-th>
+        <vs-th sort-key="quantity">Quantity</vs-th>
+        <vs-th sort-key="price">Price</vs-th>
+        <vs-th sort-key="stock">Stock</vs-th>
+        <vs-th sort-key="category">Category</vs-th>
+        <vs-th sort-key=""></vs-th>
       </template>
       <template slot-scope="{data}">
         <tbody>
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
-              <p @click.stop="viewData(tr)" class="cursor-pointer">{{i + 1 }}</p>
+              <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
             </vs-td>
+            <vs-td>
+              <p>
+                <vs-avatar class="rectangle" size="80px" :src="`/img/product/${(tr.image) ? tr.image : 'default.jpg'}`" />
+              </p>
+            </vs-td>
+
             <vs-td>
               <p>{{ tr.name }}</p>
             </vs-td>
@@ -80,7 +90,6 @@ export default {
                 text: "Product removed from system successfully!",
                 icon: 'success',
               })
-
               // Reload the data to show valid information to the table.
               this.loadProducts();
             })

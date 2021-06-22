@@ -9,28 +9,28 @@
           <vs-col class="sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4">
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
               <label for=""><small>Date</small></label>
-              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date"></datetime>
-              <span class="text-danger text-sm absolute">{{ errors.first('date') }}</span>
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="date" label="Date" v-model="form.date" @input="form.errors.errors.date = []"></datetime>
+              <has-error class="text-danger text-sm" :form="form" field="date"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="reference_no" label="Reference No" v-model="form.reference_no" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('reference_no') }}</span>
+              <vs-input name="reference_no" label="Reference No" v-model="form.reference_no" @input="form.errors.errors.reference_no = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="reference_no"></has-error>
             </vs-col>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Customer</small></label>
-            <v-select label="name" :clearable="false" name="customer_id" v-validate="'required'" v-model="form.customer_id" :options="customers" />
-            <span class="text-danger text-sm absolute">{{ errors.first('customer_id') }}</span>
+            <v-select label="name" :clearable="false" name="customer_id" v-model="form.customer_id" @input="form.errors.errors.customer_id = []" :options="customers" />
+            <has-error class="text-danger text-sm" :form="form" field="customer_id"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Biller</small></label>
-            <v-select label="name" :clearable="false" name="biller_id" v-validate="'required'" v-model="form.biller_id" :get-option-label="option => option.first_name + ' ' + option.last_name" :options="billers" />
-            <span class="text-danger text-sm absolute">{{ errors.first('biller_id') }}</span>
+            <v-select label="name" :clearable="false" name="biller_id" v-model="form.biller_id" @input="form.errors.errors.biller_id = []" :get-option-label="option => option.first_name + ' ' + option.last_name" :options="billers" />
+            <has-error class="text-danger text-sm" :form="form" field="biller_id"></has-error>
           </vs-col>
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/4 xl:w-1/4 p-2">
             <label for=""><small>Stock</small></label>
-            <v-select label="name" :clearable="false" name="stock_id" v-validate="'required'" v-model="form.stock_id" :options="stocks" />
-            <span class="text-danger text-sm absolute">{{ errors.first('stock_id') }}</span>
+            <v-select label="name" :clearable="false" name="stock_id" v-model="form.stock_id" @input="form.errors.errors.stock_id = []" :options="stocks" />
+            <has-error class="text-danger text-sm" :form="form" field="stock_id"></has-error>
           </vs-col>
         </vs-row>
 
@@ -40,50 +40,49 @@
         <vs-row>
           <vs-col class="sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2">
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="discount" label="Discount" v-model="form.discount" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('discount') }}</span>
+              <vs-input type="number" name="discount" label="Discount" v-model="form.discount" @input="form.errors.errors.discount = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="discount"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="product_tax" label="Product Tax" v-model="form.product_tax" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('product_tax') }}</span>
+              <vs-input type="number" name="product_tax" label="Product Tax" v-model="form.product_tax" @input="form.errors.errors.product_tax = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="product_tax"></has-error>
             </vs-col>
 
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="payment_term" label="Payment Term" v-model="form.payment_term" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('payment_term') }}</span>
+              <vs-input name="payment_term" label="Payment Term" v-model="form.payment_term" @input="form.errors.errors.payment_term = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="payment_term"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total_items" label="Total Items" v-model="form.total_items" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('total_items') }}</span>
+              <vs-input type="number" name="total_items" label="Total Items" v-model="form.total_items" @input="form.errors.errors.total_items = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="total_items"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="pos" label="Pos" v-model="form.pos" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('pos') }}</span>
+              <vs-input name="pos" label="Pos" v-model="form.pos" @input="form.errors.errors.pos = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="pos"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
-              <vs-input v-validate="'required'" data-vv-validate-on="blur" name="paid" label="Paid" v-model="form.paid" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('paid') }}</span>
+              <vs-input name="paid" label="Paid" v-model="form.paid" @input="form.errors.errors.paid = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="paid"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-2/3 xl:w-2/3 p-2">
-              <vs-input type="number" v-validate="'required'" data-vv-validate-on="blur" name="total" label="Total" v-model="form.total" class="w-full" />
-              <span class="text-danger text-sm absolute">{{ errors.first('total') }}</span>
+              <vs-input type="number" name="total" label="Total" v-model="form.total" @input="form.errors.errors.total = []" class="w-full" />
+              <has-error class="text-danger text-sm" :form="form" field="total"></has-error>
             </vs-col>
             <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/3 xl:w-1/3 p-2">
               <label for=""><small>Due Date</small></label>
-              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date"></datetime>
-              <span class="text-danger text-sm absolute">{{ errors.first('due_date') }}</span>
+              <datetime :auto="true" class="w-full" input-class="vs-inputx vs-input--input normal" name="due_date" label="Date" v-model="form.due_date" @input="form.errors.errors.due_date = []"></datetime>
+              <has-error class="text-danger text-sm" :form="form" field="due_date"></has-error>
             </vs-col>
           </vs-col>
 
           <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
             <label for=""><small>Details</small></label>
-            <vs-textarea rows="10" v-validate="'required'" data-vv-validate-on="blur" name="note" v-model="form.note" class="w-full" />
-            <span class="text-danger text-sm absolute">{{ errors.first('note') }}</span>
+            <vs-textarea rows="10" name="note" v-model="form.note" @input="form.errors.errors.note = []" class="w-full" />
+            <has-error class="text-danger text-sm" :form="form" field="note"></has-error>
           </vs-col>
 
         </vs-row>
-        <form-error :form="form"></form-error>
-        <vs-button class="float-right mt-6" @click="storeSale" :disabled="!validateForm">Send</vs-button>
+        <vs-button class="float-right mt-6" @click="storeSale" :disabled="form.busy">{{ $route.params.id ? 'Update' : 'Create'}}</vs-button>
       </div>
     </vx-card>
   </div>
@@ -91,7 +90,6 @@
 </template>
 
 <script>
-import FormError from '../../share/FormError'
 import vSelect from "vue-select";
 import {
   Datetime
@@ -106,7 +104,7 @@ export default {
           category_id: "",
           item_id: "",
           unit_id: "",
-          ammount: "0",
+          amount: "0",
           unit_price: "0",
           total_price: "0",
         }, ],
@@ -134,20 +132,14 @@ export default {
     }
   },
   components: {
-    FormError,
     datetime: Datetime,
     "v-select": vSelect,
     Items,
   },
-  computed: {
-    validateForm() {
-      return true;
-      // return this.form.name !== '' &&
-      //   this.form.code !== '' &&
-      //   this.form.phone !== ''
-    }
-  },
   created() {
+    if (this.$route.query.order) {
+      this.loadOrderItems()
+    }
     if (this.$route.params.id) {
       this.loadSale(this.$route.params.id)
     }
@@ -156,6 +148,13 @@ export default {
     this.loadBillers()
   },
   methods: {
+    loadOrderItems() {
+      this.axios.get('/api/get/items/orders/' + this.$route.query.order).then((response) => {
+        this.items = response.data
+        this.form.items = JSON.parse(this.items[0].items)
+        this.form.customer_id = this.items[0].customer
+      }).catch(() => {})
+    },
     loadStocks() {
       this.axios.get('/api/stocks').then((response) => {
         this.stocks = response.data
@@ -198,16 +197,15 @@ export default {
         })
 
       }).catch((error) => {
-        if (this.form.errors.errors.error) {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
-        }
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
+        })
+
       })
     },
   }
