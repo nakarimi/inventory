@@ -68,9 +68,10 @@ export default {
   methods: {
     checkLogin() {
       if (localStorage.getItem('token')) {
-        this.$router.push({
-          path: '/'
-        });
+        setTimeout(() => {
+          this.$router.go(0);
+          window.location.href = '/';
+        }, 500);
         this.$vs.notify({
           title: 'You have access to the system!',
           color: 'success',

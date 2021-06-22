@@ -33,6 +33,8 @@ class SaleController extends Controller
     {
         return Sale::with(['customer', 'stock'])->get();
     }
+
+    // Load all orders, based on customer and admin rule.
     public function storeOrderList()
     {
         if(auth()->guard('api')->user()->hasRole('customer')){

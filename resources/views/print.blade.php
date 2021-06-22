@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -5,6 +6,7 @@
 		<title>Inventory Management System Invoice</title>
 
 		<style>
+									
 			.content-box {
 				max-width: 800px;
 				margin: auto;
@@ -68,7 +70,7 @@
 				border-top: 2px solid #eee;
 				font-weight: bold;
 			}
-
+			.stripe tr:nth-child(odd) {background-color: #f2f2f2;}
 			@media only screen and (max-width: 600px) {
 				.content-box table tr.top table td {
 					width: 100%;

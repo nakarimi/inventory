@@ -4,20 +4,17 @@
   <vs-row>
     <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
       <vs-card>
-        <vs-divider>Products Sales</vs-divider>
-        <vue-apex-charts type="bar" height="350" :options="barChart.chartOptions" :series="barChart.series"></vue-apex-charts>
+        <vue-apex-charts :key="productsSalesKey" type="bar" height="450" :options="productsSales.chartOptions" :series="productsSales.series"></vue-apex-charts>
       </vs-card>
     </vs-col>
     <vs-col class="my-2 sm:w-1 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
       <vs-card>
-        <vs-divider>Category</vs-divider>
-        <vue-apex-charts type="radialBar" height="350" :options="radialBarChart.chartOptions" :series="radialBarChart.series"></vue-apex-charts>
+        <vue-apex-charts :key="accountsBalanceKey" type="line" height="450" :options="accountsBalance.chartOptions" :series="accountsBalance.series" />
       </vs-card>
     </vs-col>
   </vs-row>
   <vs-card>
-    <vs-divider>Financial Status</vs-divider>
-    <vue-apex-charts type="bar" height="350" :options="columnChart.chartOptions" :series="columnChart.series"></vue-apex-charts>
+    <vue-apex-charts :key="financeStatusKey" type="bar" height="350" :options="financeStatus.chartOptions" :series="financeStatus.series"></vue-apex-charts>
   </vs-card>
 </div>
 </template>
@@ -28,14 +25,23 @@ import VueApexCharts from 'vue-apexcharts'
 export default {
   data() {
     return {
+      productsSalesKey: 0,
 
+      accountsBalanceKey: 0,
+
+      financeStatusKey: 0,
       // Financial status chart configuration.
-      barChart: {
+      productsSales: {
         series: [{
-          data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+          data: []
         }],
         chartOptions: {
           colors: ['#7367F0', '#28C76F', '#EA5455', '#FF9F43', '#1E1E1E'],
+          title: {
+            text: 'Products Sales',
+            align: 'left'
+          },
+
           plotOptions: {
             bar: {
               horizontal: true,
@@ -45,26 +51,26 @@ export default {
             enabled: false
           },
           xaxis: {
-            categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
-              'United States', 'China', 'Germany'
-            ],
+            categories: [],
+          },
+          tooltip: {
+            y: {
+              formatter: function (val) {
+                return " " + val + " thousands"
+              }
+            }
           }
         }
       },
 
       // Actuall data to show in the chart.
-      columnChart: {
-        series: [{
-          name: 'Net Profit',
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-        }, {
-          name: 'Revenue',
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-        }, {
-          name: 'Expense',
-          data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-        }],
+      financeStatus: {
+        series: [],
         chartOptions: {
+          title: {
+            text: 'Financial Status',
+            align: 'center'
+          },
           colors: [
             "#4ea397",
             "#22c3aa",
@@ -92,11 +98,11 @@ export default {
           },
 
           xaxis: {
-            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+            categories: [],
           },
           yaxis: {
             title: {
-              text: '$ (thousands)'
+              text: ' (thousands)'
             }
           },
           fill: {
@@ -106,45 +112,141 @@ export default {
           tooltip: {
             y: {
               formatter: function (val) {
-                return "$ " + val + " thousands"
+                return " " + val + " thousands"
               }
             }
           }
         }
       },
 
-      // Category chart information.
-      radialBarChart: {
-        series: [44, 55, 67, 83],
+      accountsBalance: {
+        series: [],
         chartOptions: {
-          colors: ['#7367F0', '#28C76F', '#EA5455', '#FF9F43', '#1E1E1E'],
-          plotOptions: {
-            radialBar: {
-              dataLabels: {
-                name: {
-                  fontSize: '22px',
-                },
-                value: {
-                  fontSize: '16px',
-                },
-                total: {
-                  show: true,
-                  label: 'Total',
-                  formatter: function (w) {
-                    // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                    return 249
-                  }
+          title: {
+            text: 'Accounts Balance History',
+            align: 'right'
+          },
+          chart: {
+            height: 500,
+            toolbar: {
+              show: false
+            },
+            export: {
+              csv: {
+                filename: undefined,
+                columnDelimiter: ',',
+                headerCategory: 'category',
+                headerValue: 'value',
+                dateFormatter(timestamp) {
+                  return new Date(timestamp).toDateString()
                 }
+              },
+              svg: {
+                filename: undefined,
+              },
+              png: {
+                filename: undefined,
               }
+            },
+            dropShadow: {
+              enabled: true,
+              top: 5,
+              left: 0,
+              blur: 4,
+              opacity: 0.10
             }
           },
-          labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
-        }
-      }
+          stroke: {
+            // curve: 'smooth',
+            width: 2
+          },
+          grid: {
+            borderColor: '#e7e7e7'
+          },
+          legend: {
+            show: false
+          },
+          markers: {
+            size: 0,
+            hover: {
+              size: 5
+            }
+          },
+          xaxis: {
+            labels: {
+              style: {
+                cssClass: 'text-grey fill-current'
+              }
+            },
+            axisTicks: {
+              show: false
+            },
+            categories: [],
+            axisBorder: {
+              show: false
+            }
+          },
+          yaxis: {
+            // opposite: true,
+            tickAmount: 5,
+            labels: {
+              style: {
+                cssClass: 'text-grey fill-current direction-ltr'
+              },
+              // formatter(val) {
+              //   return val > 999 ? `${(val / 1000).toFixed(0)} k` : val
+              // }
+            }
+          },
+          tooltip: {
+            x: {
+              show: false
+            }
+          }
+        },
+      },
+
     }
   },
   components: {
     VueApexCharts
-  }
+  },
+  created() {
+    this.getProductsSales();
+    this.getAccountsBalance();
+    this.getFinanceStatus();
+  },
+  methods: {
+
+    // Get Products sales data from api
+    getProductsSales() {
+      this.axios.get('/api/reports/getProductsSales').then((response) => {
+        this.productsSales.series = [{
+          data: response.data[1]
+        }]
+        this.productsSales.chartOptions.xaxis.categories = response.data[0]
+        this.productsSalesKey += 1;
+      }).catch(() => {})
+    },
+
+    // Get categories data from api
+    getAccountsBalance() {
+      this.axios.get('/api/reports/getAccountsBalance').then((response) => {
+        console.log(response.data);
+        this.accountsBalance.series = response.data[1]
+        this.accountsBalance.chartOptions.xaxis.categories = response.data[0]
+        this.accountsBalanceKey += 1;
+      }).catch(() => {})
+    },
+
+    // Get finance status data from api
+    getFinanceStatus() {
+      this.axios.get('/api/reports/getFinanceStatus').then((response) => {
+        this.financeStatus.series = response.data[1]
+        this.financeStatus.chartOptions.xaxis.categories = response.data[0]
+        this.financeStatusKey += 1
+      }).catch(() => {})
+    }
+  },
 }
 </script>

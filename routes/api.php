@@ -47,5 +47,14 @@ Route::get('unread_notifications', 'ApplicationController@unreadNotifications');
 Route::get('read_notifications', 'ApplicationController@readNotifications');
 Route::post('make_read_notif', 'ApplicationController@MakeReadNotif');
 
+Route::get('reports/getProductsSales', 'ApplicationController@getProductsSales');
+Route::get('reports/getAccountsBalance', 'ApplicationController@getAccountsBalance');
+Route::get('reports/getFinanceStatus', 'ApplicationController@getFinanceStatus');
 // Custom Routes
+Route::get('reports/sales_report', 'PrintController@salesReport');
+Route::get('reports/purchase_report', 'PrintController@purchaseReport');
+Route::get('reports/transfers_report', 'PrintController@transfersReport');
+Route::get('reports/trnsactions_report', 'PrintController@transactionsReport');
+Route::get('reports/balancesheet_report', 'PrintController@balancesheetReport');
+
 Route::get('home', 'UserController@home');

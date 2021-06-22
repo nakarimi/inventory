@@ -56,5 +56,14 @@ class Transfer extends Model
         return $this->belongsTo(Stock::class, 'target_stock');
     }
 
+    public function source()
+    {
+        return $this->belongsTo(Stock::class, 'source_stock');
+    }
+    public function target()
+    {
+        return $this->belongsTo(Stock::class, 'target_stock');
+    }
+
     
 }

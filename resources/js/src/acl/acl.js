@@ -11,10 +11,9 @@ if (userInfo && userInfo.roles[0]) initialRole = userInfo.roles[0].name
 
 export default new AclCreate({
   initial: initialRole,
-  notfound: {
-    path: '/pages/not-authorized',
-    forwardQueryParams: true,
-  },
+  // notfound: {
+  //   path: (localStorage.getItem('user')) ? '/pages/not-authorized' : '/',
+  // },
   router,
   acceptLocalRules: true,
   globalRules: {

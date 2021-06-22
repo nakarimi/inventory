@@ -571,6 +571,19 @@ const router = new Router({
         },
         // End Of Edit Routes
         {
+          path: '/manage/reports',
+          name: 'manage-reports',
+          component: () => import('./views/apps/reports/ReportManagement.vue'),
+          meta: {
+            rule: 'isAdmin',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Reports Management', active: true },
+            ],
+            // btn_list_path: '/apps/list/reports',
+          }
+        },
+        {
           path: '/manage/category',
           name: 'manage-category',
           component: () => import('./views/apps/CategoryManagement.vue'),

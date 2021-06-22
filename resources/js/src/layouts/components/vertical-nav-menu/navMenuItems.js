@@ -169,6 +169,12 @@ export default [
         ]
     },
     {
+        url: '/manage/reports',
+        name: "Reports",
+        icon: "FileTextIcon",
+        rule: 'isAdmin',
+    },
+    {
         url: null,
         name: "General",
         icon: "SettingsIcon",

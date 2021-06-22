@@ -116,4 +116,28 @@ class Helper
         ];
         $result = DB::table('notifs')->insert($data);
     }
+
+    public static function getUser($id){
+        $user = User::find($id);
+        return $user->first_name . ' ' . $user->last_name;
+    }
+    public static function findUnit($id){
+        switch ($id) {
+            case 1:
+                return 'KG';
+                break;
+            case 2:
+                return 'Gram';
+                break;            
+            case 3:
+                return 'Liter';
+                break;
+            case 3:
+                return 'Pack';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
 }

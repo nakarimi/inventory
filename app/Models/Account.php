@@ -50,4 +50,8 @@ class Account extends Model
     {
         return $this->belongsTo(User::class, 'account_user_id');
     }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'account_id');
+    }
 }
