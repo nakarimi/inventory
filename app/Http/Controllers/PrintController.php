@@ -143,9 +143,6 @@ class PrintController extends Controller
     }
 
     $transactions = $query->get()->toArray();
-    for ($i=0; $i < 20; $i++) { 
-      $transactions = array_merge($transactions, $query->get()->toArray());
-    }
 
     $data = [
       'label' => 'Transactions Report',
