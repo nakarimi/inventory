@@ -48,7 +48,7 @@ class User extends Authenticatable
                 'first_name' => 'required|max:191',
                 'last_name'  => 'required|max:191',
                 'branch'     => 'required|max:191',
-                'email'      => 'required|string|email|max:191|unique:users'. ($id ? ",email,$id" : ''),
+                'email'      => 'required|email|max:191|unique:users'. ($id ? ",email,$id" : ''),
                 'phone'      => 'required|digits:10|numeric|regex:/(07)[0-9]{8}/',
                 'address'    => 'required',
                 'password'   => 'required|string|min:6'

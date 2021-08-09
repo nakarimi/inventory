@@ -52,6 +52,8 @@ export default {
   },
   created() {
     this.loadNotifs();
+    
+    
     setInterval(() => {
       this.loadNotifs();
     }, 2500);
@@ -63,7 +65,6 @@ export default {
       }).catch(() => {})
     },
     elapsedTime(startTime) {
-      console.log(startTime);
       const x = new Date(startTime)
       const now = new Date()
       let timeDiff = now - x

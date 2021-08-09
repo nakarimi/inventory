@@ -165,6 +165,8 @@ class UserController extends Controller
                     'phone' => 'required|max:12',
                     'address' => 'required',
                 ]);
+
+                // Remove email in update operation.
                 unset($request['email']);
                 $request['branch_id'] = $request['branch']['id'];
                 $user = User::find($id);

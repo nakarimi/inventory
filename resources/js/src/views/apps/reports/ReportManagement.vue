@@ -58,7 +58,7 @@ export default {
       all: null,
     }
   },
-  created() {},
+  created () {},
   components: {
     Datetime
   },

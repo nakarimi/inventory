@@ -46,9 +46,9 @@
   </vx-card>
   <vs-popup title="" :active.sync="popupOpen">
     <vx-card>
-      <span v-for="(item, index) in popupData" :key="index">
+      <span v-for="(value, index) in popupData" :key="index">
         <li v-if="index != 'updated_at'">
-          <strong class="capitalize">{{ index | remove_ }}</strong>: {{ item }}
+          <strong class="capitalize">{{ index | remove_ }}</strong>: {{ value }}
         </li>
       </span>
     </vx-card>
@@ -66,7 +66,7 @@ export default {
     }
   },
   created() {
-    this.loadBranches()
+    this.loadActivities()
   },
   methods: {
     toggleModel(data = []) {
@@ -74,7 +74,7 @@ export default {
       this.popupData = data;
       this.popupOpen = !this.popupOpen;
     },
-    loadBranches() {
+    loadActivities() {
       this.axios.get('/api/activity_log').then((response) => {
         this.activity_log = response.data
       }).catch(() => {})

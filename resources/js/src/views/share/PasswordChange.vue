@@ -62,7 +62,7 @@ export default {
         }).catch((error) => {
           this.$vs.notify({
             title: 'Failed!',
-            text: 'There is some failure, please try again!',
+            text: 'All fields are required, is your password currect?',
             color: 'danger',
             iconPack: 'feather',
             icon: 'icon-cross',

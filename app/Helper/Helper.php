@@ -102,6 +102,8 @@ class Helper
     public static function notifyStatus($id, $status){
         DB::table('notifs')->where('id', $id)->update(['status' => $status]);
     }
+
+    // Create notifications in the system by provided data.
     public static function notify($msg, $action, $type, $type_id, $color = 'primary')
     {
         $data = [

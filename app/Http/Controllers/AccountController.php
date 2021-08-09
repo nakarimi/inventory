@@ -98,8 +98,8 @@ class AccountController extends Controller
             ->performedOn($account)
             ->withProperties($account)
             ->log('Updated');
-            // add related notification to this operation in system
-            Helper::notify('An account had been updated in the system!' , 'Modification', 'account', $account->id, 'warning');
+        // add related notification to this operation in system
+        Helper::notify('An account had been updated in the system!' , 'Modification', 'account', $account->id, 'warning');
         return $account;
     }
 

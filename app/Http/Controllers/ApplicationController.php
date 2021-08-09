@@ -36,6 +36,8 @@ class ApplicationController extends Controller
     {
         return DB::table('notifs')
             ->join('users', 'users.id', '=', 'notifs.user_id')
+
+            // Load same branch data for this user.
             ->where('notifs.branch_id', auth()->guard('api')->user()->branch_id)
             ->latest('notifs.created_at')
             ->get(['notifs.*', 'users.first_name', 'users.last_name']);

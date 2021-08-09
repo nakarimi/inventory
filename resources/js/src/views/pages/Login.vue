@@ -1,8 +1,3 @@
-<!-- =========================================================================================
-    File Name: Login.vue
-    Description: Login Page
-    ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System========================================================================================== -->
 <template>
 <div class="h-screen flex w-full bg-img vx-row no-gutter items-center justify-center" id="page-login">
   <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
@@ -33,7 +28,7 @@
                   <span class="cursor-pointer link-color" @click="showAlert('Please, Contact with adminstrator to reset your Password!')">Forgot Password?</span>
                 </div>
                 <vs-button class="float-right" :disabled="!validateForm" @click="loginAction">Login</vs-button>
-                <vs-button type="border" to="/pages/signup">Register</vs-button>
+                <!-- <vs-button type="border" to="/pages/signup">Register</vs-button> -->
                 <!-- <vs-divider>OR</vs-divider> -->
               </div>
             </div>
@@ -123,25 +118,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-#page-login {
-  .social-login-buttons {
-    .bg-facebook {
-      background-color: #1551b1
-    }
-
-    .bg-twitter {
-      background-color: #00aaff
-    }
-
-    .bg-google {
-      background-color: #4285F4
-    }
-
-    .bg-github {
-      background-color: #333
-    }
-  }
-}
-</style>
