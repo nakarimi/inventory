@@ -60,7 +60,7 @@ class PrintController extends Controller
 
     // Direct download.
     // return $pdf->stream();
-    return $pdf->download('invoice-' . Carbon::now() . '.pdf');
+    return $pdf->save('reports/invoice-' . Carbon::now() . '.pdf')->download('invoice-' . Carbon::now() . '.pdf');
   }
 
 
@@ -93,7 +93,7 @@ class PrintController extends Controller
     $pdf = App::make('dompdf.wrapper');
     $logo = $this->loadImg('/images/pages/404.png');
     $pdf->loadView('print_sales_report', compact('logo', 'data', 'sales'));
-    return $pdf->download('sales-report-' . Carbon::now() . '.pdf');
+    return $pdf->save('reports/sales-report-' . Carbon::now() . '.pdf')->download('sales-report-' . Carbon::now() . '.pdf');
   }
   public function purchaseReport(Request $request)
   {
@@ -113,7 +113,7 @@ class PrintController extends Controller
     $pdf = App::make('dompdf.wrapper');
     $logo = $this->loadImg('/images/pages/404.png');
     $pdf->loadView('print_purchases_report', compact('logo', 'data', 'purchases'));
-    return $pdf->download('purchases-report-' . Carbon::now() . '.pdf');
+    return $pdf->save('reports/purchases-report-' . Carbon::now() . '.pdf')->download('purchases-report-' . Carbon::now() . '.pdf');
   }
   public function transfersReport(Request $request)
   {
@@ -133,7 +133,7 @@ class PrintController extends Controller
     $pdf = App::make('dompdf.wrapper');
     $logo = $this->loadImg('/images/pages/404.png');
     $pdf->loadView('print_transfers_report', compact('logo', 'data', 'transfers'));
-    return $pdf->download('transfers-report-' . Carbon::now() . '.pdf');
+    return $pdf->save('reports/transfers-report-' . Carbon::now() . '.pdf')->download('transfers-report-' . Carbon::now() . '.pdf');
   }
   public function transactionsReport(Request $request)
   {
@@ -153,7 +153,7 @@ class PrintController extends Controller
     $pdf = App::make('dompdf.wrapper');
     $logo = $this->loadImg('/images/pages/404.png');
     $pdf->loadView('print_transactions_report', compact('logo', 'data', 'transactions'));
-    return $pdf->download('transactions-report-' . Carbon::now() . '.pdf');
+    return $pdf->save('reports/transactions-report-' . Carbon::now() . '.pdf')->download('transactions-report-' . Carbon::now() . '.pdf');
   }
   public function balancesheetReport(Request $request)
   {
@@ -186,6 +186,6 @@ class PrintController extends Controller
     $pdf = App::make('dompdf.wrapper');
     $logo = $this->loadImg('/images/pages/404.png');
     $pdf->loadView('print_balance_sheet_report', compact('logo', 'data', 'accounts'));
-    return $pdf->download('balancesheet-report-' . Carbon::now() . '.pdf');
+    return $pdf->save('reports/balancesheet-report-' . Carbon::now() . '.pdf')->download('balancesheet-report-' . Carbon::now() . '.pdf');
   }
 }
