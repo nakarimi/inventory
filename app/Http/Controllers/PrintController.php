@@ -12,6 +12,7 @@ use App\Models\StockRecord;
 use App\Models\Transaction;
 use App\Models\Transfer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
@@ -40,12 +41,11 @@ class PrintController extends Controller
       'created' => Carbon::now()->format('Y-M-d'),
       'due' => Carbon::today()->addDays(7)->format('Y-M-d'),
       'company_info' => [
-        'Sparksuite, Inc.', '12345 Sunny Road', 'Sunnyville, CA 12345'
+        'MortazaOmid Company.', 'Shahr-e-naw', 'Kabul-Afghanistan'
       ],
       'reciever_info' => [
-        'Acme Corp.',
-        'John Doe',
-        'john@example.com',
+        'Central Office',
+        'mortazaomid@gmail.com',
       ],
       'sale' => Sale::where('id', $request->id)->with(['customer', 'stock'])->first()
     ];
@@ -63,6 +63,18 @@ class PrintController extends Controller
     return $pdf->save('reports/invoice-' . Carbon::now() . '.pdf')->download('invoice-' . Carbon::now() . '.pdf');
   }
 
+  public function allReports(Request $request)
+  {
+    $path = public_path('reports');
+    $filesInFolder = File::allFiles($path);
+    
+    
+    foreach($filesInFolder as $key => $path){
+      $files = pathinfo($path);
+      $allMedia[] = $files['basename'];
+    }
+    return Response::json($allMedia, 200);
+  }
 
   /**
    * load Image by using the path from public directory, convert to base 64 to be used in the pdf generation.
@@ -164,7 +176,7 @@ class PrintController extends Controller
       });
       
     }
-
+    
     $accounts = $query->get();
     foreach ($accounts as $key => &$account) {
       $account->t_credit = 0;
@@ -188,4 +200,8 @@ class PrintController extends Controller
     $pdf->loadView('print_balance_sheet_report', compact('logo', 'data', 'accounts'));
     return $pdf->save('reports/balancesheet-report-' . Carbon::now() . '.pdf')->download('balancesheet-report-' . Carbon::now() . '.pdf');
   }
+  public function download(Request $request){
+    return response()->download(public_path('reports/' . $_GET['file']));
+  }
+  
 }

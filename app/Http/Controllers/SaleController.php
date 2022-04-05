@@ -14,8 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
-use function GuzzleHttp\json_decode;
-
 class SaleController extends Controller
 {
 
@@ -37,15 +35,15 @@ class SaleController extends Controller
     // Load all orders, based on customer and admin rule.
     public function storeOrderList()
     {
+    
         if(auth()->guard('api')->user()->hasRole('customer')){
             $orders = DB::table('orders')
             ->where('user_id', auth()->guard('api')->user()->id)
-            ->get();
+            ->join('users', 'users.id', 'orders.user_id')->get();
         }else{
-            $orders = DB::table('orders')->get();
+            $orders = DB::table('orders')->join('users', 'users.id', 'orders.user_id')->get();
         }
         return $orders;
-        
     }
 
     /**
