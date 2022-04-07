@@ -4,10 +4,16 @@
     <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/edit/${entity}/${id}`).catch(() => {})">
       <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
     </span>
-    <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/view/${entity}/${id}`).catch(() => {})">
-      <feather-icon icon="ArchiveIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+    <span v-if="this.entity_plural == 'stocks'" >
+      <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/view/${entity}/${id}`).catch(() => {})">
+        <feather-icon icon="ArchiveIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+      </span>
     </span>
-
+    <span v-if="this.entity_plural == 'purchases'" >
+      <span class="cursor-pointer hover:text-success" @click="$router.push(`/apps/add/sale?id=${id}`).catch(() => {})">
+        <feather-icon icon="ArchiveIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
+      </span>
+    </span>
     <span class="cursor-pointer hover:text-danger" @click="deleteEntity(id)">
       <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="cursor-pointer" />
     </span>

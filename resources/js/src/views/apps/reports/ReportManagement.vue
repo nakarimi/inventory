@@ -95,7 +95,8 @@ export default {
           all: this.all
         }
       }).then((response) => {
-        this.$vs.loading.close()
+        this.$vs.loading.close();
+        this.allReports();
       }).catch(() => {this.$vs.loading.close()})
     },
     purchaseReport() {
@@ -107,7 +108,8 @@ export default {
           all: this.all
         }
       }).then((response) => {
-        this.$vs.loading.close()
+        this.$vs.loading.close();
+        this.allReports();
       }).catch(() => {this.$vs.loading.close()})
     },
     transfersReport() {
@@ -119,7 +121,8 @@ export default {
           all: this.all
         }
       }).then((response) => {
-        this.$vs.loading.close()
+        this.$vs.loading.close();
+        this.allReports();
       }).catch(() => {this.$vs.loading.close()})
     },
     trnsactionsReport() {
@@ -131,7 +134,8 @@ export default {
           all: this.all
         }
       }).then((response) => {
-        this.$vs.loading.close()
+        this.$vs.loading.close();
+        this.allReports();
       }).catch(() => {this.$vs.loading.close()})
     },
     balanceSheetReport() {
@@ -143,7 +147,8 @@ export default {
           all: this.all
         }
       }).then((response) => {
-        this.$vs.loading.close()
+        this.$vs.loading.close();
+        this.allReports();
       }).catch(() => {this.$vs.loading.close()})
     },
   },

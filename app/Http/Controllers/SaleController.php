@@ -9,6 +9,7 @@ use App\Models\Stock;
 use App\Helper\Helper;
 use App\Models\Payment;
 use App\Models\Customer;
+use App\Models\Product;
 use App\Models\StockRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +72,16 @@ class SaleController extends Controller
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
 
-        DB::table('orders')->insert($data);
+        foreach ($request->items as $key => $item) {
+            $product = Product::find($item['item_id']['id']);
+            $product->quantity = $product->quantity -$item['amount'];
+            $product->save();
+        }
+        
+        $id = DB::table('orders')->insertGetId($data);
+
+        // add related notification to this operation in system
+        Helper::notify('A new order had been created in the system!' , 'Creation', 'order', $id, 'success');
     }
     public function store(Request $request)
     {

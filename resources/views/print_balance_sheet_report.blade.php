@@ -20,6 +20,8 @@
                   <td>Owner</td>
                   <td>Total Debit</td>
                   <td>Total Credit</td>
+                  <td>Discount</td>
+                  <td>Tax</td>
                   <td>Main Balance</td>
                </tr>
             </thead>
@@ -30,6 +32,8 @@
                   <td>{{ $data['user_account']['first_name'] }} {{ $data['user_account']['last_name'] }}</td>
                   <td>{{ $data['t_debit'] }}</td>
                   <td>{{ $data['t_credit'] }}</td>
+                  <td>{{ $data['t_discount'] }}</td>
+                  <td>{{ $data['t_tax'] }}</td>
                   <td>{{ $data['t_balance'] }}</td>
                </tr>
                @endforeach

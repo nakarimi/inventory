@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Sale;
 use App\Helper\Helper;
 use App\Models\Account;
+use App\Models\Payment;
 use App\Models\Purchase;
 use App\Models\Transfer;
 use Barryvdh\DomPDF\PDF;
@@ -200,10 +201,39 @@ class PrintController extends Controller
     foreach ($accounts as $key => &$account) {
       $account->t_credit = 0;
       $account->t_debit = 0;
+      $account->t_discount = 0;
+      $account->t_tax = 0;
       $account->t_balance = 0;
       foreach ($account->transactions as $key => $value) {
+        if($value->type == "payment"){
+          $payments = Payment::find($value->type_id);
+          if($payments){
+
+            if($value->credit){
+              // It is sale
+              $sale = Sale::find($payments->sale_id);
+              if($sale){
+                $tax = $sale->product_tax;
+                $discount = $sale->discount;
+              }
+            }else{
+              // It is purchase
+              $purchase = Purchase::find($payments->purchase_id);
+              if($purchase){
+                $tax = $purchase->total_tax;
+                $discount = $purchase->discount;                
+              }
+            }              
+          }else{
+            $tax = 0;
+            $discount = 0;
+          }
+        }
+
         $account->t_credit += abs($value->credit);
         $account->t_debit += abs($value->debit);
+        $account->t_discount += abs($discount);
+        $account->t_tax += abs($tax);
         $account->t_balance += abs($value->credit) - abs($value->debit);
       }
     }
@@ -228,7 +258,7 @@ class PrintController extends Controller
   public function downloadBackup(Request $request){
     return response()->download(storage_path('app/Laravel/' . $_GET['file']));
   }
-  
+
   public function newBackup(Request $request){
     try {
       Artisan::call("backup:run");

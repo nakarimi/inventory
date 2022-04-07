@@ -95,6 +95,7 @@ import {
   Datetime
 } from 'vue-datetime';
 import Items from '../../share/Items'
+  
 
 export default {
   data() {
@@ -146,6 +147,7 @@ export default {
     this.loadStocks()
     this.loadCustomers()
     this.loadBillers()
+    this.loadPurchase()
   },
   methods: {
     loadOrderItems() {
@@ -176,7 +178,11 @@ export default {
         this.customers = response.data
       }).catch(() => {})
     },
-
+    loadPurchase(){
+      this.axios.get(`/api/purchases/${this.$route.query.id}/edit`).then((response) => {
+        this.form.fill(response.data);
+      }).catch(() => {})
+    },
     storeSale() {
       if (this.$route.params.id) {
         var x = this.form.patch(`/api/sales/${this.$route.params.id}`)
