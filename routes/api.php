@@ -61,3 +61,6 @@ Route::get('reports/balancesheet_report', 'PrintController@balancesheetReport');
 
 Route::get('home', 'UserController@home');
 Route::get('download/pdf', 'PrintController@download');
+Route::get('download/backup', 'PrintController@downloadBackup');
+Route::get('manage/all_backups', 'PrintController@allBackup');
+Route::get('manage/new_backup', 'PrintController@newBackup');

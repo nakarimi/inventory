@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Sale;
 use App\Helper\Helper;
 use App\Models\Account;
 use App\Models\Purchase;
-use Carbon\Carbon;
-use App\Models\Sale;
+use App\Models\Transfer;
 use Barryvdh\DomPDF\PDF;
 use App\Models\StockRecord;
 use App\Models\Transaction;
-use App\Models\Transfer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
 
 class PrintController extends Controller
@@ -223,5 +224,31 @@ class PrintController extends Controller
   public function download(Request $request){
     return response()->download(public_path('reports/' . $_GET['file']));
   }
+  
+  public function downloadBackup(Request $request){
+    return response()->download(storage_path('app/Laravel/' . $_GET['file']));
+  }
+  
+  public function newBackup(Request $request){
+    try {
+      Artisan::call("backup:run");
+    } catch (\Throwable $th) {
+      throw $th;
+    }
+
+  }
+  public function allBackup(Request $request)
+  {
+    $path = storage_path('app/Laravel');
+    $filesInFolder = File::allFiles($path);
+    
+    
+    foreach($filesInFolder as $key => $path){
+      $files = pathinfo($path);
+      $allMedia[] = $files['basename'];
+    }
+    return Response::json($allMedia, 200);
+  }
+ 
   
 }

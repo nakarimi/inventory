@@ -63,6 +63,7 @@ return [
             ]) : [],
             'dump' => [
                 'dump_binary_path' => '/opt/lampp/bin', // only the path, so without `mysqldump` or `pg_dump`
+                // 'dump_binary_path' => 'C:\xampp\mysql\bin',
             ],
         ],
 

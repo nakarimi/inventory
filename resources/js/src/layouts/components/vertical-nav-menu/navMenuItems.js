@@ -189,6 +189,10 @@ export default [
                 url: '/manage/activity-log',
                 name: "Activity Log",
                 slug: "activity-log",
+            },{
+                url: '/manage/backup',
+                name: "Back Up",
+                slug: "backup",
             },
             {
                 url: '/manage/notifications',

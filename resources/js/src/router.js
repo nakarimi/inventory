@@ -623,6 +623,18 @@ const router = new Router({
           }
         },
         {
+          path: '/manage/backup',
+          name: 'manage-backup',
+          component: () => import('./views/apps/BackUp.vue'),
+          meta: {
+            rule: 'isAdmin',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Back Up', active: true },
+            ],
+          }
+        },
+        {
           path: '/manage/notifications',
           name: 'manage-notifications',
           component: () => import('./views/apps/AllNotifications.vue'),
