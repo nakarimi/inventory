@@ -583,6 +583,21 @@ const router = new Router({
             btn_list_path: '/apps/list/stock',
           }
         },
+        {
+          path: '/apps/view/stock/:id',
+          name: 'view-stock',
+          component: () => import('./views/apps/stock/StockView.vue'),
+          meta: {
+            rule: 'isAccounter',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Stocks List', url: { name: 'list-stock' } },
+              { title: 'View Stock', active: true }
+            ],
+            btn_list_path: '/apps/list/stock',
+          }
+        },
+
         // End Of Edit Routes
         {
           path: '/manage/reports',

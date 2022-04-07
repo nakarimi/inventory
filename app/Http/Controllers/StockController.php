@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Stock;
 use App\Helper\Helper;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -71,7 +72,9 @@ class StockController extends Controller
      */
     public function show(Stock $stock)
     {
-        //
+        $products = Product::where('stock_id', $stock->id)->get();
+        $stock = ['products' => $products];
+        return $stock;
     }
 
     /**
