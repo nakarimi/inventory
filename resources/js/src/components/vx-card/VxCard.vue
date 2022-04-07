@@ -3,7 +3,7 @@
     Description: Card Component
     Component Name: VxCard
     ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
+    Item Name: MOFCMS - Management System
       Author: Unknown
     ========================================================================================== -->
  <template>

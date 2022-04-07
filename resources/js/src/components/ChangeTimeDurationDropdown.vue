@@ -2,7 +2,7 @@
     File Name: ChangeTimeDurationDropdown.vue
     Description: Change duration dropdown component
     ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
+    Item Name: MOFCMS - Management System
       Author: Unknown
     ========================================================================================== -->
 <!-- :class="data.class" -->

@@ -2,7 +2,7 @@
     File Name: StatisticsCard.vue
     Description: Statistics card component
     ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
+    Item Name: MOFCMS - Management System
       Author: Unknown
     ========================================================================================== -->
 <template>

@@ -33,12 +33,21 @@
               <vs-button type="border" :color="all || (start_date && end_date) ? 'primary' : 'danger'" :disabled="! (all || ((start_date && end_date) && (start_date < end_date)))" @click="salesReport"><strong>Sales Report </strong></vs-button>
               <vs-button type="border" :color="all || (start_date && end_date) ? 'primary' : 'danger'" :disabled="! (all || ((start_date && end_date) && (start_date < end_date)))" @click="purchaseReport"><strong>Purchase Report </strong></vs-button>
               <vs-button type="border" :color="all || (start_date && end_date) ? 'primary' : 'danger'" :disabled="! (all || ((start_date && end_date) && (start_date < end_date)))" @click="transfersReport"><strong>Transfers Report </strong></vs-button>
-              <vs-button type="border" :color="all || (start_date && end_date) ? 'primary' : 'danger'" :disabled="! (all || ((start_date && end_date) && (start_date < end_date)))" @click="trnsactionsReport"><strong>Trnsactions Report </strong></vs-button>
+              <vs-button type="border" :color="all || (start_date && end_date) ? 'primary' : 'danger'" :disabled="! (all || ((start_date && end_date) && (start_date < end_date)))" @click="trnsactionsReport"><strong>Transections Report </strong></vs-button>
               <vs-button type="border" :color="all || (start_date && end_date) ? 'primary' : 'danger'" :disabled="! (all || ((start_date && end_date) && (start_date < end_date)))" @click="balanceSheetReport"><strong>Balance Sheet Report </strong></vs-button>
             </div>
           </vs-col>
         </vs-row>
       </vx-card>
+      <br>
+      <vx-card>
+      <ul>
+        <li v-for="(report, i) in all_reports">
+          <a href="" @click="downloadReports(report)" >{{ report }}</a>
+        </li>
+      </ul>
+      </vx-card>
+
     </div>
   </div>
 
@@ -56,13 +65,27 @@ export default {
       start_date: null,
       end_date: null,
       all: null,
+      all_reports: [],
     }
   },
-  created () {},
+  created () {
+    this.allReports();
+  },
   components: {
     Datetime
   },
   methods: {
+
+    allReports() {
+      this.$vs.loading();
+      this.axios.get('/api/reports/all_reports').then((response) => {
+        this.all_reports = response.data;
+      }).catch(() => {this.$vs.loading.close()})
+    },
+    downloadReports(file) {
+      this.$vs.loading();
+        window.open("/api/download/pdf?file="+file, '_blank').focus();
+    },
     salesReport() {
       this.$vs.loading();
       this.axios.get('/api/reports/sales_report', {

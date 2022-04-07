@@ -40,6 +40,21 @@ class TransferController extends Controller
     {
         //
     }
+    // Approve user status
+    public function approve($id, Request $request)
+    {
+        try {
+            //code...
+            $transfer = Transfer::findOrFail($id);
+            $transfer->update([
+                'approval_status' => $request->status,
+            ]);
+            return Response::json($transfer, 200);
+
+        } catch (\Throwable $th) {
+            return Response::json($th, 400);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.

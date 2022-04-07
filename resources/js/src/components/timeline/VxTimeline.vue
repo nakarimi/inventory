@@ -3,7 +3,7 @@
     Description: Timeline Component
     Component Name: VxTimeline
     ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
+    Item Name: MOFCMS - Management System
       Author: Unknown
     ========================================================================================== -->
 <template>

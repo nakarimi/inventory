@@ -2,7 +2,7 @@
     File Name: VxTour.vue
     Description: Tour Component
     ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
+    Item Name: MOFCMS - Management System
       Author: Unknown
     ========================================================================================== -->
 <template>

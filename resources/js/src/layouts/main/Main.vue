@@ -6,7 +6,7 @@
 <template>
 <div class="layout--main" :class="[layoutTypeClass, navbarClasses, footerClasses, {'no-scroll': isAppPage}]">
 
-  <v-nav-menu :navMenuItems="navMenuItems" title="INVMS" parent=".layout--main" />
+  <v-nav-menu :navMenuItems="navMenuItems" title="MOFCMS" parent=".layout--main" />
 
   <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
     <div id="content-overlay" />

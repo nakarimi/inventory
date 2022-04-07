@@ -77,7 +77,8 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //
+        return $account;
+        
     }
 
     /**

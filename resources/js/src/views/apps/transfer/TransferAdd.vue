@@ -52,7 +52,7 @@ export default {
         source_stock: '',
         target_stock: '',
         total: '',
-        approval_status: 'nane',
+        approval_status: 'Action!',
       }),
       stocks: [],
     }

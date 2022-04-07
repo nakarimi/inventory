@@ -22,6 +22,7 @@ Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 Route::resource('users', 'UserController');
 Route::get('user', 'UserController@user')->middleware('auth:api');
 Route::post('approve/user/{id}', 'UserController@approve')->middleware('auth:api');
+Route::post('approve/transfer/{id}', 'TransferController@approve')->middleware('auth:api');
 
 // Application Resource Routes
 Route::resource('branches', 'BranchController');
@@ -51,6 +52,7 @@ Route::get('reports/getProductsSales', 'ApplicationController@getProductsSales')
 Route::get('reports/getAccountsBalance', 'ApplicationController@getAccountsBalance');
 Route::get('reports/getFinanceStatus', 'ApplicationController@getFinanceStatus');
 // Custom Routes
+Route::get('reports/all_reports', 'PrintController@allReports');
 Route::get('reports/sales_report', 'PrintController@salesReport');
 Route::get('reports/purchase_report', 'PrintController@purchaseReport');
 Route::get('reports/transfers_report', 'PrintController@transfersReport');
@@ -58,3 +60,4 @@ Route::get('reports/trnsactions_report', 'PrintController@transactionsReport');
 Route::get('reports/balancesheet_report', 'PrintController@balancesheetReport');
 
 Route::get('home', 'UserController@home');
+Route::get('download/pdf', 'PrintController@download');

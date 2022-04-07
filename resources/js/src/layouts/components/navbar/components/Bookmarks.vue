@@ -37,7 +37,7 @@
           :data="navbarSearchAndPinList"
           :initalData="{pages: starredPagesLimited.concat(starredPagesMore)}"
           :searchLimit="5"
-          placeholder="Explore INVMS..."
+          placeholder="Explore MOFCMS..."
           inputClassses="w-full"
           show-action
           show-pinned

@@ -542,6 +542,20 @@ const router = new Router({
           }
         },
         {
+          path: '/apps/edit/account/:id',
+          name: 'edit-account',
+          component: () => import('./views/apps/account/AccountAdd.vue'),
+          meta: {
+            rule: 'isAdmin',
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Accounts List', url: { name: 'list-account' } },
+              { title: 'Edit Account', active: true }
+            ],
+            btn_list_path: '/apps/list/account',
+          }
+        },
+        {
           path: '/apps/edit/vendor/:id',
           name: 'edit-vendor',
           component: () => import('./views/apps/vendor/VendorAdd.vue'),
@@ -588,7 +602,7 @@ const router = new Router({
           name: 'manage-category',
           component: () => import('./views/apps/CategoryManagement.vue'),
           meta: {
-            rule: 'isAdmin',
+            rule: 'isAccounter',
             breadcrumb: [
               { title: 'Home', url: '/' },
               { title: 'Category Management', active: true },

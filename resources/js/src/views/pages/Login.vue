@@ -23,7 +23,7 @@
 
                 <vs-input type="password" name="password" icon-no-border icon="icon icon-lock" icon-pack="feather" label-placeholder="Password" v-model="form.password" class="w-full mt-6 mb-6 inline-block" />
 
-                <div class="flex flex-wrap justify-between my-5">
+                <div class="flex flex-wrap justify-between my-4">
                   <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
                   <span class="cursor-pointer link-color" @click="showAlert('Please, Contact with adminstrator to reset your Password!')">Forgot Password?</span>
                 </div>

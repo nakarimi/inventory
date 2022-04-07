@@ -58,6 +58,7 @@ export default {
     loadStock(id) {
       this.axios.get(`/api/stocks/${id}/edit`).then((response) => {
         this.form.fill(response.data);
+        console.log(this.form);
       }).catch(() => {})
     },
     storeStock() {

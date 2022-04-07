@@ -178,7 +178,7 @@ export default [
         url: null,
         name: "General",
         icon: "SettingsIcon",
-        rule: 'isAdmin',
+        rule: 'isAccounter',
         submenu: [
             {
                 url: '/manage/category',

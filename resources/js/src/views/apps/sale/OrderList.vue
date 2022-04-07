@@ -4,6 +4,7 @@
     <vs-table ref="table" :data="orders" search stripe pagination :max-items="10">
       <template slot="thead">
         <vs-th sort-key="">#</vs-th>
+        <vs-th sort-key="user">User</vs-th>
         <vs-th sort-key="date">Date</vs-th>
         <vs-th sort-key="due_date">Title</vs-th>
         <vs-th sort-key="">Number of Items</vs-th>
@@ -14,6 +15,9 @@
           <vs-tr :data="tr" :key="i" v-for="(tr, i) in data">
             <vs-td>
               <p class="cursor-pointer">{{ (i+ (10 * ($refs.table.currentx - 1 ))) + 1 }}</p>
+            </vs-td>
+            <vs-td>
+              <p>{{ tr.first_name }} {{ tr.last_name }}</p>
             </vs-td>
             <vs-td>
               <p>{{ tr.created_at | formatDate }}</p>

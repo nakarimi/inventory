@@ -3,7 +3,7 @@
     Description: list Component
     Component Name: VxList
     ----------------------------------------------------------------------------------------
-    Item Name: INVMS - Inventory Management System
+    Item Name: MOFCMS - Management System
       Author: Unknown
     ========================================================================================== -->
 

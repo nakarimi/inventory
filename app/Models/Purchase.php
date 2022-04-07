@@ -43,7 +43,7 @@ class Purchase extends Model
                 'note'           => 'required',
                 'total'          => 'required|min:1',
                 'discount'       => 'required|min:0',
-                'total_tax'      => 'required|number|min:0',
+                'total_tax'      => 'required|numeric|min:0',
                 'payment_status' => 'required',
                 'due_date'       => 'required',
             ],

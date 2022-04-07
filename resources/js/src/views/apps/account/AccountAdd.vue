@@ -50,6 +50,9 @@ export default {
   },
   created() {
     this.getAllUsers();
+    if (this.$route.params.id) {
+      this.loadAccount(this.$route.params.id)
+    }
   },
   methods: {
     getAllUsers() {
@@ -58,11 +61,35 @@ export default {
           this.users = response.data;
         })
     },
+    loadAccount(id) {
+      this.axios.get(`/api/accounts/${id}/edit`).then((response) => {
+        this.form.fill(response.data);
+        this.axios.get(`/api/users/${this.form.account_user_id}/edit`).then((response2) => {
+          this.form.account_user_id = response2.data;
+          console.log(this.form);
 
+        }).catch(() => {})
+      }).catch(() => {})
+    },
     storeAccount() {
-      this.form.post('/api/accounts')
-        .then((response) => {
-          this.form.reset();
+      if (this.$route.params.id) {
+        var x = this.form.patch(`/api/accounts/${this.$route.params.id}`)
+      } else {
+        var x = this.form.post('/api/accounts')
+      }
+      x.then((response) => {
+        // By uploading the image, the failure repsonse is different.
+        // Here is extra step to extract error from string response and assing to form errors.
+        if(typeof response.data == 'string' && response.data.indexOf(`The given data was invalid`) >= 0){
+          var res = response.data.split(`{"message"`);
+          var data = JSON.parse(`{"message"`+res[1]);
+          this.form.errors.set(data.errors);
+        }else{
+          if (!this.$route.params.id) {
+            this.form.reset();
+          } else {
+            this.$router.push("/apps/list/account");
+          }
           this.$vs.notify({
             title: 'Success!',
             text: 'Process completed successfully!',
@@ -71,17 +98,20 @@ export default {
             icon: 'icon-check',
             position: 'top-left'
           })
+        }
 
-        }).catch((error) => {
-          this.$vs.notify({
-            title: 'Failed!',
-            text: 'There is some failure, please try again!',
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-cross',
-            position: 'top-left'
-          })
+      }).catch((error) => {
+        console.log(this.form.errors);
+        this.$vs.notify({
+          title: 'Failed!',
+          text: 'There is some failure, please try again!',
+          color: 'danger',
+          iconPack: 'feather',
+          icon: 'icon-cross',
+          position: 'top-left'
         })
+
+      })
     },
   }
 }
