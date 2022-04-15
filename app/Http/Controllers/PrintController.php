@@ -265,7 +265,6 @@ class PrintController extends Controller
     } catch (\Throwable $th) {
       throw $th;
     }
-
   }
   public function allBackup(Request $request)
   {

@@ -96,6 +96,11 @@ export default {
         main_price += this.form.items[key].total_price;
       }
       this.form.total = main_price;
+      if(this.form.hasOwnProperty('product_tax')){
+        this.form.total = this.form.total - (1 * this.form.discount) + (1 * this.form.product_tax);
+      }else{
+        this.form.total = this.form.total - (1 * this.form.discount) + (1 * this.form.total_tax);
+      }
     }
   },
   methods: {
